@@ -1,0 +1,172 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+   
+        
+}
+body{
+    width: 100%;
+    height: 100vh;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Navbar Styling */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #4b0000; /* Maroon background */
+    padding: 10px 50px;
+    z-index: 1000;
+    padding-right: 100px;
+}
+.navbar .logo{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.navbar .logo h1 {
+    color: #fff;
+}
+.navbar .logo img{
+    width: 10%;
+}
+
+.navbar .nav-links {
+    list-style: none;
+    display: flex;
+}
+
+.navbar .nav-links li {
+    margin-left: 20px;
+}
+
+.navbar .nav-links li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.navbar .nav-links li a:hover {
+    color: #a20000; /* Maroon hover color */
+    transform: scale(1.05);
+}
+
+/* Header */
+
+header{
+    background-image: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)) ,url("./image/background.jpg");
+    background-position: center;
+    background-size: cover;
+    height: 450px;
+    padding-top:10% ;
+}
+.head-info{
+    text-align: center;
+    margin-top: 100px;
+    color: white;
+}
+.head-info p{
+    color: lightgray;
+    margin-top: 15px;
+}
+
+/* Contact Section */
+
+.contact-container{
+    padding:50px;
+    display: flex;
+    justify-content:space-between;
+    height: 590px;
+}
+
+.contact{
+    padding: 50px 40px 40px 40px;
+    background-color: #1d232c;
+    color: white;
+    width: 100%;
+    height: 500px;
+}
+.contact input{
+    width: 95%;
+    height: 50px;
+    border-radius: 5px;
+    padding-left: 15px;
+    margin-bottom: 15px;
+
+}
+.contact input:focus{
+    outline: none;
+}
+.contact textarea{
+    width: 95%;
+    border-radius: 5px;
+    padding: 15px;
+    height: 100px;
+    margin-bottom: 15px;
+}
+.contact textarea:focus{
+    outline: none;
+}
+.contact button{
+    background-color: #a20000; /* Maroon button */
+    color: white;
+    padding: 10px 20px;
+    margin-top:15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+
+}
+.contact button:active{
+    background-color: #8c0000; /* Darker maroon hover */
+    transform: scale(1.05);
+}
+
+/* Map */
+.map-container{
+    width: 100%;
+    height:  500px;
+    text-align: center;
+}
+.map-container iframe{
+    height: 100%;
+    width: 100%;
+}
+/* Footer */
+footer{
+    background-color: #000; /* Black background */
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    margin-top: 40px;
+  
+}
+footer h1{
+    font-weight: bolder;
+}
+footer img{
+    width: 10%;
+}
+footer .footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.social-icon{
+    display: block;
+}
+.social-icon a{
+    color: #f2f4f7;
+}
+
+

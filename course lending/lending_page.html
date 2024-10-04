@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A-Z Coding Academy - Programming Language Course Management</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <!-- Fond Awesome Link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="shortcut icon" href="./image/icon.jpg" type="image/x-icon">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="./image/icon-removebg-preview.png" alt="A-Z LOGO">
+            <h1> Coding Academy</h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#courses">Courses</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="./02_Contact_Page/contact-page.html">Contact</a></li>
+        </ul>
+        <button class="login-btn" onclick="openLogin()">Login</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h2>Welcome to A-Z Coding Academy</h2>
+            <p>Learn programming from the best courses designed for you!</p>
+            <a href="#courses" class="cta-btn">Explore Courses</a>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section class="courses" id="courses">
+        <h2>Our Top Courses</h2>
+        <div class="course-cards">
+            <div class="course-card">
+                <img src="./image/Python_(programming_language)-Logo.wine.png" alt="Python Programming"
+                    class="course-image">
+                <h3>Python Programming</h3>
+                <p>Beginner to Advanced</p>
+            </div>
+            <div class="course-card">
+                <img src="./image/Java_(1).png" alt="JavaScript Development" class="course-image">
+                <h3>JavaScript Development</h3>
+                <p>Interactive Web Development</p>
+            </div>
+            <div class="course-card">
+                <img src="./image/C++-Logo.wine.png" alt="Web Development" class="course-image">
+                <h3>Web Development</h3>
+                <p>Frontend & Backend Programming</p>
+            </div>
+            <div class="course-card">
+                <img src="./image/Python_(programming_language)-Logo.wine.png" alt="Web Development"
+                    class="course-image">
+                <h3>Web Development</h3>
+                <p>Frontend & Backend Programming</p>
+            </div>
+            <div class="course-card">
+                <img src="./image/C++-Logo.wine.png" alt="Web Development" class="course-image">
+                <h3>Web Development</h3>
+                <p>Frontend & Backend Programming</p>
+            </div>
+            <div class="course-card">
+                <img src="./image/Java_(1).png" alt="Web Development" class="course-image">
+                <h3>Web Development</h3>
+                <p>Frontend & Backend Programming</p>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <h2>About Us</h2>
+        <p>We provide high-quality, interactive courses in various programming languages to help you excel in the world
+            of software development. Join us to take your coding skills to the next level!</p>
+    </section>
+
+    <!-- Login Modal -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-modal-content">
+            <div class="header">
+                <h2>Login</h2>
+                <span class="close-btn" onclick="closeLogin()">✖</span>
+            </div>
+            <form id="loginForm">
+                <input type="text" id="nic" placeholder="NIC Number" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer">
+            <div>
+                <img src="./image/icon-removebg-preview.png" alt="">
+            </div>
+            <div>
+                <h1>A-Z Coding Academy</h1>
+                <p>&copy; 2024 a-z_coders.com</p>
+            </div>
+            <div class="social-icon">
+                <a href="https://www.instagram.com/imthath_imt?igsh=MW1pOW10aHN5aTA1dw=="><i
+                        class="fa-brands fa-instagram"></i></a>
+                <a href="https://x.com/imthath_imt?t=DwbcRg6h_NHAZDOq7o_Vyw&s=09"><i class="fa-brands fa-twitter">
+                    </i></a>
+                <a href="https://www.facebook.com/imthath.imt?mibextid=ZbWKwL"><i class="fa-brands fa-facebook"></i></a>
+                <a
+                    href="https://www.linkedin.com/in/mohamed-imthath-006a62270?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"><i
+                        class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
