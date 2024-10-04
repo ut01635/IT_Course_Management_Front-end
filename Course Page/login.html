@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A-Z Coding Academy Login</title>
+    <link rel="stylesheet" href="./login.css"> <!-- External stylesheet -->
+
+       <!-- Google Fonts -->
+       <link rel="preconnect" href="https://fonts.googleapis.com">
+       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+       <link
+           href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+           rel="stylesheet">
+   
+       <!-- Fond Awesome Link -->
+       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+           integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+           crossorigin="anonymous" referrerpolicy="no-referrer" />
+   
+    <link rel="shortcut icon" href="../course lending/image/icon.jpg" type="image/x-icon">
+
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="../course lending/image/icon-removebg-preview.png" alt="A-Z LOGO">
+            <h1> Coding Academy</h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="../course lending/lending_page.html">HOME</a></li>
+            <li><a href="../course lending/02_Contact_Page/contact-page.html">CONTACT</a></li>
+        </ul>
+    </nav>
+
+    <div class="main">
+        <div id="loginSection" class="container">
+            <div class="header">
+                <h2 class="heading">A-Z Coding Academy</h2>
+                <span class="close-btn"><a href="../course lending/lending_page.html">✖</a></span>
+            </div>
+            <form id="loginform" class="login-form">
+                <div class="form-group">
+                    <label for="loginNIC">NIC Number</label>
+                    <input type="text" id="loginNIC" name="loginNIC" placeholder="NIC Number" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" name="loginPassword" placeholder="Password" required>
+                </div>
+                <button type="submit" class="login-btn">Login</button>
+                <p id="loginMessage" class="display-message"></p>
+            </form>
+        </div>
+    </div>
+
+      <!-- Footer Section -->
+      <footer class="footer">
+        <div class="footer">
+            <div>
+                <img src="../course lending/image/icon-removebg-preview.png" alt="">
+            </div>
+            <div>
+                <h1>A-Z Coding Academy</h1>
+                <p>&copy; 2024 a-z_coders.com</p>
+            </div>
+            <div class="social-icon">
+                <a href="https://www.instagram.com/imthath_imt?igsh=MW1pOW10aHN5aTA1dw=="><i
+                        class="fa-brands fa-instagram"></i></a>
+                <a href="https://x.com/imthath_imt?t=DwbcRg6h_NHAZDOq7o_Vyw&s=09"><i class="fa-brands fa-twitter">
+                    </i></a>
+                <a href="https://www.facebook.com/imthath.imt?mibextid=ZbWKwL"><i class="fa-brands fa-facebook"></i></a>
+                <a
+                    href="https://www.linkedin.com/in/mohamed-imthath-006a62270?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"><i
+                        class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+   
+
+    <script src="login.js"></script> <!-- External JavaScript file -->
+</body>
+
+</html>
