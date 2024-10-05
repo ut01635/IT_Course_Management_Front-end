@@ -64,13 +64,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100vh;
+    /* width: 100vh; */
 
 }
 
 .container {
     max-width: 100%;
-    width: 30%;
+    width: 25%;
     background: linear-gradient(0deg, #ffffff 0%, #faeceb 100%);
     border-radius: 20px;
     padding: 25px 35px;
@@ -195,7 +195,7 @@ input:focus {
 .footer {
     background-color: #000; /* Black background */
     color: white;
-    padding: 10px 20px;
+    padding: px 20px;
     text-align: center;
     /* width: 100%; */
     margin-top: 100px;
