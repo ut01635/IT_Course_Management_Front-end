@@ -73,6 +73,15 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+
+    /* width: 100vh; */
+
+}
+
+.container {
+    max-width: 100%;
+    width: 25%;
+
 }
 
 .container {
@@ -202,7 +211,7 @@ input:focus {
     background-color: #000;
     /* Black background */
     color: white;
-    padding: 10px 20px;
+    padding: px 20px;
     text-align: center;
     margin-top: 100px;
     /* You may want to adjust or remove this */
