@@ -60,15 +60,19 @@ body {
     transform: scale(1.05);
 }
 
-.navbar .login-btn {
+.navbar .login-btn  {
     background-color: #a20000; /* Maroon button */
     border: none;
     padding: 10px 20px;
+   
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.login-btn a{
+    text-decoration: none;
     color: #fff;
     font-size: 16px;
     cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .navbar .login-btn:hover {
