@@ -60,15 +60,19 @@ body {
     transform: scale(1.05);
 }
 
-.navbar .login-btn {
+.navbar .login-btn  {
     background-color: #a20000; /* Maroon button */
     border: none;
     padding: 10px 20px;
+   
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.login-btn a{
+    text-decoration: none;
     color: #fff;
     font-size: 16px;
     cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .navbar .login-btn:hover {
@@ -175,78 +179,6 @@ body {
     margin: 20px 0;
 }
 
-/* Login Modal */
-.login-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-}
-
-.login-modal-content {
-    background-color: #bebaba86; /* Black background */
-    padding: 20px;
-    border-radius: 10px;
-    width: 300px;
-    text-align: center;
-    transition: transform 0.3s ease;
-}
-.login-modal-content .header{
-    display: flex;
-    justify-content: space-around;
-}
-
-.login-modal-content h2 {
-    margin-bottom: 20px;
-    color: #a20000; /* Maroon heading */
-}
-
-.login-modal-content input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    transition: border-color 0.3s ease;
-}
-
-.login-modal-content input:focus {
-    border-color: #a20000; /* Maroon focus border */
-}
-
-.login-modal-content button {
-    background-color: #a20000; /* Maroon button */
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.login-modal-content button:hover {
-    background-color: #8c0000; /* Darker maroon hover */
-    transform: scale(1.05);
-}
-
-.close-btn {
-    /* position: absolute;
-    top: 10px;
-    right: 10px; */
-    font-size: 24px;
-    cursor: pointer;
-    color: #ffffff; /* Maroon close button */
-    transition: color 0.3s ease;
-}
-.close-btn:hover{
-color: white;
-color: #8c0000; /* Darker maroon on hover */
-}
 
 /* Footer Section */
 .footer {
