@@ -1,0 +1,264 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    padding-top: 60px; /* Space for the fixed navbar */
+    background-color: #333; /* Background color */
+    color: #fff; /* Text color */
+}
+/* Navbar Styling */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #4b0000; /* Maroon background */
+    padding: 10px 20px;
+    z-index: 1000;
+}
+.navbar .logo{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.navbar .logo h1 {
+    color: #fff;
+}
+.navbar .logo img{
+    width: 10%;
+}
+
+.navbar .nav-links {
+    list-style: none;
+    display: flex;
+}
+
+.navbar .nav-links li {
+    margin-left: 20px;
+}
+
+.navbar .nav-links li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.navbar .nav-links li a:hover {
+    color: #a20000; /* Maroon hover color */
+    transform: scale(1.05);
+}
+
+
+/* Login Form */
+.main{
+    padding-top: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vh;
+
+}
+
+.container {
+    max-width: 100%;
+    width: 30%;
+    background: linear-gradient(0deg, #ffffff 0%, #faeceb 100%);
+    border-radius: 20px;
+    padding: 25px 35px;
+    border: 5px solid #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    box-sizing: border-box;
+}
+
+.container .header {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 10px;
+}
+
+.close-btn a {
+    text-decoration: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #252525;
+    /* Maroon close button */
+    transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+    color: white;
+    color: #8c0000;
+    /* Darker maroon on hover */
+    transform: scale(1.1);
+}
+
+.heading {
+    text-align: center;
+    font-weight: 600;
+    font-size: 24px;
+    color: #5f312d;
+    margin-bottom: 20px;
+}
+
+.login-form {
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #5f312d;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    background: #ffffff;
+    border: none;
+    padding: 15px;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border: 2px solid transparent;
+    margin-top: 5px;
+    box-sizing: border-box;
+}
+
+input::placeholder {
+    color: #aaaaaa;
+}
+
+input:focus {
+    outline: none;
+    border-color: #573634;
+}
+
+.login-btn {
+    display: block;
+    width: 100%;
+    font-weight: bold;
+    background: linear-gradient(45deg, #6b3e3b 0%, #a7423b 100%);
+    color: #ffffff;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.login-btn:hover {
+    background: linear-gradient(45deg, #5a2f2f 0%, #8d3e3e 100%);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.login-btn:active {
+    background: linear-gradient(45deg, #4e2a2a 0%, #7b3b3b 100%);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transform: translateY(0);
+}
+
+.display-message {
+    margin-top: 20px;
+    color: red;
+    font-size: 14px;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+        max-width: 90%;
+    }
+
+    .heading {
+        font-size: 20px;
+    }
+}
+
+/* Footer Section */
+.footer {
+    background-color: #000; /* Black background */
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    /* width: 100%; */
+    margin-top: 100px;
+}
+footer h1{
+    font-weight: bolder;
+}
+footer img{
+    width: 20%;
+    transition: transform 1s ease;
+}
+footer img:hover{
+    width: 22%;
+    transform: scale(1.1);
+
+}
+footer .footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.social-icon{
+    display: block;
+    gap: 15px;
+    transition: transform 0.3s ease;
+}
+.social-icon a{
+    color: #f2f4f7;
+    transition: transform 0.3s ease;
+}
+.social-icon:hover{
+    transform: scale(1.1);
+}
+.social-icon a:hover{
+    transform: scale(1.05);
+    color: #a20000;
+}
+
+/* Additional Navbar and Footer Styling for the Logo */
+.navbar .logo h1 {
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.navbar .logo h1:hover {
+    color: #a20000; /* Maroon hover */
+}
+
+.footer-logo h1 {
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.footer-logo h1:hover {
+    color: #a20000; /* Maroon hover */
+}
+
+.navbar h1, .footer h1 {
+    font-family: 'Arial', sans-serif;
+    letter-spacing: 1px;
+}
