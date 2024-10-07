@@ -55,11 +55,6 @@ body{
     scale: 0.9;
 }
 
-
-/* Side Navebar */
-/* .side{
-    margin-top: 100px;
-} */
 .side-navebar{
     margin-top: 120px;
     width: 20%;
@@ -173,11 +168,12 @@ td{
 #user-registration-message-2{
     position: absolute;
     left: 50%;
-    bottom: 15px;
+    bottom: 5px;
     transform: translateX(-50%);
     font-size: 25px;
-    font-weight: bolder;
+    font-weight: 400;
     display: none;
+    background-color: gray;
 }
 
 
