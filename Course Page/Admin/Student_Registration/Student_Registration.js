@@ -259,7 +259,7 @@ function removeStudentByNicNumber(event,StudentNicToRemove) {
 //Logout function
 
 function logout() {
-    location.href = "../01_Admin_Login/admin_login.html";
+    location.href = "../../../course lending/lending_page.html";
 }
 
 const logoutButton = document.getElementById('logoutButton');
