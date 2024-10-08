@@ -50,7 +50,7 @@
              <ul class="side-navebar-links">
                  <li class="side-navebar-link"><a href="../Student_Registration/Student_Registration.html">REGISTER</a>
                  </li>
-                 <li class="side-navebar-link"><a href="../03_Fee_Management/fee_management.html">PAYMENT</a></li>
+                 <li class="side-navebar-link"><a href="../Fee_Managment/Fee_Management.htm">PAYMENT</a></li>
                  <li class="side-navebar-link"><a href="../Course_offering/Course_offering.html">COURSE OFFERINGS</a>
                  </li>
                  <li class="side-navebar-link"><a href="../05_Report/report.html">REPORT</a></li>
@@ -73,8 +73,8 @@
                 <thead>
                     <tr>
                         <th>Course Name</th>
-                        <th>Fee</th>
                         <th>Level</th>
+                        <th>Fee</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -103,32 +103,32 @@
                     <div id="course-offerings">
                         <form id="course-offerings-form">
                             <div class="form-group">
-                                <label for="nic">Course Name</label>
-                                <input type="text" id="nic" name="nic" autocomplete="off" required>
+                                <label for="courseName">Course Name</label>
+                                <input type="text" id="courseName" name="courseName" autocomplete="off" required>
                             </div>
                             <div class="form-group">
                                 <label for="level">Proficiency Level</label>
-                                <select class="form-select" aria-label="Default select example" required>
+                                <select class="form-select" id="level" aria-label="Default select example" required>
                                     <option selected>Proficiency Level</option>
-                                    <option value="2">Beginner</option>
-                                    <option value="6">Intermediate</option>
+                                    <option value="Beginner">Beginner</option>
+                                    <option value="Intermediate">Intermediate</option>
                                   </select>
                             </div>
                             <div class="form-group">
-                                <label for="courseFee">Course Fee</label>
-                                <input type="number" id="courseFee" name="courseFee" autocomplete="off" required>
+                                <label for="fee">Course Fee</label>
+                                <input type="number" id="fee" name="fee" autocomplete="off" required>
                             </div>
                             <div class="form-group">
                                 <label for="duration">Duration</label>
-                                <select class="form-select" aria-label="Default select example" required>
-                                    <option selected>Proficiency Level</option>
+                                <select class="form-select" id="duration" aria-label="Default select example" required>
+                                    <option selected>Duration</option>
                                     <option value="2">2 Months</option>
                                     <option value="6">6 Months</option>
                                   </select>
                             </div>
                             <div class="form-group">
                                 <label for="coursePic">Course Picture</label>
-                                <input type="file" id="coursePic" name="coursePic" required>
+                                <input type="file" id="coursePic" name="coursePic" >
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary main-btn">Register</button>
@@ -136,7 +136,7 @@
                         </form>
 
                         <div>
-                            <p id="user-registration-message"></p>
+                            <p id="course-offerings-message"></p>
                         </div>
 
                     </div>
