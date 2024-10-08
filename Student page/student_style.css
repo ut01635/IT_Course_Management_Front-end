@@ -34,6 +34,7 @@ li {
   text-transform: uppercase;
 }
 a {
+  text-decoration: none;
   position: relative;
   color: rgb(85, 83, 83);
   font-size: 14px;
@@ -88,4 +89,12 @@ a:hover {
 }
 .fa-bell:active {
   scale: 0.9;
+}
+
+
+.courses {
+  background-color: darkgray;
+}
+.payments{
+  background-color: darkgray;
 }

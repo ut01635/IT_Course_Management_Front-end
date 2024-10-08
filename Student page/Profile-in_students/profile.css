@@ -90,11 +90,4 @@
   .fa-bell:active {
     scale: 0.9;
   }
-  /* card */
-  .img{
-    height: 250px;
-    width: 250px;
-  }
-  .followBtn{
-    width: 100%;
-  }
+  
