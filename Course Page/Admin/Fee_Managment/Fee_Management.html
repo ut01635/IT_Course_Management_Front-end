@@ -126,7 +126,7 @@
   
  <!-- Payment details modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered" style="width: 100%;">
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="exampleModalLabel">Payment details</h1>
@@ -181,6 +181,271 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
     <script src="./Fee_Management.js"></script>
+    <script>
+        //Site Navebar
+const toggle = document.querySelector(".fa-bars")
+const toggleClose = document.querySelector(".fa-xmark")
+const sideNavebar = document.querySelector(".side-navebar")
+
+toggle.addEventListener("click" ,function(){
+    sideNavebar.style.right = "0"
+})
+
+toggleClose.addEventListener("click" , function(){
+    sideNavebar.style.right = "-60%"
+})
+
+
+
+
+let students  = [];
+let courses = [];
+let courseEnrollData = [];
+let InstallmentDetails  = [];
+let FullpaymentDetails  = [];
+
+const GetAllStudentsURL = 'http://localhost:5251/api/Student/Get-All-Students';
+//Fetch Students Data from Database
+async function GetAllStudents(){
+    fetch(GetAllStudentsURL).then((response) => {
+        return response.json();
+    }).then((data) => {
+        students = data;
+    })
+};
+GetAllStudents()
+
+
+const GetAllCoursesURL = 'http://localhost:5251/api/Course/Get-All-Courses';
+//Fetch Students Data from Database
+async function GetAllCourses(){
+    fetch(GetAllCoursesURL).then((response) => {
+        return response.json();
+    }).then((data) => {
+        courses = data;
+    })
+};
+GetAllCourses()
+
+const GetAllCourseEnrollURL = 'http://localhost:5251/api/CourseEnroll/Get-All-Enroll-Data';
+//Fetch CourseEnrollData Data from Database
+async function GetAllCourseEnrollData(){
+    fetch(GetAllCourseEnrollURL).then((response) => {
+        return response.json();
+    }).then((data) => {
+        courseEnrollData = data;
+    })
+};
+GetAllCourseEnrollData()
+
+const GetAllInstallmentsURL = 'http://localhost:5251/api/Installment/Get-All-Installments';
+//Fetch Installments Data from Database
+async function GetAllInstallments(){
+    fetch(GetAllInstallmentsURL).then((response) => {
+        return response.json();
+    }).then((data) => {
+        InstallmentDetails = data;
+        displayInstallmentPaymentTable()
+    })
+    
+};
+GetAllInstallments()
+
+const GetAllFullPaymentURL = 'http://localhost:5251/api/FullPayment/Get-All-FullPayments';
+//Fetch Fullpayments Data from Database
+async function GetAllFullPayments(){
+    fetch(GetAllFullPaymentURL).then((response) => {
+        return response.json();
+    }).then((data) => {
+        FullpaymentDetails = data;
+        displayFullPaymentTable()
+    })
+};
+GetAllFullPayments()
+
+const AddFullPaymentURL = 'http://localhost:5251/api/FullPayment/Add-FullPayment';
+//Add FullPayment data in Database
+async function AddFullPayment(FullPaymentData){
+    await fetch(AddFullPaymentURL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(FullPaymentData)
+    });
+    GetAllFullPayments()
+    displayFullPaymentTable()
+};
+
+
+const UpdateStatusURL = 'http://localhost:5251/api/CourseEnroll/Update-Status';
+//Update CourseEnroll Status
+async function UpdateStatus(CourseEnrollId , Status){
+    await fetch(`${UpdateStatusURL}/${CourseEnrollId}/${Status}`,{
+        method:"PUT",
+        headers:{
+            "Content-Type":"application/json"
+        },
+    });
+    GetAllCourseEnrollData()
+}
+
+const UpdatePaymentIdURL = 'http://localhost:5251/api/CourseEnroll/Add-payment-Id';
+//Update CourseEnroll PaymentId
+async function UpdatePaymentId(CourseEnrollId , InstallmentId , FullPaymentId){
+    await fetch(`${UpdatePaymentIdURL}/${CourseEnrollId}/${InstallmentId}/${FullPaymentId}`,{
+        method:"PUT",
+        headers:{
+            "Content-Type":"application/json"
+        },
+    });
+    GetAllCourseEnrollData()
+}
+
+const UpdateInstallmentURL = 'http://localhost:5251/api/Installment/Update-Installment';
+//Update Installments
+async function UpdateInstallment(installmentId , paidAmount){
+    await fetch(`${UpdateInstallmentURL}/${installmentId}/${paidAmount}`,{
+        method:"PUT",
+        headers:{
+            "Content-Type":"application/json"
+        },
+    });
+    GetAllInstallments()
+}
+
+const AddInstallmentURL = 'http://localhost:5251/api/Installment/Add-installment';
+//Add Stud
+async function AddInstallment(InstallmentData){
+    await fetch(AddInstallmentURL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(InstallmentData)
+    });
+    GetAllInstallments();
+    displayInstallmentPaymentTable();
+};
+
+
+// let totalAmount = 0;
+// let installmentAmount = 0;
+
+// document.getElementById('nic').addEventListener("keyup" , () =>{
+//     const nic = document.getElementById('nic').value.trim();
+//     const student = students.find((student) => student.nic == nic);
+            
+//     if(student){
+//         if(student.courseEnrollId != 0){
+//             const CourseEnrollDetail = courseEnrollData.find(c => c.id === student.courseEnrollId);
+//             const CourseDetails = courses.find(c => c.id == CourseEnrollDetail.courseId)
+
+//             if(CourseEnrollDetail != null){
+//                 document.getElementById('fee-management-message').textContent = student.fullName;
+//                 document.getElementById('fee-management-message').style.color = "green";
+    
+//                 courses.forEach(element => {
+//                     if(element.courseName == CourseDetails.courseName && element.level == CourseDetails.level){
+//                         document.getElementById('total-course-fee').textContent = `${element.totalFee} Rs`;
+//                         document.getElementById('total-amount').textContent = `${element.totalFee} Rs`;
+//                         if(CourseEnrollDetail.duration == "3"){
+//                             installmentAmount = element.totalFee / 3;
+//                             document.getElementById('installment-amount').textContent = `${installmentAmount} Rs / Month`
+//                         }else if(CourseEnrollDetail.duration == "6"){
+//                                 installmentAmount = element.totalFee / 6;
+//                                 document.getElementById('installment-amount').textContent = `${installmentAmount} Rs / Month`
+//                         }
+//                         totalAmount = element.totalFee;
+//                     }
+//                 });
+    
+//             }
+
+//         }else{
+//             document.getElementById('fee-management-message').textContent = `${student.fullName} didnt select a course`;
+//             document.getElementById('fee-management-message').style.color = "red";
+//             document.getElementById('total-course-fee').textContent = `0 Rs`;
+//             document.getElementById('total-amount').textContent = `0 Rs`;
+//             document.getElementById('installment-amount').textContent = `0 Rs`;
+//         }
+
+//     }else{
+//         document.getElementById('fee-management-message').textContent = "Student not found";
+//         document.getElementById('fee-management-message').style.color = "red";
+//     }
+
+// });
+
+
+let totalAmount = 0;
+    let installmentAmount = 0;
+
+    document.getElementById('nic').addEventListener("keyup", () => {
+        const nic = document.getElementById('nic').value.trim();
+        const student = students.find((student) => student.nic == nic);
+        
+        if (student) {
+            if (student.courseEnrollId != 0) {
+                const CourseEnrollDetail = courseEnrollData.find(c => c.nic === student.nic);
+                const CourseDetails = courses.find(c => c.id == CourseEnrollDetail.courseId);
+
+                if (CourseEnrollDetail != null) {
+                    document.getElementById('fee-management-message').textContent = student.fullName;
+                    document.getElementById('fee-management-message').style.color = "green";
+
+                    // Display all courses in the dropdown for this student
+                    let followedCourseDropdown = document.getElementById('followedCourse');
+                    followedCourseDropdown.innerHTML = '<option selected>Select your pay course</option>'; // Reset options
+                    courses.forEach(course => {
+                        let option = document.createElement("option");
+                        option.value = course.id;
+                        option.textContent = `${course.courseName} (${course.level})`;
+                        followedCourseDropdown.appendChild(option);
+                    });
+
+                }
+            } else {
+                document.getElementById('fee-management-message').textContent = `${student.fullName} didn't select a course`;
+                document.getElementById('fee-management-message').style.color = "red";
+                document.getElementById('total-course-fee').textContent = `0 Rs`;
+                document.getElementById('total-amount').textContent = `0 Rs`;
+                document.getElementById('installment-amount').textContent = `0 Rs`;
+                document.getElementById('followedCourse').innerHTML = '<option selected>No course selected</option>';
+            }
+
+        } else {
+            document.getElementById('fee-management-message').textContent = "Student not found";
+            document.getElementById('fee-management-message').style.color = "red";
+            document.getElementById('total-course-fee').textContent = `0 Rs`;
+            document.getElementById('total-amount').textContent = `0 Rs`;
+            document.getElementById('installment-amount').textContent = `0 Rs`;
+            document.getElementById('followedCourse').innerHTML = '<option selected>Select your pay course</option>';
+        }
+    });
+
+    // When a course is selected, update the course fee and installment info
+    document.getElementById('followedCourse').addEventListener('change', function () {
+        const selectedCourseId = this.value;
+        const selectedCourse = courses.find(course => course.id == selectedCourseId);
+
+        if (selectedCourse) {
+            document.getElementById('total-course-fee').textContent = `${selectedCourse.totalFee} Rs`;
+            totalAmount = selectedCourse.totalFee;
+
+            // Calculate installment amounts if duration is 3 or 6 months
+            if (selectedCourse.duration == "3") {
+                installmentAmount = totalAmount / 3;
+                document.getElementById('installment-amount').textContent = `${installmentAmount} Rs / Month`;
+            } else if (selectedCourse.duration == "6") {
+                installmentAmount = totalAmount / 6;
+                document.getElementById('installment-amount').textContent = `${installmentAmount} Rs / Month`;
+            }
+        }
+    });
+
+
+    </script>
 </body>
 
 </html>
