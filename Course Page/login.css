@@ -3,13 +3,18 @@
     padding: 0;
     box-sizing: border-box;
 }
+
 body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
-    padding-top: 60px; /* Space for the fixed navbar */
-    background-color: #333; /* Background color */
-    color: #fff; /* Text color */
+    padding-top: 60px;
+    /* Space for the fixed navbar */
+    background-color: #333;
+    /* Background color */
+    color: #fff;
+    /* Text color */
 }
+
 /* Navbar Styling */
 .navbar {
     position: fixed;
@@ -19,11 +24,13 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #4b0000; /* Maroon background */
+    background-color: #4b0000;
+    /* Maroon background */
     padding: 10px 20px;
     z-index: 1000;
 }
-.navbar .logo{
+
+.navbar .logo {
     display: flex;
     justify-content: start;
     align-items: center;
@@ -32,7 +39,8 @@ body {
 .navbar .logo h1 {
     color: #fff;
 }
-.navbar .logo img{
+
+.navbar .logo img {
     width: 10%;
 }
 
@@ -53,24 +61,31 @@ body {
 }
 
 .navbar .nav-links li a:hover {
-    color: #a20000; /* Maroon hover color */
+    color: #a20000;
+    /* Maroon hover color */
     transform: scale(1.05);
 }
 
 
 /* Login Form */
-.main{
+.main {
     padding-top: 90px;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100vh;
+
+    /* width: 100vh; */
 
 }
 
 .container {
     max-width: 100%;
-    width: 30%;
+    width: 25%;
+
+}
+
+.container {
+    width: 18%;
     background: linear-gradient(0deg, #ffffff 0%, #faeceb 100%);
     border-radius: 20px;
     padding: 25px 35px;
@@ -193,47 +208,65 @@ input:focus {
 
 /* Footer Section */
 .footer {
-    background-color: #000; /* Black background */
+    background-color: #000;
+    /* Black background */
     color: white;
-    padding: 10px 20px;
+    padding: px 20px;
     text-align: center;
-    /* width: 100%; */
     margin-top: 100px;
+    /* You may want to adjust or remove this */
+    position: fixed;
+    /* Fix the footer to the bottom */
+    bottom: 0;
+    /* Align it to the bottom */
+    left: 0;
+    /* Align it to the left */
+    width: 100%;
+    /* Full width */
+    z-index: 1000;
+    /* Ensure it appears above other content */
 }
-footer h1{
+
+footer h1 {
     font-weight: bolder;
 }
-footer img{
+
+footer img {
     width: 20%;
     transition: transform 1s ease;
 }
-footer img:hover{
+
+footer img:hover {
     width: 22%;
     transform: scale(1.1);
-
 }
-footer .footer{
+
+footer .footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.social-icon{
+.social-icon {
     display: block;
     gap: 15px;
     transition: transform 0.3s ease;
 }
-.social-icon a{
+
+.social-icon a {
     color: #f2f4f7;
     transition: transform 0.3s ease;
 }
-.social-icon:hover{
+
+.social-icon:hover {
     transform: scale(1.1);
 }
-.social-icon a:hover{
+
+.social-icon a:hover {
     transform: scale(1.05);
     color: #a20000;
 }
+
 
 /* Additional Navbar and Footer Styling for the Logo */
 .navbar .logo h1 {
@@ -244,7 +277,8 @@ footer .footer{
 }
 
 .navbar .logo h1:hover {
-    color: #a20000; /* Maroon hover */
+    color: #a20000;
+    /* Maroon hover */
 }
 
 .footer-logo h1 {
@@ -255,10 +289,12 @@ footer .footer{
 }
 
 .footer-logo h1:hover {
-    color: #a20000; /* Maroon hover */
+    color: #a20000;
+    /* Maroon hover */
 }
 
-.navbar h1, .footer h1 {
+.navbar h1,
+.footer h1 {
     font-family: 'Arial', sans-serif;
     letter-spacing: 1px;
 }
