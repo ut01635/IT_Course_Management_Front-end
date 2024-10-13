@@ -66,23 +66,29 @@
             <div id="fee-management" class=" px-5">
                 <div class="d-flex justify-content-between align-items-top mb-5">
                     <h2>Fee Management</h2>
-                    <button type="button"  class="btn btn-outline-secondary text-secondary-emphasis d-flex justify-content-end align-items-top" id="student-payment-details">Details <i class="fa fa-info-circle align-items-center" aria-hidden="true"></i></button>
+                    <button type="button"  class="btn btn-outline-secondary text-secondary-emphasis d-flex justify-content-end align-items-top" data-bs-toggle="modal" data-bs-target="#exampleModal">Details <i class="fa fa-info-circle align-items-center" aria-hidden="true"></i></button>
                 </div>
 
                 <form id="fee-management-form">
                     <table>
-                        <tr>
+                        <tr class="mt-4">
                             <td><label for="nic">NIC Number</label></td>
                             <td><input type="text" id="nic" name="nic" required></td>
                         </tr>
+                        <tr class="mt-4">
+                            <td><label for="followedCourse">Following Course</label></td>
+                            <td><select class="mt-2"  id="followedCourse" >
+                                <option selected>Select your pay course</option>
+                              </select></td>
+                        </tr>
 
-                        <tr>
+                        <tr class="mt-4">
                             <td><label for="total-course-fee">Total Course Fee</label></td>
                             <td><p id="total-course-fee">0 Rs</p></td>
                         </tr>
 
-                        <tr>
-                            <td><label for="fullname">Payment Plans</label></td>
+                        <tr class="mt-4">
+                            <td><label for="payment-plan">Payment Plans</label></td>
                             <td>
                                 <select name="payment-plan" id="payment-plan">
                                     <option >payment-plan</option>
@@ -92,12 +98,12 @@
                             </td>
                         </tr>
 
-                        <tr id="if-full-payment" >
+                        <tr id="if-full-payment" class="mt-4" >
                             <td><label for="email">Total Amount</label></td>
                             <td><p id="total-amount">0 Rs</p></td>
                         </tr>
 
-                        <tr id="if-installment">
+                        <tr id="if-installment" class="mt-4">
                             <td><label for="phone">Installments</label></td>
                             <td><p id="installment-amount">0 Rs</p></td>
                         </tr>
@@ -117,6 +123,57 @@
             </div>
         </div>
     </div>
+  
+ <!-- Payment details modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Payment details</h1>
+          <div >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div id="table-1">
+                <div id="table-container">
+                    <table id="payment-details-table" class="table">
+                        <thead>
+                            <tr>
+                                <th>Payment ID</th><th>Course Fee</th><th>Installment Amount</th><th>Payment Paid</th><th>Payment Due</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body-installment">
+    
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div id="table-2">
+                <div id="table-container" >
+                    <table id="payment-details-table" class="payment-details-table-2 table">
+                        <thead>
+                            <tr>
+                                <th>Payment ID</th><th>NIC Number</th><th>Full Name</th><th>Course Fee</th><th>Payment Paid</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body-fullpayment">
+    
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+
 
 
 

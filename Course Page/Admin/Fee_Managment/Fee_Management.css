@@ -204,3 +204,35 @@ td > p{
     font-size: 20px;
     font-weight: bold;
 }
+
+/* table style */
+#table-container{
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 25px;
+}
+#table-container{
+    overflow: auto;
+    height: 85%;
+}
+#table-container > table{
+    height: 50px;
+    border-spacing: 15px;
+
+}
+#table-container > table > tr:hover{
+    background-color: lightgrey;
+}
+th{
+    border:2px solid black;
+    border-radius: 10px;
+}
+#table-container > table td{
+   border-bottom: 2px solid black;
+   text-align: center;
+}
+
+#table-2{
+    display: none;
+} 

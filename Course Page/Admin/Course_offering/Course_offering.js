@@ -33,12 +33,28 @@ async function AddCourse(CourseData){
     CoursesTable();
 };
 
+//Update Course Fee
+async function UpdateCourseFee(CourseId , NewFee){
+    // Update Course
+    await fetch(`${UpdateCourseURL}/${CourseId}/${NewFee}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+    });
+    GetAllCourses();
+    CoursesTable();
+};
+
 // Delete Course From Database
 async function DeleteCourse(CourseId){
     // Delete Course
     await fetch(`${DeleteCourseURL}/${CourseId}`, {
         method: "DELETE"
     });
+
+    GetAllCourses();
+    CoursesTable();
 };
 
 //Site Navebar
@@ -79,6 +95,7 @@ document.getElementById("course-offerings-form").addEventListener('submit',(even
         document.getElementById('course-offerings-message').innerHTML = "Added New Course succesfull"
     }
     event.target.reset()
+    document.getElementById('staticBackdrop').style.display="none"
 
     setTimeout(()=>{
         document.getElementById('course-offerings-message').textContent = ""
@@ -126,7 +143,7 @@ function removeCourseById(event, courseIdToRemove) {
             // Show success message
             document.getElementById('course-offerings-message-2').style.color = "Green";
             document.getElementById('course-offerings-message-2').textContent = "Course Removed Successfully";
-
+            CoursesTable();
             // Remove row from the table
             const row = event.target.parentElement.parentElement;
             row.remove();
@@ -134,6 +151,7 @@ function removeCourseById(event, courseIdToRemove) {
             // If the course is not found
             document.getElementById('course-offerings-message-2').textContent = "Course not found in local storage";
         }
+       
 
         // Reset message after 2 seconds
         setTimeout(() => {
