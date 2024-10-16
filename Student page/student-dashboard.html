@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student- A to Z</title>
+    <link rel="stylesheet" href="./studentStyle.css">
+
+</head>
+
+<body>
+    <header>
+        <nav class="sidebar">
+            <div class="nav-container">
+                <div class="nav-header">
+                    <img src="./logo A to Z.png" class="nav-logo" alt="Logo">
+                </div>
+                <div class="nav-menu" id="nav-menu">
+                    <ul class="nav-list">
+                        <li class="nav-item"><a href="#home" class="nav-link">Home</a></li>
+                        <li class="nav-item"><a href="#profile" class="nav-link">Profile</a></li>
+                        <li class="nav-item"><a href="#courses" class="nav-link">Courses</a></li>
+                        <li class="nav-item"><a href="#notification" class="nav-link">Notification</a></li>
+                        <li class="nav-item"><a href="#payment" class="nav-link">Payment</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <section id="home">
+            <h3>Welcome to the world of coding with the best educaters</h3>
+            <p><b></b>A to Z Institution</b>, where excellence in education meets innovation. We offer
+                comprehensive programs and personalized support from A to Z, empowering students to achieve their
+                fullest potential. Our dedicated faculty and cutting-edge resources ensure a transformative learning
+                experience tailored to your success.</p>
+            <section class="container">
+                <marquee direction="right"> here you can get</marquee>
+                <div id="corsesFromAdminPage">
+                    <!-- dynamically course populatedhere -->
+
+                   
+                </div>
+                <marquee behavior="" direction="left">If you like to follow these courses, contact admin for more details</marquee>
+            </section>
+
+
+        </section>
+        <Section id="profile" class="container">
+            <!-- Profile Section -->
+            <div class="section" id="profile">
+                <h2>Profile</h2>
+                <section id="profileSection">
+                    <table id="profileTable">
+                        <tr>
+                            <th>Full Name</th>
+                            <td id="profileNameDisplay">Loading...</td>
+                        </tr>
+                        <tr>
+                            <th>NIC Number</th>
+                            <td id="profileNICDisplay">Loading...</td>
+                        </tr>
+                        <tr>
+                            <th>Date of Birth</th>
+                            <td id="profileDOBDisplay">Loading...</td>
+                        </tr>
+                        <tr>
+                            <th>Age</th>
+                            <td id="profileAgeDisplay">Loading...</td>
+                        </tr>
+                        <tr>
+                            <th>Address</th>
+                            <td id="profileAddressDisplay">Loading...</td>
+                        </tr>
+                    </table>
+                    <button onclick="openUpdateProfileModal()">Update Profile</button>
+                </section>
+            </div>
+
+            <!-- Update Profile Modal -->
+            <div id="updateProfileModal" class="modal">
+                <div class="modal-content">
+                    <h2>Update Profile</h2>
+                    <div class="form-group">
+                        <label for="updateProfileName">Full Name</label>
+                        <input type="text" id="updateProfileName">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateProfileNIC">NIC Number</label>
+                        <input type="text" id="updateProfileNIC" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateProfileDOB">Date of Birth</label>
+                        <input type="date" id="updateProfileDOB">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateProfileAge">Age</label>
+                        <input type="number" id="updateProfileAge">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateProfileAddress">Address</label>
+                        <input type="text" id="updateProfileAddress">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateProfilePassword">Password</label>
+                        <input type="password" id="updateProfilePassword">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateProfileConfirmPassword">Confirm Password</label>
+                        <input type="password" id="updateProfileConfirmPassword">
+                    </div>
+                    <div class="form-group">
+                        <button onclick="updateProfile()">Save Changes</button>
+                        <button onclick="closeUpdateProfileModal()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </Section>
+
+
+        <section id="courses" class="container">
+            <!-- Courses Section -->
+            <div class="section" id="courses">
+                <h2>Courses</h2>
+                <table id="studentCoursesTable">
+                    <thead>
+                        <tr>
+                            <th>Course ID</th>
+                            <th>Name</th>
+                            <th>Period</th>
+                            <th>Level</th>
+                            <th>Fee</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+        <section id="notification" class="container">
+            <!-- Notifications Section -->
+            <div class="section" id="notifications">
+                <h2>Notifications</h2>
+                <ul id="notificationsList"></ul>
+            </div>
+        </section>
+        <section id="payment" class="container">
+            <!-- Payment Section -->
+            <div class="section" id="payments">
+                <h2>Payments</h2>
+                <table id="studentPaymentsTable">
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Fee</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+    <Footer id="container-footer">
+        <div class="mainfoot">
+            <div class="logofoot">
+                <img src="./logo A to Z.png" alt="logo">
+            </div>
+            <div class="con">
+                <h5>Contact us</h5>
+                <p>Email : atoz@gmail.com</p>
+                <p>Phone :+94761021754</p>
+                <p>Address : vavuniya,north of srilanka</p>
+            </div>
+            <div class="about">
+                <h4>
+                    A To Z Institution
+                </h4>
+                <P>
+
+                    Welcome to A to Z Institution, where excellence in education meets innovation. We offer
+                    comprehensive programs and personalized support from A to Z, empowering students to achieve their
+                    fullest potential. Our dedicated faculty and cutting-edge resources ensure a transformative learning
+                    experience tailored to your success.
+                </P>
+            </div>
+        </div>
+        <hr>
+        <p>
+            <center>&copy; <span id="year"></span> A To Z Institution. All rights reserved.</center>
+        </p>
+    </Footer>
+    <script src="./studentScript.js"></script>
+</body>
+
+</html>
