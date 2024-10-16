@@ -7,7 +7,7 @@ async function fetchStudentData(nic) {
 }
 
 async function fetchCourses() {
-    const response = await fetch('/api/courses');
+    const response = await fetch('http://localhost:5043/api/Course/GetAllCourses');
     if (!response.ok) {
         throw new Error('Network response was not ok');
     }
@@ -15,7 +15,7 @@ async function fetchCourses() {
 }
 
 async function fetchNotifications(nic) {
-    const response = await fetch(`/api/notifications/${nic}`);
+    const response = await fetch(`http://localhost:5043/api/Notification/by-nic/${nic}`);
     if (!response.ok) {
         throw new Error('Network response was not ok');
     }
@@ -127,7 +127,7 @@ async function loadCourses() {
                 if (course) {
                     const row = studentCoursesTable.insertRow();
                     row.insertCell(0).innerText = course.id;
-                    row.insertCell(1).innerText = course.name;
+                    row.insertCell(1).innerText = course.courseName;
                     row.insertCell(2).innerText = course.period;
                     row.insertCell(3).innerText = course.level;
                     row.insertCell(4).innerText = course.fee;
@@ -197,18 +197,18 @@ async function populateCoursesFromAdminPage() {
             courses.forEach(course => {
                 const card = document.createElement('div');
                 card.className = 'course-card';
-
+const courseImage = document.createElement('img')
                 const courseName = document.createElement('h3');
-                courseName.innerText = course.name;
+                courseName.innerText = course.courseName;
 
                 const coursePeriod = document.createElement('p');
-                coursePeriod.innerText = `Period: ${course.period}`;
+                coursePeriod.innerText = `Period: ${course.duration}`;
 
                 const courseLevel = document.createElement('p');
                 courseLevel.innerText = `Level: ${course.level}`;
 
                 const courseFee = document.createElement('p');
-                courseFee.innerText = `Fee: $${course.fee}`;
+                courseFee.innerText = `Fee: $${course.fees}`;
 
                 card.appendChild(courseName);
                 card.appendChild(coursePeriod);
