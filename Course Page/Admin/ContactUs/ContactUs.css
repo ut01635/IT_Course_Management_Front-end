@@ -1,0 +1,139 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    font-style: normal;       
+}
+
+body{
+    height: 100vh;
+}
+/* Navebar */
+
+nav{
+    display: flex;
+    justify-content: space-between;
+    background-color: #4b0000; /* Maroon background */
+    color: #fff;
+    align-items: center;
+    padding: 10px 25px;
+    height: 90px;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px;
+}
+nav .logo {
+    display: flex;
+    align-items: center;
+}
+
+nav .logo img {
+    width: 50px; /* Adjust the logo size */
+    margin-right: 15px; /* Spacing between logo and text */
+}
+
+#logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+#logo-container p{
+    font-size: 25px;
+    font-weight: bolder;
+    color: rgb(0, 0, 0);
+}
+#logo-container p::first-letter{
+    color: orange;
+    font-size: 30px;
+}
+.navebar-menu-toggle{
+    font-size: 2.2rem;
+    padding-top: 15px;
+}
+
+.navebar-link a:hover{
+    text-decoration: underline;
+}
+
+.fa-bars{
+    cursor: pointer;
+}
+.fa-bars:active{
+    scale: 0.9;
+}
+nav>ul{
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+nav>ul>li{
+    list-style: none;
+}
+nav>ul>li>a{
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: #1d232c;
+    cursor: pointer;
+}
+
+
+
+
+
+/* Side Navebar */
+
+.side-navebar{
+    width: 20%;
+    height: 100%;
+    background-color:#1d232c;
+    position: fixed;
+    top: 0;
+    right: -60%;
+    padding: 20px;
+    color: white;
+    transition: 1s;
+    margin: 0;
+    z-index: 5;
+}
+
+.side-navebar p{
+    text-align: right;
+    font-size: 2rem;
+}
+.fa-xmark{
+    cursor: pointer;
+}
+.fa-xmark:active{
+    scale: 0.9;
+}
+
+.side-navebar-links{
+    list-style: none;
+}
+.side-navebar-link{
+    margin-bottom: 30px;
+}
+.side-navebar-link a{
+    text-decoration: none;
+    color: white;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+a::after{
+    content: '';
+    width: 0%;
+    height: 2px;
+    background: #f44336;
+    display: block;
+    margin: auto;
+    transition: 0.5s;
+}
+a:hover::after{
+    width: 100%;
+}
+.logout > a{
+    color: red;
+}
+

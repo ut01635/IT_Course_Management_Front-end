@@ -35,11 +35,6 @@
             <img src="../image/icon-removebg-preview.png" alt="A-Z LOGO">
             <h1> Coding Academy</h1>
         </div>
-        <ul>
-            <li><a id="student-report-link">Student Report</a></li>
-            <li><a id="course-enrollment-link">Course Enrollment</a></li>
-            <li><a id="financial-report-link">Financial Report</a></li>
-        </ul>
         <div class="navebar-menu-toggle">
             <i class="fa-solid fa-bars"></i>
         </div>
@@ -58,6 +53,7 @@
                  <li class="side-navebar-link"><a href="../Fee_Managment/Fee_Management.html">PAYMENT</a></li>
                  <li class="side-navebar-link"><a href="../Course_offering/Course_offering.html">COURSE OFFERINGS</a>
                  </li>
+                 <li class="side-navebar-link"><a href="../ContactUs/ContactUs.html">MESSAGE</a></li>
                  <li class="side-navebar-link"><a href="../Report/Report.html">REPORT</a></li>
                  <li class="side-navebar-link logout"><a href="#" id="logoutButton">Logout</a></li>
              </ul>
@@ -71,8 +67,10 @@
             <div class="heading">
                 <h1>Student</h1><h1>Report</h1>
                 <div id="search-container">
-                    <input type="text" id="search-by-nic" placeholder="NIC number"><button id="report-generate-btn">Generate Report</button>
+                    <input type="text" id="search-by-nic" placeholder="NIC number">
+                    <button id="report-generate-btn">Generate Report</button>
                 </div>
+                
             </div>
 
             <div id="form-container">
@@ -82,16 +80,16 @@
                             <h2>Personal Details</h2>
                         </div>
                         <table>
-                            <tr>
+                            <tr class="form-group">
                                 <td><label for="nic">NIC Number :</label></td><td><input type="text" id="nic" disabled></td>
                             </tr>
-                            <tr>
+                            <tr  class="form-group">
                                 <td><label for="name">Full Name :</label></td><td><input type="text" id="name" disabled></td>
                             </tr>
-                            <tr>
+                            <tr  class="form-group">
                                 <td><label for="email">Email :</label></td><td><input type="text" id="email" disabled></td>
                             </tr>
-                            <tr>
+                            <tr  class="form-group">
                                 <td><label for="phone">Phone No :</label></td><td><input type="text" id="phone" disabled></td>
                             </tr>
                         </table>
@@ -104,14 +102,12 @@
                         </div>
                         <table>
                             <tr>
-                                <td><label for="cours-ename">Course Name :</label></td><td><input type="text" id="course-name" disabled></td>
+                                <td><label for="cours-ename">Course Name :</label></td><td><select id="EnrollCourses" class="form-select" aria-label="Default select example">
+                                    <option selected>Following Course</option>
+                                    
+                                  </select></td>
                             </tr>
-                            <tr>
-                                <td><label for="level">Proficiency Level :</label></td><td><input type="text" id="level" disabled></td>
-                            </tr>
-                            <tr>
-                                <td><label for="duration">Duration :</label></td><td><input type="text" id="duration" disabled></td>
-                            </tr>
+                            
                         </table>
                     </div>
                 </form>
@@ -151,59 +147,6 @@
             </div>
             
 
-        </div>
-    </main>
-
-    <main id="course-enrollment" style="display: none;">
-        <div id="report-container">
-
-            <div class="heading">
-                <h1>Course</h1><h1>Enrollment</h1>
-            </div>
-
-            <div id="table-container">
-                <table id="course-enrollment-table">
-
-                    <tr>
-                        <th>Course ID</th><th>Course Name</th><th>Proficiency Level</th><th>Enrollment</th>
-                    </tr>
-                    
-                </table>
-            </div>
-
-        </div>
-    </main>
-
-    <main id="financial-report" style="display: none;">
-        <div id="report-container">
-
-            <div class="heading">
-                <h1>Financial</h1><h1>Report</h1>
-            </div>
-
-            <div id="financial-report-container">
-                <form id="financial-report-form">
-                    <div class="form-group">
-                        <table>
-                            <tr>
-                                <td><label for="initia-amount">Initial Amount :</label></td><td><input type="text" id="initia-amount" disabled></td>
-                            </tr>
-                            <tr>
-                                <td><label for="course-amount">Course Amount :</label></td><td><input type="text" id="course-amount" disabled></td>
-                            </tr>
-                            <tr>
-                                <td><label for="total-amount">Total Income :</label></td><td><input type="text" id="total-amount" disabled></td>
-                            </tr>
-                            <tr>
-                                <td><label for="out-standing-amount">Out Standing Amount:</label></td><td><input type="text" id="out-standing-amount" disabled></td>
-                            </tr>
-                        </table>
-                    </div>
-                </form>
-                <div class="chart-container">
-                    <canvas id="myChart"></canvas>
-                </div>
-            </div>
         </div>
     </main>
 
