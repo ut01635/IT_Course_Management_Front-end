@@ -78,7 +78,7 @@ async function updateProfile() {
     };
 
     try {
-        const response = await fetch(`https://localhost:7008/api/Student/Update-Student${nic}`, {
+        const response = await fetch(`https://localhost:7008/api/Student/Update-Student/${nic}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -109,8 +109,8 @@ async function loadCourses() {
             const studentCoursesTable = document.getElementById('studentCoursesTable').getElementsByTagName('tbody')[0];
             studentCoursesTable.innerHTML = '';
 
-            student.courses.forEach(id => {
-                const course = courses.find(course => course.id === id);
+            student.Course.forEach(id => {
+                const course = Course.find(course => course.id === id);
                 if (course) {
                     const row = studentCoursesTable.insertRow();
                     row.insertCell(0).innerText = course.id;
