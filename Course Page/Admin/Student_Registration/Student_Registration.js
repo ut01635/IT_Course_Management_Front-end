@@ -65,20 +65,31 @@ async function UpdateStudent(StudentNic, StudentUpdateData) {
 }
 
 // Delete Student From Database
-const DeleteStudentURL = 'https://localhost:7008/api/Student/Delete-student';
-
-async function DeleteStudent(StudentNic) {
+async function DeleteStudent(nic) {
     try {
-        const response = await fetch(`${DeleteStudentURL}/${StudentNic}`, {
-            method: "DELETE"
+        const response = await fetch(`https://localhost:7008/api/Student/Delete-student/${nic}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
-        if (!response.ok) throw new Error(`Failed to delete student: ${response.status}`);
-        await GetAllStudents();
+
+        if (!response.ok) {
+            throw new Error(`Failed to delete student: ${response.status} ${response.statusText}`);
+        }
+
+        // No need to parse the response body for a DELETE request
+        console.log(`Student with NIC ${nic} deleted successfully.`);
+        // Optionally refresh the student list here
+        await GetAllStudents(); // Refresh the student list
     } catch (error) {
-        console.error('Error deleting student:', error);
-        alert('Failed to delete student. Please ensure the server is running and the URL is correct.');
+        console.error("Error deleting student:", error);
+        alert(`Error deleting student: ${error.message}`);
     }
 }
+
+
+
 
 // Password Encryption
 function encryption(password) {
@@ -109,6 +120,7 @@ document.getElementById("registration-form").addEventListener("submit", function
             formData.append("phone", phone);
             formData.append("password", password);
             formData.append("registrationFee", registrationFee);
+            
             if (fileInput.length > 0) {
                 formData.append("imageFile", fileInput[0]);
             }
@@ -242,3 +254,7 @@ const logoutButton = document.getElementById('logoutButton');
 logoutButton.addEventListener('click', function() {
   logout();
 });
+
+
+
+
