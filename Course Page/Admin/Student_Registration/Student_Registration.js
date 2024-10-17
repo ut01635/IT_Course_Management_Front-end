@@ -229,3 +229,16 @@ async function removeStudentByNicNumber(event, nic) {
         await DeleteStudent(nic);
     }
 }
+
+
+
+//Logout function
+
+function logout() {
+    window.location.href = "../../../course lending/lending_page.html";
+}
+
+const logoutButton = document.getElementById('logoutButton');
+logoutButton.addEventListener('click', function() {
+  logout();
+});

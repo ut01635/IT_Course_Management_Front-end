@@ -10,101 +10,100 @@ body{
     height: 100vh;
     background-position: center;
 }
-/* Navebar */
 
-.navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
+/* Navbar */
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #4b0000; /* Maroon background */
-    padding: 10px 20px;
-    z-index: 1000;
+    padding: 10px 20px; /* Spacing around the content */
+    color: white; /* Text color */
+    position: fixed; /* Keep header fixed at the top */
+    width: 100%; /* Full width */
+    z-index: 1000; /* Ensure it's on top of other elements */
 }
-.navbar .logo{
+
+.header .logo {
     display: flex;
-    justify-content: start;
     align-items: center;
 }
 
-.navbar .logo h1 {
-    color: #fff;
+.header .logo img {
+    width: 50px; /* Adjust the logo size */
+    margin-right: 10px; /* Spacing between logo and text */
 }
-.navbar .logo img{
-    width: 10%;
+
+.header h1 {
+    font-size: 1.8rem; /* Adjust the font size */
+    margin: 0; /* Remove default margin */
 }
-.navebar-menu-toggle{
+
+.navebar-menu-toggle {
     font-size: 2.2rem;
-    padding-top: 15px;
+    cursor: pointer; /* Change cursor to pointer */
 }
 
-.navebar-link a:hover{
-    text-decoration: underline;
+
+.navebar-link a {
+    color: white; /* Ensure link color is set */
+    transition: color 0.3s ease, transform 0.3s ease; /* Add transition */
 }
 
-.fa-bars{
-    cursor: pointer;
-    color: #fff;
-}
-.fa-bars:active{
-    scale: 0.9;
+.navebar-link a:hover {
+    color: #f44336; /* Change color on hover */
+    transform: scale(1.05); /* Slight scale effect on hover */
 }
 
-.side-navebar{
+.side-navebar {
     margin-top: 120px;
     width: 20%;
     height: 70%;
-    background-color:#1d232c;
+    background-color: #1d232c;
     position: fixed;
     top: 10;
     right: -60%;
     padding: 20px;
     color: white;
-    transition: 1s;
+    transition: right 0.5s ease; /* Smooth transition for opening */
     margin: 0;
     z-index: 5;
 }
 
-.side-navebar p{
-    text-align: right;
-    font-size: 2rem;
-}
-.fa-xmark{
-    cursor: pointer;
-}
-.fa-xmark:active{
-    scale: 0.9;
+.side-navebar-links {
+    list-style: none;
+    padding: 0; /* Remove default padding */
 }
 
-.side-navebar-links{
-    list-style: none;
-}
-.side-navebar-link{
+.side-navebar-link {
     margin-bottom: 30px;
 }
-.side-navebar-link a{
-    text-decoration: none;
+
+.side-navebar-link a {
+    text-decoration: none; /* No underline by default */
     color: white;
     font-size: 1.4rem;
+    position: relative; /* Position for pseudo-element */
+    padding: 5px 0; /* Spacing for the link */
+    transition: color 0.3s ease, transform 0.3s ease; /* Add transition */
 }
-a::after{
-    content: '';
-    width: 0%;
-    height: 2px;
-    background: #f44336;
-    display: block;
-    margin: auto;
-    transition: 0.5s;
+
+.side-navebar-link a:hover {
+    color: #f44336; /* Change color on hover */
+    transform: scale(1.05); /* Slight scale effect on hover */
 }
-a:hover::after{
-    width: 100%;
-}
-.logout > a{
+
+.logout > a {
     color: red;
+    font-weight: bold; /* Make it more prominent */
+    transition: color 0.3s ease; /* Smooth color transition */
 }
+
+.logout > a:hover {
+    color: darkred; /* Change color on hover */
+}
+
+
 
 
 /* main table style */
