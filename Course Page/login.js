@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else if (student) {
             sessionStorage.setItem('loggedStudent', nicNumber);
             alert(alertMessage);
-            window.location.href = '../Student page/student-dashboard.html';
+            window.location.href = './Student page/student-dashboard.html';
             event.target.reset();
         } else {
             document.getElementById('loginMessage').textContent = "Invalid NIC number or password.";
