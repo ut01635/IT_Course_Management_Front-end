@@ -113,11 +113,13 @@ a:hover::after{
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 60%;
+    height: 50%;
+    margin-top: 50px;
 }
 #sub-container{
     display: flex;
-    gap: 100px;
+    /* gap: 100px; */
+    /* height: 100%; */
 }
 
 #main-container  h2{
@@ -152,11 +154,15 @@ input , select{
     padding: 0.5rem;
     font-size: 1rem;
     border: none;
+    color: #000000;
     text-decoration: line;
     outline: none;
     border-radius: 5px;
     margin-left: 25px;
     box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+select option{
+    color: #000000;
 }
 input:focus,select:focus{
     border: 1.9px solid #007bff;
@@ -203,4 +209,63 @@ td > p{
     width: 113%;
     font-size: 20px;
     font-weight: bold;
+}
+
+
+/* Modal Styles */
+.modal-dialog {
+    max-width: 90vw;  /* Make the modal take up a larger portion of the screen */
+    margin: 0 auto;   /* Center the modal horizontally */
+}
+
+#searchNic {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    border: 1px solid #000000;
+    border-radius: 4px;
+}
+
+/* Table Style */
+#payment-details-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#payment-details-table thead {
+    background-color: #640505;
+    color: #fff;
+}
+
+#payment-details-table th, #payment-details-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+#payment-details-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+    #payment-details-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    #payment-details-table th, #payment-details-table td {
+        padding: 8px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 576px) {
+    #payment-details-table th, #payment-details-table td {
+        padding: 6px;
+        font-size: 10px;
+    }
 }

@@ -14,12 +14,12 @@
     <!-- My Style Sheet -->
     <link rel="stylesheet" href="./Fee_Management.css">
 
-    <!-- Fond Awesome Link -->
+    <!-- Font Awesome Link -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <!-- Bootstrap cdn -->
+    <!-- Bootstrap CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
@@ -29,92 +29,140 @@
 </head>
 
 <body>
-    <!-- Navebar -->
+    <!-- Navbar -->
     <nav class="navbar px-5">
         <div class="logo">
             <img src="../image/icon-removebg-preview.png" alt="A-Z LOGO">
-            <h1> Coding Academy</h1>
+            <h1>Coding Academy</h1>
         </div>
         <div class="navebar-menu-toggle">
             <i class="fa-solid fa-bars"></i>
         </div>
     </nav>
 
-    <!-- Side Navebar -->
-     <div class="side">
+    <!-- Side Navbar -->
+    <div class="side">
+        <div class="side-navebar">
+            <p>
+                <i class="fa-solid fa-xmark"></i>
+            </p>
+            <ul class="side-navebar-links">
+                <li class="side-navebar-link"><a href="../Student_Registration/Student_Registration.html">REGISTER</a>
+                </li>
+                <li class="side-navebar-link"><a href="../Fee_Managment/Fee_Management.html">PAYMENT</a></li>
+                <li class="side-navebar-link"><a href="../Course_offering/Course_offering.html">COURSE OFFERINGS</a>
+                </li>
+                <li class="side-navebar-link"><a href="../ContactUs/ContactUs.html">MESSAGE</a></li>
+                <li class="side-navebar-link"><a href="../Report/Report.html">REPORT</a></li>
+                <li class="side-navebar-link logout"><a href="#" id="logoutButton">Logout</a></li>
+            </ul>
+        </div>
+    </div>
 
-         <div class="side-navebar">
-             <p>
-                 <i class="fa-solid fa-xmark"></i>
-             </p>
-             <ul class="side-navebar-links">
-                 <li class="side-navebar-link"><a href="../Student_Registration/Student_Registration.html">REGISTER</a>
-                 </li>
-                 <li class="side-navebar-link"><a href="../Fee_Managment/Fee_Management.html">PAYMENT</a></li>
-                 <li class="side-navebar-link"><a href="../Course_offering/Course_offering.html">COURSE OFFERINGS</a>
-                 </li>
-                 <li class="side-navebar-link"><a href="../ContactUs/ContactUs.html">MESSAGE</a></li>
-                 <li class="side-navebar-link"><a href="../Report/Report.html">REPORT</a></li>
-                 <li class="side-navebar-link logout"><a href="#" id="logoutButton">Logout</a></li>
-             </ul>
-         </div>
-     </div>
-
-
-     <!-- Form -->
+    <!-- Form -->
     <div id="main-container">
         <div id="sub-container" class="mt-5">
-            <div id="fee-management" class=" px-5">
+            <div id="fee-management" class="px-5">
                 <div class="d-flex justify-content-between align-items-top mb-5">
                     <h2>Fee Management</h2>
-                    <button type="button"  class="btn btn-outline-secondary text-secondary-emphasis d-flex justify-content-end align-items-top" id="student-payment-details">Details <i class="fa fa-info-circle align-items-center" aria-hidden="true"></i></button>
+                    <button type="button"
+                        class="btn btn-outline-secondary text-secondary-emphasis d-flex justify-content-end align-items-top"
+                        id="student-payment-details">Details <i class="fa fa-info-circle align-items-center"
+                            aria-hidden="true"></i></button>
                 </div>
 
                 <form id="fee-management-form">
-                    <table>
-                        <tr>
-                            <td><label for="nic">NIC Number</label></td>
-                            <td><input type="text" id="nic" name="nic" required></td>
-                        </tr>
-
-                        <tr>
-                            <td><label for="total-course-fee">Total Course Fee</label></td>
-                            <td><p id="total-course-fee">0 Rs</p></td>
-                        </tr>
-
-                        <tr>
-                            <td><label for="fullname">Payment Plans</label></td>
-                            <td>
-                                <select name="payment-plan" id="payment-plan">
-                                    <option >payment-plan</option>
-                                    <option value="fullpayment">Full Payment</option>
-                                    <option value="installment">Installment</option>
+                    <div class="container">
+                        <div class="row mb-3">
+                            <label for="nic" class="col-sm-3 col-form-label">NIC Number : </label>
+                            <div class="col-sm-8 d-flex justify-content-center align-items-center">
+                                <input type="text" class="form-control" id="nic" name="nic" placeholder="Input NIC Number" required>
+                            </div>
+                        </div>
+                
+                        <div class="row mb-3">
+                            <label for="course" class="col-sm-3 col-form-label">Select Course: </label>
+                            <div class="col-sm-8 d-flex justify-content-center align-items-center">
+                                <select id="course" name="course" class="form-select" required disabled>
+                                    <option value="">Select Course</option>
                                 </select>
-                            </td>
-                        </tr>
+                            </div>
+                        </div>
+                
+                        <div class="row mb-3">
+                            <label for="total-course-fee" class="col-sm-3 col-form-label">Total Course Fee: </label>
+                            <div class="col-sm-8 d-flex justify-content-center align-items-center rounded-2 bg-body-tertiary bg-opacity-25">
+                                <p id="total-course-fee">0 Rs</p>
+                            </div>
+                        </div> 
+                
+                        <div class="row mb-3">
+                            <label for="payment-plan" class="col-sm-3 col-form-label">Payment Plans: </label>
+                            <div class="col-sm-8 d-flex justify-content-center align-items-center rounded-2 bg-body-tertiary bg-opacity-25">
+                                <p id="payment-plan"></p>
+                            </div>
+                        </div>
+                
+                        <div class="row mb-3" id="if-full-payment">
+                            <label for="total-amount" class="col-sm-3 col-form-label">Total Amount: </label>
+                            <div class="col-sm-8 d-flex justify-content-center align-items-center rounded-2 bg-body-tertiary bg-opacity-25">
+                                <p id="total-amount">0 Rs</p>
+                            </div>
+                        </div>
+                 
+                        <div class="row mb-3" id="if-installment">
+                            <label for="installments" class="col-sm-3 col-form-label">Installments: </label>
+                            <div class="col-sm-8 d-flex justify-content-center align-items-center rounded-2 bg-body-tertiary bg-opacity-25">
+                                <p id="installment-amount">0 Rs</p>
+                            </div>
+                        </div>
+                
+                        <div class="row">
+                            <div class="col-sm-12 text-center">
+                                <button type="submit" class="btn btn-success btn-lg">Pay</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                
+                <div id="fee-management-message"></div>
+                
+            </div>
+        </div>
+    </div>
 
-                        <tr id="if-full-payment" >
-                            <td><label for="email">Total Amount</label></td>
-                            <td><p id="total-amount">0 Rs</p></td>
-                        </tr>
-
-                        <tr id="if-installment">
-                            <td><label for="phone">Installments</label></td>
-                            <td><p id="installment-amount">0 Rs</p></td>
-                        </tr>
-                       
-                    </table>
-                     
-                    <div id="button-container" class="d-grid col-6 mx-auto mt-5">
-                        <button type="submit" class="btn btn-success">Pay</button>
+    <!-- Modal for Payment Details -->
+    <!-- Modal for Payment Details -->
+    <div class="modal fade" id="paymentDetailsModal" tabindex="-1" aria-labelledby="paymentDetailsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentDetailsModalLabel">Payment Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Search by NIC Input -->
+                    <div class="mb-3">
+                        <input type="text" id="searchNic" class="form-control" placeholder="Search by NIC" />
                     </div>
 
-                </form>
-
-                <div>
-                    <p id="fee-management-message"></p>
+                    <!-- Payment Details Table -->
+                    <table class="table" id="payment-details-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Payment ID</th>
+                                <th>Enroll ID</th>
+                                <th>NIC</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Payment details will be dynamically inserted here -->
+                        </tbody>
+                    </table>
                 </div>
-
             </div>
         </div>
     </div>
