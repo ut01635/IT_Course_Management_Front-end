@@ -28,15 +28,17 @@ async function GetAllStudents() {
 }
 GetAllStudents();
 
-// Add Student in  Databases
+// Add Student in Database
 const AddStudentURL = 'https://localhost:7008/api/Student/Add-Student';
 
-async function AddStudent(formData) {
-
+async function AddStudent(studentData) {
     try {
         const response = await fetch(AddStudentURL, {
             method: "POST",
-            body: formData
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(studentData)
         });
         if (!response.ok) throw new Error(`Failed to add student: ${response.status}`);
         await GetAllStudents();
@@ -44,7 +46,6 @@ async function AddStudent(formData) {
         console.error('Error adding student:', error);
         alert('Failed to add student. Please ensure the server is running and the URL is correct.');
     }
-    
 }
 
 // Update Student Contact Details
@@ -52,6 +53,8 @@ const UpdateStudentURL = 'https://localhost:7008/api/Student/Update-Student';
 
 async function UpdateStudent(StudentNic, StudentUpdateData) {
     try {
+        console.log('Updating student:', StudentNic, StudentUpdateData); // Log data being sent
+
         const response = await fetch(`${UpdateStudentURL}/${StudentNic}`, {
             method: "PUT",
             headers: {
@@ -59,10 +62,14 @@ async function UpdateStudent(StudentNic, StudentUpdateData) {
             },
             body: JSON.stringify(StudentUpdateData)
         });
-        if (!response.ok) throw new Error(`Failed to update student: ${response.status}`);
+
+        if (!response.ok) {
+            const errorResponse = await response.json();
+            throw new Error(`Failed to update student: ${response.status} - ${errorResponse.message || 'No details provided'}`);
+        }
     } catch (error) {
         console.error('Error updating student:', error);
-        alert('Failed to update student. Please ensure the server is running and the URL is correct.');
+        alert('Failed to update student. Please ensure the server is running and the URL is correct. Error: ' + error.message);
     }
 }
 
@@ -79,10 +86,6 @@ async function DeleteStudent(nic) {
         if (!response.ok) {
             throw new Error(`Failed to delete student: ${response.status} ${response.statusText}`);
         }
-
-        // No need to parse the response body for a DELETE request
-        console.log(`Student with NIC ${nic} deleted successfully.`);
-        // Optionally refresh the student list here
         await GetAllStudents(); // Refresh the student list
     } catch (error) {
         console.error("Error deleting student:", error);
@@ -90,11 +93,27 @@ async function DeleteStudent(nic) {
     }
 }
 
+// Password validation function
+function validatePassword() {
+    const password = document.getElementById('password').value.trim();
+    const messageElement = document.getElementById('user-registration-message');
 
+    if (password.length >= 8) {
+        messageElement.style.color = "Green";
+        messageElement.textContent = "Valid password";
+        document.getElementById('password').style.border = "2px solid Green";
+    } else if (password.length === 0) {
+        document.getElementById('password').style.border = "none";
+        messageElement.textContent = ""; // Clear message
+    } else {
+        messageElement.style.color = "Red";
+        messageElement.textContent = "Password must be at least 8 characters long";
+        document.getElementById('password').style.border = "2px solid Red";
+    }
+}
 
-
-// Password Encryption
-
+// Add password validation event listener
+document.getElementById('password').addEventListener("keyup", validatePassword);
 
 // Form Submit Function
 document.getElementById("registration-form").addEventListener("submit", function(event) {
@@ -104,7 +123,6 @@ document.getElementById("registration-form").addEventListener("submit", function
     const email = document.getElementById("email").value.trim();
     const phone = document.getElementById('phone').value.trim();
     const password = document.getElementById('password').value.trim();
-    const fileInput = document.getElementById('profilepic').files;
     const registrationFee = 2500;
 
     const existingUser = students.find(user => user.nic === nic);
@@ -112,20 +130,18 @@ document.getElementById("registration-form").addEventListener("submit", function
         document.getElementById('user-registration-message').style.color = "Red";
         document.getElementById('user-registration-message').textContent = "User already exists";
     } else {
+        // Check password length again before proceeding
         if (password.length >= 8) {
-            const formData = new FormData();
-            formData.append("nic", nic);
-            formData.append("fullName", fullName);
-            formData.append("email", email);
-            formData.append("phone", phone);
-            formData.append("password", password);
-            formData.append("registrationFee", registrationFee);
-            
-            if (fileInput.length > 0) {
-                formData.append("imageFile", fileInput[0]);
-            }
+            const studentData = {
+                nic: nic,
+                fullName: fullName,
+                email: email,
+                phone: phone,
+                password: password,
+                registrationFee: registrationFee
+            };
 
-            AddStudent(formData);
+            AddStudent(studentData);
             document.getElementById('user-registration-message').style.color = "Green";
             document.getElementById('user-registration-message').textContent = "Registered Successfully";
             event.target.reset();
@@ -138,40 +154,6 @@ document.getElementById("registration-form").addEventListener("submit", function
     setTimeout(() => {
         document.getElementById('user-registration-message').textContent = "";
     }, 3000);
-});
-
-// Check if student already exists on NIC input
-document.getElementById('nic').addEventListener("keyup", () => {
-    const nic = document.getElementById('nic').value.trim();
-    const student = students.find((student) => student.nic === nic);
-    const messageElement = document.getElementById('user-registration-message');
-    if (student) {
-        messageElement.style.color = "Red";
-        messageElement.textContent = "Student Already Exists";
-        document.getElementById('nic').style.border = "2px solid Red";
-    } else if (nic.length === 0) {
-        document.getElementById('nic').style.border = "none";
-    } else {
-        messageElement.style.color = "Green";
-        messageElement.textContent = "New Student";
-        document.getElementById('nic').style.border = "2px solid green";
-    }
-});
-
-// Password validation
-document.getElementById('password').addEventListener("keyup", () => {
-    const password = document.getElementById('password').value.trim();
-    const messageElement = document.getElementById('user-registration-message');
-
-    if (password.length >= 8) {
-        messageElement.style.color = "Green";
-        messageElement.textContent = "Valid password";
-        document.getElementById('password').style.border = "2px solid Green";
-    } else if (password.length === 0) {
-        document.getElementById('password').style.border = "none";
-    } else {
-        document.getElementById('password').style.border = "2px solid Red";
-    }
 });
 
 // Show Table
@@ -196,7 +178,6 @@ function ShowTable() {
         });
     }
 }
-ShowTable();  
 
 // Update Student
 function updateStudent(fullName, email, phone, UpdateButton, SaveButton) {
@@ -223,6 +204,12 @@ async function saveStudent(fullName, email, phone, UpdateButton, SaveButton, Stu
         phone: phoneValue
     };
 
+    // Check for required fields
+    if (!fullNameValue || !emailValue || !phoneValue) {
+        alert('All fields are required to update the student.');
+        return;
+    }
+
     await UpdateStudent(StudentNic, studentUpdateData);
 
     document.getElementById(fullName).disabled = true;
@@ -242,19 +229,11 @@ async function removeStudentByNicNumber(event, nic) {
     }
 }
 
-
-
-//Logout function
-
-function logout() {
-    window.location.href = "../../../course lending/lending_page.html";
+// Logout function
+const logoutButton = document.getElementById("logout-button");
+if (logoutButton) {
+    logoutButton.addEventListener("click", function() {
+        alert("Logged out successfully!");
+        // Redirect to login or home page
+    });
 }
-
-const logoutButton = document.getElementById('logoutButton');
-logoutButton.addEventListener('click', function() {
-  logout();
-});
-
-
-
-
