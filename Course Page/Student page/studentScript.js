@@ -1,5 +1,5 @@
 async function fetchStudentData(nic) {
-    const response = await fetch(`/api/students/${nic}`);
+    const response = await fetch(`https://localhost:7008/api/Student/Get-StudentByNIC${nic}`);
     if (!response.ok) {
         throw new Error('Network response was not ok');
     }
@@ -7,15 +7,7 @@ async function fetchStudentData(nic) {
 }
 
 async function fetchCourses() {
-    const response = await fetch('http://localhost:5043/api/Course/GetAllCourses');
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
-    return await response.json();
-}
-
-async function fetchNotifications(nic) {
-    const response = await fetch(`http://localhost:5043/api/Notification/by-nic/${nic}`);
+    const response = await fetch('https://localhost:7008/api/Course/GetAllCourses');
     if (!response.ok) {
         throw new Error('Network response was not ok');
     }
@@ -23,7 +15,7 @@ async function fetchNotifications(nic) {
 }
 
 async function loadProfile() {
-    const nic = localStorage.getItem('currentStudentNIC');
+    const nic = sessionStorage.getItem('loggedStudent');
     if (!nic) {
         console.error('No NIC found in local storage.');
         return;
@@ -31,18 +23,18 @@ async function loadProfile() {
 
     try {
         const student = await fetchStudentData(nic);
-        document.getElementById('profileNameDisplay').innerText = student.name;
+        document.getElementById('profileNameDisplay').innerText = student.fullName;
         document.getElementById('profileNICDisplay').innerText = student.nic;
-        document.getElementById('profileDOBDisplay').innerText = student.dob;
-        document.getElementById('profileAgeDisplay').innerText = student.age;
-        document.getElementById('profileAddressDisplay').innerText = student.address;
+        document.getElementById('profileEmailDisplay').innerText = student.email;
+        document.getElementById('profilePhoneDisplay').innerText = student.phone;
+
     } catch (error) {
         console.error('Error fetching student data:', error);
     }
 }
 
 async function openUpdateProfileModal() {
-    const nic = localStorage.getItem('currentStudentNIC');
+    const nic = sessionStorage.getItem('loggedStudent');
     if (!nic) {
         console.error('No NIC found in local storage.');
         return;
@@ -50,11 +42,10 @@ async function openUpdateProfileModal() {
 
     try {
         const student = await fetchStudentData(nic);
-        document.getElementById('updateProfileName').value = student.name;
+        document.getElementById('updateProfileName').value = student.fullName;
         document.getElementById('updateProfileNIC').value = student.nic;
-        document.getElementById('updateProfileDOB').value = student.dob;
-        document.getElementById('updateProfileAge').value = student.age;
-        document.getElementById('updateProfileAddress').value = student.address;
+        document.getElementById('updateProfileEmail').value = student.email;
+        document.getElementById('updateProfilePhone').value = student.phone;
 
         document.getElementById('updateProfileModal').style.display = 'block';
     } catch (error) {
@@ -67,34 +58,27 @@ async function closeUpdateProfileModal() {
 }
 
 async function updateProfile() {
-    const nic = localStorage.getItem('currentStudentNIC');
+    const nic = sessionStorage.getItem('loggedStudent');
     if (!nic) {
         console.error('No NIC found in local storage.');
         return;
     }
 
     const studentName = document.getElementById('updateProfileName').value.trim();
-    const studentDOB = document.getElementById('updateProfileDOB').value.trim();
-    const studentAge = document.getElementById('updateProfileAge').value.trim();
-    const studentAddress = document.getElementById('updateProfileAddress').value.trim();
-    const studentPassword = document.getElementById('updateProfilePassword').value.trim();
-    const studentConfirmPassword = document.getElementById('updateProfileConfirmPassword').value.trim();
-
-    if (studentPassword !== studentConfirmPassword) {
-        alert('Passwords do not match!');
-        return;
-    }
+    const studentNIC = document.getElementById('updateProfileNIC').value.trim();
+    const studentEmail = document.getElementById('updateProfileEmail').value.trim();
+    const studentPhone = document.getElementById('updateProfilePhone').value.trim();
+   
 
     const payload = {
         name: studentName,
-        dob: studentDOB,
-        age: studentAge,
-        address: studentAddress,
-        password: studentPassword ? btoa(studentPassword) : undefined,
+        nic: studentNIC,
+        email: studentEmail,
+        phone: studentPhone,
     };
 
     try {
-        const response = await fetch(`/api/students/${nic}`, {
+        const response = await fetch(`https://localhost:7008/api/Student/Update-Student${nic}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -112,8 +96,11 @@ async function updateProfile() {
     }
 }
 
+
+
+//load cousrse in table
 async function loadCourses() {
-    const nic = localStorage.getItem('currentStudentNIC');
+    const nic = sessionStorage.getItem('loggedStudent');
     try {
         const courses = await fetchCourses();
         const student = await fetchStudentData(nic); // Fetch the student data to get their courses
@@ -122,8 +109,8 @@ async function loadCourses() {
             const studentCoursesTable = document.getElementById('studentCoursesTable').getElementsByTagName('tbody')[0];
             studentCoursesTable.innerHTML = '';
 
-            student.courses.forEach(courseId => {
-                const course = courses.find(course => course.id === courseId);
+            student.courses.forEach(id => {
+                const course = courses.find(course => course.id === id);
                 if (course) {
                     const row = studentCoursesTable.insertRow();
                     row.insertCell(0).innerText = course.id;
@@ -138,9 +125,27 @@ async function loadCourses() {
         console.error('Error loading courses:', error);
     }
 }
+async function fetchNotifications(nic) {
+    const response = await fetch(`https://localhost:7008/api/Notification/by-nic/${nic}`);
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return await response.json();
+}
 
+
+
+
+
+
+
+
+
+
+
+//notification section -----------------------------------------------------------------
 async function loadNotifications() {
-    const nic = localStorage.getItem('currentStudentNIC');
+    const nic = sessionStorage.getItem('loggedStudent');
     if (!nic) {
         console.error('No NIC found in local storage.');
         return;
@@ -161,8 +166,17 @@ async function loadNotifications() {
     }
 }
 
+
+
+
+
+
+
+
+
+//payment section-----------------------------------------------------------------------------------------------------------------------------------------------------------
 async function loadPayments() {
-    const nic = localStorage.getItem('currentStudentNIC');
+    const nic = sessionStorage.getItem('loggedStudent');
     try {
         const courses = await fetchCourses();
         const student = await fetchStudentData(nic);
@@ -187,6 +201,17 @@ async function loadPayments() {
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+//first course card---------------------------------------------------------------------------------------------------------------------------------------------------------
 async function populateCoursesFromAdminPage() {
     try {
         const courses = await fetchCourses();
