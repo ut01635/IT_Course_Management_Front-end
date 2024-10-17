@@ -28,10 +28,11 @@ async function GetAllStudents() {
 }
 GetAllStudents();
 
-// Add Student in Database
+// Add Student in  Databases
 const AddStudentURL = 'https://localhost:7008/api/Student/Add-Student';
 
 async function AddStudent(formData) {
+
     try {
         const response = await fetch(AddStudentURL, {
             method: "POST",
@@ -43,6 +44,7 @@ async function AddStudent(formData) {
         console.error('Error adding student:', error);
         alert('Failed to add student. Please ensure the server is running and the URL is correct.');
     }
+    
 }
 
 // Update Student Contact Details
@@ -92,9 +94,7 @@ async function DeleteStudent(nic) {
 
 
 // Password Encryption
-function encryption(password) {
-    return btoa(password);
-}
+
 
 // Form Submit Function
 document.getElementById("registration-form").addEventListener("submit", function(event) {
@@ -103,7 +103,7 @@ document.getElementById("registration-form").addEventListener("submit", function
     const fullName = document.getElementById('fullname').value.trim();
     const email = document.getElementById("email").value.trim();
     const phone = document.getElementById('phone').value.trim();
-    const password = encryption(document.getElementById('password').value.trim());
+    const password = document.getElementById('password').value.trim();
     const fileInput = document.getElementById('profilepic').files;
     const registrationFee = 2500;
 
