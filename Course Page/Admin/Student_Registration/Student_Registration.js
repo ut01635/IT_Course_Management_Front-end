@@ -81,9 +81,7 @@ async function DeleteStudent(StudentNic) {
 }
 
 // Password Encryption
-function encryption(password) {
-    return btoa(password);
-}
+
 
 // Form Submit Function
 document.getElementById("registration-form").addEventListener("submit", function(event) {
@@ -92,7 +90,7 @@ document.getElementById("registration-form").addEventListener("submit", function
     const fullName = document.getElementById('fullname').value.trim();
     const email = document.getElementById("email").value.trim();
     const phone = document.getElementById('phone').value.trim();
-    const password = encryption(document.getElementById('password').value.trim());
+    const password = document.getElementById('password').value.trim();
     const fileInput = document.getElementById('profilepic').files;
     const registrationFee = 2500;
 
