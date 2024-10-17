@@ -16,6 +16,62 @@ async function fetchCourses() {
     return await response.json();
 }
 
+// Fetch notifications by NIC
+async function fetchNotifications(nic) {
+    const response = await fetch(`https://localhost:7008/api/Notification/by-nic/${nic}`);
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return await response.json();
+}
+// Fetch enrollments for the student by NIC
+async function fetchEnrollmentsByNic(nic) {
+    const response = await fetch(`https://localhost:7008/api/Enrollment/by-nic/${nic}`);
+    if (!response.ok) {
+        throw new Error('Network response was not ok');   
+    }
+    return await response.json();
+}
+
+// Fetch course details by course ID
+async function fetchCourseData(courseId) {
+    const response = await fetch(`https://localhost:7008/api/Course/${courseId}`);
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return await response.json();
+}
+
+
+// Populate courses from admin page
+async function populateCoursesFromAdminPage() {
+    try {
+        const courses = await fetchCourses();
+        const coursesContainer = document.getElementById('corsesFromAdminPage'); // Ensure this matches your HTML ID
+        coursesContainer.innerHTML = '';
+
+        if (courses.length > 0) {
+            courses.forEach(course => {
+                const card = document.createElement('div');
+                card.className = 'course-card';
+
+                card.innerHTML = `
+                    <img src="${course.imagePath}" alt="${course.courseName}"> <!-- Corrected imagePath -->
+                    <h3>${course.courseName}</h3>
+                    <p>Period: ${course.duration}</p>
+                    <p>Level: ${course.level}</p>
+                    <p>Fee: $${course.fees}</p>
+                `;
+
+                coursesContainer.appendChild(card);
+            });
+        } else {
+            coursesContainer.innerHTML = '<p>No courses available at the moment. Please contact admin for more details.</p>';
+        }
+    } catch (error) {
+        console.error('Error populating courses:', error.message);
+    }
+}
 // Load student profile
 async function loadProfile() {
     const nic = sessionStorage.getItem('loggedStudent');
@@ -106,48 +162,42 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// Load courses for the student
 async function loadCourses() {
     const nic = sessionStorage.getItem('loggedStudent');
+    if (!nic) {
+        console.error('No NIC found in local storage.');
+        return;
+    }
+
     try {
-        console.log('Fetching courses...');
-        const courses = await fetchCourses();
-        console.log('Fetched courses:', courses);
-
-        const student = await fetchStudentData(nic); 
-        console.log('Fetched student data for courses:', student);
-
-        if (student && student.courses.length > 0) {
-            const studentCoursesTable = document.getElementById('studentCoursesTable').getElementsByTagName('tbody')[0];
-            studentCoursesTable.innerHTML = '';
-
-            student.courses.forEach(id => {
-                const course = courses.find(course => course.id === id);
-                if (course) {
-                    const row = studentCoursesTable.insertRow();
-                    row.insertCell(0).innerText = course.id;
-                    row.insertCell(1).innerText = course.courseName;
-                    row.insertCell(2).innerText = course.duration;
-                    row.insertCell(3).innerText = course.level;
-                    row.insertCell(4).innerText = course.fees;
-                }
-            });
-        } else {
+        // Step 1: Fetch enrollments
+        const enrollments = await fetchEnrollmentsByNic(nic);
+        if (enrollments.length === 0) {
             alert('No courses enrolled.');
+            return;
+        }
+
+        const studentCoursesTable = document.getElementById('studentCoursesTable').getElementsByTagName('tbody')[0];
+        studentCoursesTable.innerHTML = ''; // Clear existing rows
+
+        // Step 2: Fetch course details for each enrollment
+        for (const enrollment of enrollments) {
+            const course = await fetchCourseData(enrollment.courseId);
+            
+            // Step 3: Populate the table
+            const row = studentCoursesTable.insertRow();
+            row.insertCell(0).innerText = course.id;           // Course ID
+            row.insertCell(1).innerText = course.courseName;   // Course Name
+            row.insertCell(2).innerText = course.duration;      // Duration
+            row.insertCell(3).innerText = course.level;         // Level
+            row.insertCell(4).innerText = course.fees;          // Fees
         }
     } catch (error) {
         console.error('Error loading courses:', error.message);
     }
 }
 
-// Fetch notifications by NIC
-async function fetchNotifications(nic) {
-    const response = await fetch(`https://localhost:7008/api/Notification/by-nic/${nic}`);
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
-    return await response.json();
-}
+
 
 // Load notifications
 async function loadNotifications() {
@@ -206,35 +256,6 @@ async function loadPayments() {
     }
 }
 
-// Populate courses from admin page
-async function populateCoursesFromAdminPage() {
-    try {
-        const courses = await fetchCourses();
-        const coursesContainer = document.getElementById('corsesFromAdminPage'); // Ensure this matches your HTML ID
-        coursesContainer.innerHTML = '';
-
-        if (courses.length > 0) {
-            courses.forEach(course => {
-                const card = document.createElement('div');
-                card.className = 'course-card';
-
-                card.innerHTML = `
-                    <img src="${course.imagePath}" alt="${course.courseName}"> <!-- Corrected imagePath -->
-                    <h3>${course.courseName}</h3>
-                    <p>Period: ${course.duration}</p>
-                    <p>Level: ${course.level}</p>
-                    <p>Fee: $${course.fees}</p>
-                `;
-
-                coursesContainer.appendChild(card);
-            });
-        } else {
-            coursesContainer.innerHTML = '<p>No courses available at the moment. Please contact admin for more details.</p>';
-        }
-    } catch (error) {
-        console.error('Error populating courses:', error.message);
-    }
-}
 
 
 // Initialize page by loading necessary data
