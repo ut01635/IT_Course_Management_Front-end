@@ -31,7 +31,7 @@ function formatDateTime(dateString) {
     const minutes = String(date.getMinutes()).padStart(2, '0'); // Get minutes and pad with leading zero
 
     // Return the formatted date and time
-    return  `${hours}.${minutes} - ${day}/${month}/${year} `;
+    return `${hours}.${minutes} - ${day}/${month}/${year} `;
 }
 
 
@@ -40,7 +40,7 @@ async function fetchContactUsDetails() {
     try {
         const response = await fetch(contactUsURL);
         if (!response.ok) throw new Error('Network response was not ok');
-        
+
         const contacts = await response.json();
         const contactTableBody = document.getElementById("ContactUS-details-table");
 
@@ -87,5 +87,81 @@ async function deleteContact(contactId) {
     }
 }
 
+
+
+document.getElementById('notificationForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    const nic = document.getElementById('nic').value;
+    const message = document.getElementById('message').value;
+
+    const currentDate = new Date().toISOString();
+
+    const data = {
+        studentNIC: nic,      // Use the correct field name
+        message: message,     // Ensure this matches the API's expectation
+        date: currentDate     // Ensure this is correctly named if needed
+    };
+
+    console.log('Request Data:', JSON.stringify(data)); // Log the data being sent
+
+    try {
+        const response = await fetch('https://localhost:7008/api/Notification/CreateNotification', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        const responseDiv = document.getElementById('response');
+
+        if (response.ok) {
+            responseDiv.innerText = 'Notification Successfully sent: ' + result.message;
+            responseDiv.style.color = 'green'; // Change text color to green
+        } else {
+            responseDiv.innerText = 'Notification Not sent, Try Again';
+            responseDiv.style.color = 'red'; // Change text color to red
+        }
+         // Clear the form fields
+         document.getElementById('notificationForm').reset(); // Reset the form fields
+
+        // Show the response and hide it after 10 seconds
+        responseDiv.style.display = 'block';
+        setTimeout(() => {
+            responseDiv.style.display = 'none';
+        }, 2000);
+
+    } catch (error) {
+        console.error('Error:', error);
+        const responseDiv = document.getElementById('response');
+        responseDiv.innerText = 'Notification Not sent, Try Again';
+        responseDiv.style.color = 'red'; // Change text color to red
+
+        // Show the response and hide it after 10 seconds
+        responseDiv.style.display = 'block';
+        setTimeout(() => {
+            responseDiv.style.display = 'none';
+        }, 2000);
+    }
+});
+
+
+
+
+
 // Initial fetch of contact details when the page loads
 fetchContactUsDetails();
+
+
+//Logout function
+
+function logout() {
+    window.location.href = "../01_Admin_Login/admin_login.html";
+}
+
+const logoutButton = document.getElementById('logoutButton');
+logoutButton.addEventListener('click', function () {
+    logout();
+});

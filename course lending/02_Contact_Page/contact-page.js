@@ -46,17 +46,22 @@ document.getElementById('contactUsForm').addEventListener("submit", async (event
         document.getElementById('contactUsMessage').textContent = "Your message was successfully sent!";
         document.getElementById('contactUsMessage').style.color = "green";
 
+        // Show the response and hide it after 10 seconds
+        document.getElementById('contactUsMessage').style.display = 'block';
         setTimeout(() => {
-            messageElem.textContent = '';
-        }, 10000);
+            document.getElementById('contactUsMessage').style.display = 'none';
+        }, 2000);
         
     } catch (error) {
         // Show error message
         document.getElementById('contactUsMessage').textContent = "Your message was not sent. Please try again.";
         document.getElementById('contactUsMessage').style.color = "red";
+
+        // Show the response and hide it after 10 seconds
+        document.getElementById('contactUsMessage').style.display = 'block';
         setTimeout(() => {
-            messageElem.textContent = '';
-        }, 100);
+            document.getElementById('contactUsMessage').style.display = 'none';
+        }, 2000);
     }
 
     // Reset the form after submission

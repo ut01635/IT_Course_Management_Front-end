@@ -1,158 +1,147 @@
-//Courses retrive from Local storage
-let courses = [];
+// Function to fetch all courses and display them in the table
+async function fetchCourses() {
+    try {
+        const response = await fetch('https://localhost:7008/api/Course/GetAllCourses');
+        const courses = await response.json();
+        const tableBody = document.getElementById('table-body-courses');
+        tableBody.innerHTML = ''; // Clear previous entries
 
+        courses.forEach(course => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${course.courseName}</td>
+                <td>${course.level}</td>
+                <td>${course.fees}</td>
+                <td>
+                    <button class="btn btn-warning btn-sm" onclick="editCourse(${course.id})">Edit</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteCourse(${course.id})">Delete</button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Error fetching courses:', error);
+    }
+}
 
-const GetAllCoursesURL = 'http://localhost:5251/api/Course/Get-All-Courses';
-const AddCourseURL = 'http://localhost:5251/api/Course/Add-Course';
-const UpdateCourseURL = 'http://localhost:5251/api/Course/Update-Course';
-const DeleteCourseURL = 'http://localhost:5251/api/Course/Delete-Course';
+// Call the function to fetch courses on page load
+fetchCourses();
 
-//Fetch Students Data from Database
-async function GetAllCourses(){
-    fetch(GetAllCoursesURL).then((response) => {
-        return response.json();
-    }).then((data) => {
-        courses = data;
-        CoursesTable();
-    })
-};
-GetAllCourses()
-console.log(courses);
+// Function to delete a course
+async function deleteCourse(courseId) {
+    if (confirm("Are you sure you want to delete this course?")) {
+        try {
+            const response = await fetch('https://localhost:7008/api/Course/Delete', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: courseId })
+            });
 
-//Add Courses in Database
-async function AddCourse(CourseData){
-    // Create new student
-    await fetch(AddCourseURL, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(CourseData)
-    });
-    GetAllCourses();
-    CoursesTable();
-};
+            if (response.ok) {
+                fetchCourses(); // Refresh the list after deletion
+            } else {
+                alert('Failed to delete course.');
+            }
+        } catch (error) {
+            console.error('Error deleting course:', error);
+        }
+    }
+}
 
-// Delete Course From Database
-async function DeleteCourse(CourseId){
-    // Delete Course
-    await fetch(`${DeleteCourseURL}/${CourseId}`, {
-        method: "DELETE"
-    });
-};
+// Function to edit a course
+async function editCourse(courseId) {
+    const response = await fetch(`https://localhost:7008/api/Course/GetCourseById/${courseId}`);
+    const course = await response.json();
 
-//Site Navebar
-const toggle = document.querySelector(".fa-bars")
-const toggleClose = document.querySelector(".fa-xmark")
-const sideNavebar = document.querySelector(".side-navebar")
+    // Populate the modal with the course data
+    document.getElementById('courseName').value = course.courseName;
+    document.getElementById('level').value = course.level;
+    document.getElementById('fee').value = course.fees;
+    document.getElementById('duration').value = course.duration;
 
-toggle.addEventListener("click" ,function(){
-    sideNavebar.style.right = "0"
-})
+    // Change the submit button to "Update"
+    const submitButton = document.querySelector('.main-btn');
+    submitButton.innerText = 'Update';
+    submitButton.setAttribute('data-id', courseId);
+    const modal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+    modal.show();
+}
 
-toggleClose.addEventListener("click" , function(){
-    sideNavebar.style.right = "-60%"
-})
-
-
-//Form Submit Function
-document.getElementById("course-offerings-form").addEventListener('submit',(event) =>{
+// Form submission for creating or updating a course
+document.getElementById('course-offerings-form').addEventListener('submit', async function(event) {
     event.preventDefault();
 
-    const courseName = document.getElementById("courseName").value.trim();
-    const level = document.getElementById("level").value;
-    const totalFee = Number(document.getElementById("fee").value.trim());
-    let id = Number(Math.floor(Math.random()*1000000))
+    const courseId = document.querySelector('.main-btn').getAttribute('data-id');
+    const courseName = document.getElementById('courseName').value;
+    const level = document.getElementById('level').value;
+    const fee = document.getElementById('fee').value;
+    const duration = document.getElementById('duration').value;
 
-    const course = courses.find(c=>c.courseName == courseName && c.level == level)
-    if(course){
-        UpdateCourseFee(course.id , totalFee)
-        document.getElementById('course-offerings-message').innerHTML = "Update Fee Successfully"
-    }else{
-        const CourseData = {
-            id,
-            courseName,
-            level,
-            totalFee
-        };
-        AddCourse(CourseData);
-        document.getElementById('course-offerings-message').innerHTML = "Added New Course succesfull"
-    }
-    event.target.reset()
+    const data = {
+        courseName: courseName,
+        level: level,
+        fees: fee,
+        duration: duration,
+    };
 
-    setTimeout(()=>{
-        document.getElementById('course-offerings-message').textContent = ""
-    }, 2000);
-
-    CoursesTable();
-});
-
-
-
-
-
-
-//Show Table
-function CoursesTable(){
-    const table = document.getElementById('table-body-courses');
-    table.innerHTML = "";
-    courses.forEach((course) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${course.courseName}</td>
-            <td>${course.level}</td>
-            <td>${course.totalFee}/= </td>
-            <td>
-             <button class="action-btn btn2 btn btn-warning" onclick="editCourse(${course.id})"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-            <button class ="action-btn btn2 btn btn-danger" onclick="removeCourseById(event,${course.id})" ><i class="fa fa-trash" aria-hidden="true"></i></button>
-            </td>
-        `;
-        table.appendChild(row);
-    });
-}
-CoursesTable();
-
-/// Remove Course with Confirmation
-function removeCourseById(event, courseIdToRemove) {
-    // Show confirmation dialog
-    const confirmation = confirm("Are you sure you want to delete this course?");
-
-    if (confirmation) {
-        let indexToRemove = courses.findIndex(obj => obj.id === courseIdToRemove);
-        if (indexToRemove !== -1) {
-            // Delete course from the database
-            DeleteCourse(courseIdToRemove);
-
-            // Show success message
-            document.getElementById('course-offerings-message-2').style.color = "Green";
-            document.getElementById('course-offerings-message-2').textContent = "Course Removed Successfully";
-
-            // Remove row from the table
-            const row = event.target.parentElement.parentElement;
-            row.remove();
+    try {
+        let response;
+        if (courseId) {
+            // Update course
+            response = await fetch(`https://localhost:7008/api/Course/Update`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ ...data, id: courseId })
+            });
         } else {
-            // If the course is not found
-            document.getElementById('course-offerings-message-2').textContent = "Course not found in local storage";
+            // Create course
+            response = await fetch('https://localhost:7008/api/Course/Create-Course', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
         }
 
-        // Reset message after 2 seconds
-        setTimeout(() => {
-            document.getElementById('course-offerings-message-2').textContent = "";
-        }, 2000);
-    } else {
-        // If the user cancels, do nothing
-        console.log("Course deletion canceled");
+        if (response.ok) {
+            fetchCourses(); // Refresh the course list
+            document.getElementById('course-offerings-form').reset(); // Clear form
+            const modal = bootstrap.Modal.getInstance(document.getElementById('staticBackdrop'));
+            modal.hide(); // Close the modal
+        } else {
+            alert('Failed to save course.');
+        }
+    } catch (error) {
+        console.error('Error saving course:', error);
     }
-}
+});
+
+// Side Navbar toggle functionality
+const toggle = document.querySelector(".fa-bars");
+const toggleClose = document.querySelector(".fa-xmark");
+const sideNavbar = document.querySelector(".side-navbar");
+
+toggle.addEventListener("click", function() {
+    sideNavbar.style.right = "0";
+});
+
+toggleClose.addEventListener("click", function() {
+    sideNavbar.style.right = "-60%";
+});
 
 
 //Logout function
 
 function logout() {
-    window.location.href = "../../../course lending/lending_page.html";
+    window.location.href = "../01_Admin_Login/admin_login.html";
 }
 
 const logoutButton = document.getElementById('logoutButton');
-logoutButton.addEventListener('click', function() {
-  logout();
+logoutButton.addEventListener('click', function () {
+    logout();
 });
