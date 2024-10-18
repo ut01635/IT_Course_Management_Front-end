@@ -60,11 +60,17 @@
                 experience tailored to your success.</p>
             <section class="container">
                 <marquee direction="right"> here you can get</marquee>
-                <marquee direction="left">
-                     <div id="corsesFromAdminPage">
-                        <!-- dynamically course populatedhere -->
-                     </div>
-                    </marquee>                
+                <marquee behavior="scroll" direction="left" id="leftCoursesMarquee">
+                    <div id="leftCoursesFromAdminPage" class="courses-container">
+                        <!-- First half of courses will be populated here -->
+                    </div>
+                </marquee>
+                <marquee behavior="scroll" direction="right" id="rightCoursesMarquee">
+                    <div id="rightCoursesFromAdminPage" class="courses-container">
+                        <!-- Second half of courses will be populated here -->
+                    </div>
+                </marquee>
+                    
                 <marquee behavior="" direction="right">If you like to follow these courses, contact admin for more details</marquee>
             </section>
         </section>

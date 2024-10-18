@@ -210,3 +210,17 @@ p {
     font-size: 1em;
     color: #555;
 }
+.courses-container {
+    display: flex;  /* Align items in a row */
+    gap: 20px;     /* Space between cards */
+}
+
+.course-card {
+    flex: 0 0 auto; /* Prevent flex items from shrinking */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    background-color: #fbe8a6; /* Light peach background for course cards */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;  /* Center the text inside the card */
+}

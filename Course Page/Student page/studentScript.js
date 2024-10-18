@@ -72,34 +72,82 @@ async function fetchCourseById(courseId) {
 }
 
 // Populate courses from admin page
+// async function populateCoursesFromAdminPage() {
+//     try {
+//         const courses = await fetchCourses();
+//         const coursesContainer = document.getElementById('corsesFromAdminPage'); // Ensure this matches your HTML ID
+//         coursesContainer.innerHTML = '';
+
+//         if (courses.length > 0) {
+//             courses.forEach(course => {
+//                 const card = document.createElement('div');
+//                 card.className = 'course-card';
+
+//                 card.innerHTML = `
+                
+//                     <h3>${course.courseName}</h3>
+//                     <p>Period: ${course.duration}</p>
+//                     <p>Level: ${course.level}</p>
+//                     <p>Fee: $${course.fees}</p>
+//                 `;
+
+//                 coursesContainer.appendChild(card);
+//             });
+//         } else {
+//             coursesContainer.innerHTML = '<p>No courses available at the moment. Please contact admin for more details.</p>';
+//         }
+//     } catch (error) {
+//         console.error('Error populating courses:', error.message);
+//     }
+// }
+
 async function populateCoursesFromAdminPage() {
     try {
         const courses = await fetchCourses();
-        const coursesContainer = document.getElementById('corsesFromAdminPage'); // Ensure this matches your HTML ID
-        coursesContainer.innerHTML = '';
+        const leftCoursesContainer = document.getElementById('leftCoursesFromAdminPage');
+        const rightCoursesContainer = document.getElementById('rightCoursesFromAdminPage');
 
-        if (courses.length > 0) {
-            courses.forEach(course => {
-                const card = document.createElement('div');
-                card.className = 'course-card';
+        leftCoursesContainer.innerHTML = '';
+        rightCoursesContainer.innerHTML = '';
 
-                card.innerHTML = `
-                    <img src="${course.imagePath}" alt="${course.courseName}"> <!-- Corrected imagePath -->
-                    <h3>${course.courseName}</h3>
-                    <p>Period: ${course.duration}</p>
-                    <p>Level: ${course.level}</p>
-                    <p>Fee: $${course.fees}</p>
-                `;
+        const midIndex = Math.ceil(courses.length / 2); // Find the middle index
+        const leftCourses = courses.slice(0, midIndex); // First half
+        const rightCourses = courses.slice(midIndex); // Second half
 
-                coursesContainer.appendChild(card);
-            });
-        } else {
-            coursesContainer.innerHTML = '<p>No courses available at the moment. Please contact admin for more details.</p>';
-        }
+        // Populate left half
+        leftCourses.forEach(course => {
+            const card = document.createElement('div');
+            card.className = 'course-card';
+            card.innerHTML = `
+                <h3>${course.courseName}</h3>
+                <p>Period: ${course.duration}</p>
+                <p>Level: ${course.level}</p>
+                <p>Fee: $${course.fees}</p>
+            `;
+            leftCoursesContainer.appendChild(card);
+        });
+
+        // Populate right half
+        rightCourses.forEach(course => {
+            const card = document.createElement('div');
+            card.className = 'course-card';
+            card.innerHTML = `
+                <h3>${course.courseName}</h3>
+                <p>Period: ${course.duration}</p>
+                <p>Level: ${course.level}</p>
+                <p>Fee: $${course.fees}</p>
+            `;
+            rightCoursesContainer.appendChild(card);
+        });
+
     } catch (error) {
         console.error('Error populating courses:', error.message);
     }
 }
+
+
+
+
 
 // Load student profile
 async function loadProfile() {
@@ -258,6 +306,8 @@ async function loadNotifications() {
 // Load payments for the student
 async function loadPayments() {
     const nic = sessionStorage.getItem('loggedStudent');
+    console.log('NIC from session storage:', nic);
+
     if (!nic) {
         console.error('No NIC found in session storage.');
         return;
@@ -265,31 +315,28 @@ async function loadPayments() {
 
     try {
         const payments = await fetchPaymentByNic(nic);
-        console.log('Payments fetched:', payments); // Log payments for debugging
+        console.log('Payments fetched:', payments);
 
-        if (payments.length > 0) {
+        if (Array.isArray(payments) && payments.length > 0) {
             const studentPaymentsTable = document.getElementById('studentPaymentsTable').getElementsByTagName('tbody')[0];
-            studentPaymentsTable.innerHTML = ''; // Clear existing rows
+            studentPaymentsTable.innerHTML = '';
 
             for (const payment of payments) {
-                const enrollmentId = payment.enrollmentID; // Use the correct property name
+                const enrollmentId = payment.enrollmentID;
+
                 if (!enrollmentId) {
                     console.warn('No enrollment ID found for payment:', payment);
                     continue;
                 }
 
                 const enrollment = await fetchEnrollmentById(enrollmentId);
-                console.log('Fetched enrollment:', enrollment); // Log fetched enrollment
-
                 if (enrollment) {
                     const course = await fetchCourseById(enrollment.courseId);
-                    console.log('Fetched course:', course); // Log fetched course
-
                     if (course) {
                         const row = studentPaymentsTable.insertRow();
-                        row.insertCell(0).innerText = new Date(payment.paymentDate).toLocaleDateString(); // Payment date
-                        row.insertCell(1).innerText = course.courseName;        // Course name
-                        row.insertCell(2).innerText = payment.amount;           // Amount Paid
+                        row.insertCell(0).innerText = new Date(payment.paymentDate).toLocaleDateString();
+                        row.insertCell(1).innerText = course.courseName;
+                        row.insertCell(2).innerText = payment.amount;
                     } else {
                         console.warn(`No course found for ID: ${enrollment.courseId}`);
                     }
@@ -304,6 +351,7 @@ async function loadPayments() {
         console.error('Error loading payments:', error.message);
     }
 }
+
 
 // Call all loading functions on page load
 document.addEventListener('DOMContentLoaded', () => {
