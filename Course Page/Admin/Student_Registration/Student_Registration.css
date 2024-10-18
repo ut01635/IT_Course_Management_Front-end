@@ -45,41 +45,69 @@ body {
     cursor: pointer; /* Change cursor to pointer */
 }
 
-/* Sidebar */
-.side-navebar {
-    margin-top: 80px; /* Adjusted margin for better spacing below the header */
-    width: 250px; /* Fixed width for sidebar */
-    height: calc(100% - 80px); /* Full height minus header */
-    background-color: #1d232c;
+/* Side Navebar */
+
+.side-navebar{
+    width: 20%;
+    height: 100%;
+    background-color:#1d232c;
     position: fixed;
-    top: 80px; /* Start below the header */
-    right: -100%; /* Initially hidden */
+    top: 0;
+    right: -60%;
     padding: 20px;
     color: white;
-    transition: right 0.5s ease; /* Smooth transition for opening */
+    transition: 1s;
+    margin: 0;
     z-index: 5;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3); /* Shadow for sidebar */
 }
 
-.side-navebar-links {
+.side-navebar p{
+    text-align: right;
+    font-size: 2rem;
+}
+.fa-xmark{
+    cursor: pointer;
+}
+.fa-xmark:active{
+    scale: 0.9;
+}
+
+.side-navebar-links{
     list-style: none;
-    padding: 0; /* Remove default padding */
 }
-
-.side-navebar-link {
-    margin-bottom: 20px; /* Reduced margin for compactness */
+.side-navebar-link{
+    margin-bottom: 30px;
 }
-
-.side-navebar-link a {
-    text-decoration: none; /* No underline by default */
+.side-navebar-link a{
+    text-decoration: none;
     color: white;
     font-size: 1.4rem;
-    transition: color 0.3s ease, transform 0.3s ease; /* Add transition */
+    cursor: pointer;
+    transition: transform 0.3s, color 0.3s; /* Add transition for smooth effect */
+    
 }
 
 .side-navebar-link a:hover {
-    color: #f44336; /* Change color on hover */
-    transform: scale(1.05); /* Slight scale effect on hover */
+    color: red; /* Change color to red on hover */
+     transform: scale(1.1); /* Scale up the link on hover */
+    
+}
+
+
+/* a::after{
+    content: '';
+    width: 0%;
+    height: 2px;
+    background: #f44336;
+    display: block;
+    margin: auto;
+    transition: 0.5s;
+} */
+a:hover::after{
+    width: 100%;
+}
+.logout > a{
+    color: red;
 }
 
 /* Main content */
