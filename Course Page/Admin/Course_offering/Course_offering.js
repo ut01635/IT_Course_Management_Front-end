@@ -31,7 +31,7 @@ fetchCourses();
 async function deleteCourse(courseId) {
     if (confirm("Are you sure you want to delete this course?")) {
         try {
-            const response = await fetch('https://localhost:7008/api/Course/Delete', {
+            const response = await fetch(`https://localhost:7008/api/Course/Delete${courseId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ async function deleteCourse(courseId) {
 
 // Function to edit a course
 async function editCourse(courseId) {
-    const response = await fetch(`https://localhost:7008/api/Course/GetCourseById/${courseId}`);
+    const response = await fetch(`https://localhost:7008/api/Course/GetCourseById${courseId}`);
     const course = await response.json();
 
     // Populate the modal with the course data
