@@ -1,53 +1,38 @@
-// Side NaveBar
-const toggle = document.querySelector(".fa-bars");
-const toggleClose = document.querySelector(".fa-xmark");
-const sideNavebar = document.querySelector(".side-navebar");
-
-toggle.addEventListener("click", function () {
-    sideNavebar.style.right = "0";
-})
-
-toggleClose.addEventListener("click", function () {
-    sideNavebar.style.right = "-60%";
-})
-
-
-let students = [];
-let courses = [];
-let courseEnrollData = [];
-let paymentDetails = [];
-
-// API URLs
 const GetAllStudentsURL = 'https://localhost:7008/api/Student/Get-All-Students';
 const GetAllCoursesURL = 'https://localhost:7008/api/Course/GetAllCourses';
-const GetAllCourseEnrollURL = 'https://localhost:7008/api/Enrollment/Get-all-enrollmetnt';
-const GetPaymentByEnrollmentURL = 'https://localhost:7008/api/Payment/enrollment/';
+const GetEnrollmentsByNICURL = 'https://localhost:7008/api/Enrollment/by-nic/';
+const GetPaymentByNICURL = 'https://localhost:7008/api/Payment/GetByNIC/'; // Updated endpoint for payment by NIC
+const GetCourseByIdURL = 'https://localhost:7008/api/Course/GetById'; 
 
-// Fetch Students Data from Database
+// Global variables to hold fetched data
+let students = [];
+let courses = [];
+
+// Fetch all initial data
+async function fetchData(url) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Error: ${response.statusText}`);
+        return await response.json();
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
 async function GetAllStudents() {
-    const response = await fetch(GetAllStudentsURL);
-    students = await response.json();
-    await GetAllCourses();
+    students = await fetchData(GetAllStudentsURL);
+    if (students) await GetAllCourses();
 }
 
-// Fetch All Courses
 async function GetAllCourses() {
-    const response = await fetch(GetAllCoursesURL);
-    courses = await response.json();
-    await GetAllCourseEnrollData();
-}
-
-// Fetch Course Enrollment Data
-async function GetAllCourseEnrollData() {
-    const response = await fetch(GetAllCourseEnrollURL);
-    courseEnrollData = await response.json();
+    courses = await fetchData(GetAllCoursesURL);
 }
 
 // Event Listener for Generate Report Button
 const reportGenerateBtn = document.getElementById("report-generate-btn");
 
-reportGenerateBtn.addEventListener("click", async function() {
-    const nicInput = document.getElementById("search-by-nic").value;
+reportGenerateBtn.addEventListener("click", async function () {
+    const nicInput = document.getElementById("search-by-nic").value.trim();
     if (!nicInput) {
         alert("Please enter NIC number.");
         return;
@@ -59,77 +44,92 @@ reportGenerateBtn.addEventListener("click", async function() {
         return;
     }
 
+    // Fill student personal details
     document.getElementById("nic").value = student.nic;
     document.getElementById("name").value = student.fullName;
     document.getElementById("email").value = student.email;
     document.getElementById("phone").value = student.phone;
 
-    const enrolledCourses = courseEnrollData.filter(enrollment => enrollment.studentNic === nicInput);
+    // Fetch enrolled courses for the student by NIC
+    const enrolledCourses = await fetchData(GetEnrollmentsByNICURL + nicInput);
+    
+    // Populate the course dropdown
+    populateCourseDropdown(enrolledCourses, nicInput); // Pass nicInput here
+});
+
+// Populate course dropdown based on enrollments
+async function populateCourseDropdown(enrolledCourses, nicInput) {
     const courseSelect = document.getElementById("EnrollCourses");
-    courseSelect.innerHTML = '<option selected>Following Course</option>';
+    courseSelect.innerHTML = '<option selected>Following Course</option>'; // Reset the dropdown
 
     // Store the enrollment IDs for later use
     let enrollmentIds = [];
 
-    enrolledCourses.forEach(enrollment => {
-        const course = courses.find(c => c.id === enrollment.courseId);
+    for (const enrollment of enrolledCourses) {
+        const course = await fetchData(GetCourseByIdURL + enrollment.courseId); // Fetch course by ID
         if (course) {
             const option = document.createElement("option");
             option.value = enrollment.id; // Store the enrollment ID as the value
-            option.textContent = course.name;
+            option.textContent = course.courseName; // Display the course name
             courseSelect.appendChild(option);
             enrollmentIds.push(enrollment.id); // Collect enrollment IDs
         }
-    });
+    }
 
-    // If there are enrolled courses, fetch payment info for the first enrollment
+    // If there are enrolled courses, fetch payment info for the student
     if (enrollmentIds.length > 0) {
-        await fetchPaymentDetails(enrollmentIds[0]); // Fetch payment details for the first enrollment
+        fetchPaymentDetailsByNIC(nicInput); // Fetch payment details by NIC
     } else {
         alert("No enrolled courses found.");
+        clearPaymentDetails(); // Clear payment details if no courses found
     }
-});
+}
 
-// Fetch payment details using enrollment ID
-async function fetchPaymentDetails(enrollmentId) {
-    const response = await fetch(GetPaymentByEnrollmentURL + enrollmentId);
+// Fetch payment details using NIC
+async function fetchPaymentDetailsByNIC(nic) {
+    const response = await fetch(GetPaymentByNICURL + nic);
     if (response.ok) {
-        const payment = await response.json();
-        fillPaymentDetails(payment);
+        const payments = await response.json();
+        // Assuming payments is an array and we want to show the first one
+        if (payments.length > 0) {
+            fillPaymentDetails(payments[0]); // Fill with first payment detail
+        } else {
+            alert("No payment details found for this student.");
+            clearPaymentDetails(); // Clear payment details if not found
+        }
     } else {
         alert("Payment details not found.");
+        clearPaymentDetails(); // Clear payment details if not found
     }
 }
 
 // Function to fill payment details
 function fillPaymentDetails(payment) {
-    document.getElementById("fee").value = payment.courseFee || "";
-    document.getElementById("plan").value = payment.paymentPlan || "";
-    document.getElementById("full-payment").value = payment.fullPayment || "";
-    document.getElementById("installments").value = payment.installments || "";
-    document.getElementById("installment-amount").value = payment.installmentAmount || "";
-    document.getElementById("payment-paid").value = payment.paymentPaid || "";
-    document.getElementById("payment-due").value = payment.paymentDue || "";
-    document.getElementById("payment-date").value = payment.paymentDate || "";
+    console.log(payment);
+    document.getElementById("fee").value = payment.amount || ""; // Ensure safe access
+    document.getElementById("plan").value = payment.paymentPlan || ""; // Ensure safe access
+    document.getElementById("full-payment").value = payment.amount || ""; // Ensure safe access
+    document.getElementById("installments").value = payment.installments || ""; // Ensure safe access
+    document.getElementById("installment-amount").value = payment.installmentAmount || ""; // Ensure safe access
+    document.getElementById("payment-paid").value = payment.paymentPaid || ""; // Ensure safe access
+    document.getElementById("payment-due").value = payment.paymentDue || ""; // Ensure safe access
+    document.getElementById("payment-date").value = payment.paymentDate || ""; // Ensure safe access
+
+    // Debugging log for checking values
+    console.log("Payment Details:", payment);
 }
 
-// Fetch all initial data
+// Function to clear payment details
+function clearPaymentDetails() {
+    document.getElementById("fee").value = "";
+    document.getElementById("plan").value = "";
+    document.getElementById("full-payment").value = "";
+    document.getElementById("installments").value = "";
+    document.getElementById("installment-amount").value = "";
+    document.getElementById("payment-paid").value = "";
+    document.getElementById("payment-due").value = "";
+    document.getElementById("payment-date").value = "";
+}
+
+// Initialize data fetching
 GetAllStudents();
-
-
-
-//Logout function
-
-function logout() {
-    window.location.href = "../01_Admin_Login/admin_login.html";
-}
-
-const logoutButton = document.getElementById('logoutButton');
-logoutButton.addEventListener('click', function () {
-    logout();
-});
-
-
-
-
-
