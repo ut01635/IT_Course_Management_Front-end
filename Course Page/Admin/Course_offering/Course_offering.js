@@ -121,18 +121,18 @@ document.getElementById('course-offerings-form').addEventListener('submit', asyn
     }
 });
 
-// Side Navbar toggle functionality
-const toggle = document.querySelector(".fa-bars");
-const toggleClose = document.querySelector(".fa-xmark");
-const sideNavbar = document.querySelector(".side-navbar");
+//Site Navebar
+const toggle = document.querySelector(".fa-bars")
+const toggleClose = document.querySelector(".fa-xmark")
+const sideNavebar = document.querySelector(".side-navebar")
 
-toggle.addEventListener("click", function() {
-    sideNavbar.style.right = "0";
-});
+toggle.addEventListener("click", function () {
+    sideNavebar.style.right = "0"
+})
 
-toggleClose.addEventListener("click", function() {
-    sideNavbar.style.right = "-60%";
-});
+toggleClose.addEventListener("click", function () {
+    sideNavebar.style.right = "-60%"
+})
 
 
 //Logout function
