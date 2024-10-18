@@ -24,24 +24,52 @@ async function fetchNotifications(nic) {
     }
     return await response.json();
 }
+
 // Fetch enrollments for the student by NIC
 async function fetchEnrollmentsByNic(nic) {
     const response = await fetch(`https://localhost:7008/api/Enrollment/by-nic/${nic}`);
-    if (!response.ok) {
-        throw new Error('Network response was not ok');   
-    }
-    return await response.json();
-}
-
-// Fetch course details by course ID
-async function fetchCourseData(courseId) {
-    const response = await fetch(`https://localhost:7008/api/Course/${courseId}`);
     if (!response.ok) {
         throw new Error('Network response was not ok');
     }
     return await response.json();
 }
 
+// Fetch course details by course ID
+async function fetchCourseData(courseId) {
+    const response = await fetch(`https://localhost:7008/api/Course/GetById${courseId}`);
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return await response.json();
+}
+
+// Fetch payment details by NIC
+async function fetchPaymentByNic(nic) {
+    const response = await fetch(`https://localhost:7008/api/Payment/GetByNIC/${nic}`);
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return await response.json();
+}
+
+// Fetch enrollment details by ID
+async function fetchEnrollmentById(enrollmentId) {
+    const response = await fetch(`https://localhost:7008/api/Enrollment/${enrollmentId}`);
+    console.log(`Fetching enrollment for ID: ${enrollmentId}`); // Log the URL
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return await response.json();
+}
+
+// Fetch course details by ID
+async function fetchCourseById(courseId) {
+    const response = await fetch(`https://localhost:7008/api/Course/${courseId}`);
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return await response.json();
+}
 
 // Populate courses from admin page
 async function populateCoursesFromAdminPage() {
@@ -72,6 +100,7 @@ async function populateCoursesFromAdminPage() {
         console.error('Error populating courses:', error.message);
     }
 }
+
 // Load student profile
 async function loadProfile() {
     const nic = sessionStorage.getItem('loggedStudent');
@@ -156,22 +185,19 @@ async function updateProfile() {
     }
 }
 
-// Initial load when the page is ready
-document.addEventListener('DOMContentLoaded', () => {
-    loadProfile(); // Load the student's profile on page load
-});
-
-
+// Load courses for the student
 async function loadCourses() {
     const nic = sessionStorage.getItem('loggedStudent');
     if (!nic) {
-        console.error('No NIC found in local storage.');
+        console.error('No NIC found in session storage.');
         return;
     }
 
     try {
-        // Step 1: Fetch enrollments
+        console.log('Fetching enrollments for NIC:', nic);
         const enrollments = await fetchEnrollmentsByNic(nic);
+        console.log('Enrollments fetched:', enrollments);
+
         if (enrollments.length === 0) {
             alert('No courses enrolled.');
             return;
@@ -180,24 +206,24 @@ async function loadCourses() {
         const studentCoursesTable = document.getElementById('studentCoursesTable').getElementsByTagName('tbody')[0];
         studentCoursesTable.innerHTML = ''; // Clear existing rows
 
-        // Step 2: Fetch course details for each enrollment
-        for (const enrollment of enrollments) {
+        // Fetch course details for each enrollment using forEach
+        enrollments.forEach(async (enrollment) => {
             const course = await fetchCourseData(enrollment.courseId);
-            
-            // Step 3: Populate the table
+            console.log('Course fetched:', course);
+
+            // Populate the table
             const row = studentCoursesTable.insertRow();
-            row.insertCell(0).innerText = course.id;           // Course ID
-            row.insertCell(1).innerText = course.courseName;   // Course Name
-            row.insertCell(2).innerText = course.duration;      // Duration
-            row.insertCell(3).innerText = course.level;         // Level
-            row.insertCell(4).innerText = course.fees;          // Fees
-        }
+            row.insertCell(0).innerText = course.id;               // Course ID
+            row.insertCell(1).innerText = course.courseName;       // Course Name
+            row.insertCell(2).innerText = course.duration;          // Duration
+            row.insertCell(3).innerText = course.level;             // Level
+            row.insertCell(4).innerText = course.fees;              // Fees
+            row.insertCell(5).innerText = enrollment.paymentPlan;   // Payment Plan
+        });
     } catch (error) {
         console.error('Error loading courses:', error.message);
     }
 }
-
-
 
 // Load notifications
 async function loadNotifications() {
@@ -232,38 +258,58 @@ async function loadNotifications() {
 // Load payments for the student
 async function loadPayments() {
     const nic = sessionStorage.getItem('loggedStudent');
+    if (!nic) {
+        console.error('No NIC found in session storage.');
+        return;
+    }
+
     try {
-        const courses = await fetchCourses();
-        const student = await fetchStudentData(nic);
+        const payments = await fetchPaymentByNic(nic);
+        console.log('Payments fetched:', payments); // Log payments for debugging
 
-        if (student && student.courses.length > 0) {
+        if (payments.length > 0) {
             const studentPaymentsTable = document.getElementById('studentPaymentsTable').getElementsByTagName('tbody')[0];
-            studentPaymentsTable.innerHTML = '';
+            studentPaymentsTable.innerHTML = ''; // Clear existing rows
 
-            student.courses.forEach(courseId => {
-                const course = courses.find(course => course.id === courseId);
-                if (course) {
-                    const row = studentPaymentsTable.insertRow();
-                    row.insertCell(0).innerText = course.courseName;
-                    row.insertCell(1).innerText = course.fees;
-                    row.insertCell(2).innerText = 'Pending'; // Payment status can be updated accordingly
-                    row.insertCell(3).innerText = new Date().toLocaleDateString();
+            for (const payment of payments) {
+                const enrollmentId = payment.enrollmentID; // Use the correct property name
+                if (!enrollmentId) {
+                    console.warn('No enrollment ID found for payment:', payment);
+                    continue;
                 }
-            });
+
+                const enrollment = await fetchEnrollmentById(enrollmentId);
+                console.log('Fetched enrollment:', enrollment); // Log fetched enrollment
+
+                if (enrollment) {
+                    const course = await fetchCourseById(enrollment.courseId);
+                    console.log('Fetched course:', course); // Log fetched course
+
+                    if (course) {
+                        const row = studentPaymentsTable.insertRow();
+                        row.insertCell(0).innerText = new Date(payment.paymentDate).toLocaleDateString(); // Payment date
+                        row.insertCell(1).innerText = course.courseName;        // Course name
+                        row.insertCell(2).innerText = payment.amount;           // Amount Paid
+                    } else {
+                        console.warn(`No course found for ID: ${enrollment.courseId}`);
+                    }
+                } else {
+                    console.warn(`No enrollment found for ID: ${enrollmentId}`);
+                }
+            }
+        } else {
+            alert('No payments found for this student.');
         }
     } catch (error) {
         console.error('Error loading payments:', error.message);
     }
 }
 
-
-
-// Initialize page by loading necessary data
+// Call all loading functions on page load
 document.addEventListener('DOMContentLoaded', () => {
     populateCoursesFromAdminPage();
     loadProfile();
     loadCourses();
     loadNotifications();
     loadPayments();
-    
 });

@@ -229,11 +229,14 @@ async function removeStudentByNicNumber(event, nic) {
     }
 }
 
-// Logout function
-const logoutButton = document.getElementById("logout-button");
-if (logoutButton) {
-    logoutButton.addEventListener("click", function() {
-        alert("Logged out successfully!");
-        // Redirect to login or home page
-    });
+//Logout function
+
+function logout() {
+    window.location.href = "../01_Admin_Login/admin_login.html";
 }
+
+const logoutButton = document.getElementById('logoutButton');
+logoutButton.addEventListener('click', function () {
+    logout();
+});
+

@@ -114,14 +114,24 @@ nav>ul>li>a{
 }
 .side-navebar-link{
     margin-bottom: 30px;
+    
 }
 .side-navebar-link a{
     text-decoration: none;
     color: white;
     font-size: 1.4rem;
     cursor: pointer;
+    transition: transform 0.3s, color 0.3s; /* Add transition for smooth effect */
+    
 }
-a::after{
+
+.side-navebar-link a:hover {
+    color: red; /* Change color to red on hover */
+     transform: scale(1.1); /* Scale up the link on hover */
+    
+}
+
+/* a::after{
     content: '';
     width: 0%;
     height: 2px;
@@ -129,11 +139,13 @@ a::after{
     display: block;
     margin: auto;
     transition: 0.5s;
-}
+} */
 a:hover::after{
     width: 100%;
 }
 .logout > a{
     color: red;
 }
+
+
 
