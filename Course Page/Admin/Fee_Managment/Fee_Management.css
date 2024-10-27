@@ -11,17 +11,15 @@ body{
 }
 /* Navebar */
 
-.navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
+nav{
     display: flex;
     justify-content: space-between;
-    align-items: center;
     background-color: #4b0000; /* Maroon background */
-    padding: 10px 20px;
-    z-index: 1000;
+    color: #fff;
+    align-items: center;
+    padding: 10px 25px;
+    height: 90px;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px;
 }
 .navbar .logo{
     display: flex;
@@ -52,13 +50,14 @@ body{
     scale: 0.9;
 }
 
+/* Side Navebar */
+
 .side-navebar{
-    margin-top: 120px;
     width: 20%;
-    height: 70%;
+    height: 100%;
     background-color:#1d232c;
     position: fixed;
-    top: 10;
+    top: 0;
     right: -60%;
     padding: 20px;
     color: white;
@@ -88,16 +87,18 @@ body{
     text-decoration: none;
     color: white;
     font-size: 1.4rem;
+    cursor: pointer;
+    transition: transform 0.3s, color 0.3s; /* Add transition for smooth effect */
+    
 }
-a::after{
-    content: '';
-    width: 0%;
-    height: 2px;
-    background: #f44336;
-    display: block;
-    margin: auto;
-    transition: 0.5s;
+
+.side-navebar-link a:hover {
+    color: red; /* Change color to red on hover */
+     transform: scale(1.1); /* Scale up the link on hover */
+    
 }
+
+
 a:hover::after{
     width: 100%;
 }
@@ -106,18 +107,19 @@ a:hover::after{
 }
 
 
-
 /* Form */
 
 #main-container{
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 60%;
+    height: 50%;
+    margin-top: 50px;
 }
 #sub-container{
     display: flex;
-    gap: 100px;
+    /* gap: 100px; */
+    /* height: 100%; */
 }
 
 #main-container  h2{
@@ -152,11 +154,15 @@ input , select{
     padding: 0.5rem;
     font-size: 1rem;
     border: none;
+    color: #000000;
     text-decoration: line;
     outline: none;
     border-radius: 5px;
     margin-left: 25px;
     box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+select option{
+    color: #000000;
 }
 input:focus,select:focus{
     border: 1.9px solid #007bff;
@@ -205,34 +211,61 @@ td > p{
     font-weight: bold;
 }
 
-/* table style */
-#table-container{
+
+/* Modal Styles */
+.modal-dialog {
+    max-width: 90vw;  /* Make the modal take up a larger portion of the screen */
+    margin: 0 auto;   /* Center the modal horizontally */
+}
+
+#searchNic {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    border: 1px solid #000000;
+    border-radius: 4px;
+}
+
+/* Table Style */
+#payment-details-table {
+    width: 100%;
+    border-collapse: collapse;
     margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    padding-bottom: 25px;
-}
-#table-container{
-    overflow: auto;
-    height: 85%;
-}
-#table-container > table{
-    height: 50px;
-    border-spacing: 15px;
-
-}
-#table-container > table > tr:hover{
-    background-color: lightgrey;
-}
-th{
-    border:2px solid black;
-    border-radius: 10px;
-}
-#table-container > table td{
-   border-bottom: 2px solid black;
-   text-align: center;
 }
 
-#table-2{
-    display: none;
-} 
+#payment-details-table thead {
+    background-color: #640505;
+    color: #fff;
+}
+
+#payment-details-table th, #payment-details-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+#payment-details-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+    #payment-details-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    #payment-details-table th, #payment-details-table td {
+        padding: 8px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 576px) {
+    #payment-details-table th, #payment-details-table td {
+        padding: 6px;
+        font-size: 10px;
+    }
+}

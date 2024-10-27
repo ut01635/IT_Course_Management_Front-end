@@ -1,65 +1,58 @@
-*{
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
-    font-style: normal; 
-        
 }
-body{
+
+body {
     height: 100vh;
+    background-color: #f4f4f4; /* Light gray background for contrast */
     background-position: center;
 }
-/* Navebar */
 
-.navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
+/* Navbar */
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #4b0000; /* Maroon background */
-    padding: 10px 20px;
-    z-index: 1000;
+    padding: 15px 30px; /* Increased padding for better spacing */
+    color: white; /* Text color */
+    /* position: fixed; Keep header fixed at the top */
+    width: 100%; /* Full width */
+    /* z-index: 1000; Ensure it's on top of other elements */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
 }
-.navbar .logo{
+
+.header .logo {
     display: flex;
-    justify-content: start;
     align-items: center;
 }
 
-.navbar .logo h1 {
-    color: #fff;
+.header .logo img {
+    width: 50px; /* Adjust the logo size */
+    margin-right: 15px; /* Spacing between logo and text */
 }
-.navbar .logo img{
-    width: 10%;
+
+.header h1 {
+    font-size: 1.8rem; /* Adjust the font size */
+    margin: 0; /* Remove default margin */
 }
-.navebar-menu-toggle{
+
+.navebar-menu-toggle {
     font-size: 2.2rem;
-    padding-top: 15px;
+    cursor: pointer; /* Change cursor to pointer */
 }
 
-.navebar-link a:hover{
-    text-decoration: underline;
-}
-
-.fa-bars{
-    cursor: pointer;
-    color: #fff;
-}
-.fa-bars:active{
-    scale: 0.9;
-}
+/* Side Navebar */
 
 .side-navebar{
-    margin-top: 120px;
     width: 20%;
-    height: 70%;
+    height: 100%;
     background-color:#1d232c;
     position: fixed;
-    top: 10;
+    top: 0;
     right: -60%;
     padding: 20px;
     color: white;
@@ -89,8 +82,19 @@ body{
     text-decoration: none;
     color: white;
     font-size: 1.4rem;
+    cursor: pointer;
+    transition: transform 0.3s, color 0.3s; /* Add transition for smooth effect */
+    
 }
-a::after{
+
+.side-navebar-link a:hover {
+    color: red; /* Change color to red on hover */
+     transform: scale(1.1); /* Scale up the link on hover */
+    
+}
+
+
+/* a::after{
     content: '';
     width: 0%;
     height: 2px;
@@ -98,7 +102,7 @@ a::after{
     display: block;
     margin: auto;
     transition: 0.5s;
-}
+} */
 a:hover::after{
     width: 100%;
 }
@@ -106,130 +110,156 @@ a:hover::after{
     color: red;
 }
 
+/* Main content */
+.main {
+    margin-top: 100px; /* Space for header */
+    padding: 20px; /* General padding for main content */
+}
 
-/* main table style */
-#heading-container{
+#heading-container {
     display: flex;
-    gap: 10px;
-}
-#heading-container > h1::first-letter {
-    font-size: larger;
-}
-#heading-container > h1:hover{
-    color: maroon;
-    cursor: default;
+    justify-content: space-between; /* Space between items */
+    align-items: center;
+    margin-bottom: 20px; /* Space below heading */
 }
 
+#heading-container h1 {
+    font-size: 2rem; /* Larger font for heading */
+    color: #333; /* Darker color for contrast */
+}
 
+.btn {
+    padding: 10px 20px; /* Increased padding for buttons */
+    background-color: #28a745; /* Bootstrap success color */
+    color: white; /* Text color */
+    border: none;
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
 
-/* Pop Up Table */
+.btn:hover {
+    background-color: #218838; /* Darker green on hover */
+}
 
- #table-container{
+#table-container {
     position: relative;
     overflow: auto;
-    height: 85%;
+    height: auto; /* Adjust height */
 }
 
-.table-view{
+.table-view {
     width: 100%;
     border-collapse: collapse;
     margin: 20px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Shadow for table */
 }
 
-td{
+th, td {
     text-align: center;
-    padding: 8px;
+    padding: 12px; /* Increased padding for better spacing */
     color: #fff;
+    background-color: #343a40; /* Darker background for table rows */
 }
+
+th {
+    background-color: #495057; /* Slightly lighter for headers */
+}
+
 .table-input {
     width: 90%;
-    padding: 5px;
-    box-sizing: border-box;
+    padding: 10px; /* Increased padding */
     border: none;
-    /* box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px; */
-    background-color: rgba(233, 229, 229, 0.719);
+    background-color: rgba(233, 229, 229, 0.8); /* Background with some transparency */
     font-weight: 600;
+    border-radius: 5px; /* Rounded corners */
 }
-.btn {
-    padding: 6px;
-    margin: 5px;
-    box-sizing: border-box;
-    border: none;
-    outline: none;
+
+.modal-header {
+    background-color: #4b0000; /* Maroon background for modal header */
+    color: white; /* Text color */
+}
+
+.modal-footer .main-btn {
+    background-color: #007bff; /* Bootstrap primary color */
+}
+
+.modal-footer .main-btn:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Message Styles */
+#user-registration-message {
+    color: red; /* Error message color */
+    font-size: 18px;
     font-weight: bold;
-    cursor: pointer;
-}
-.btn:active{
-    scale: 0.95;
-}
-
-#user-registration-message-2{
-    position: absolute;
-    left: 50%;
-    bottom: 5px;
-    transform: translateX(-50%);
-    font-size: 25px;
-    font-weight: 400;
-    display: none;
-    background-color: gray;
+    text-align: center; /* Center alignment */
 }
 
 
+/* Form Container */
+#student-registration {
+    background-color: #fff; /* White background for form */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px; /* Spacing inside the form */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+}
 
-/* form */
-  label {
-      display: block;
-      font-size:16px;
-      font-weight: bold;
-      color: black;
-  }
-  
-  input {
-      width: 100%;
-      padding: 8px;
-      box-sizing: border-box;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 15px;
-  }
-  
-  input:focus {
-      border-color: #007bff;
-      outline: none;
-  }
-  
-  #button-container{
-      display: flex;
-      gap: 15px;
-  }
-  
-  .main-btn {
-      width: 100%;
-      padding:9px 10px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      margin-top: 25px;
-      font-size: 19px;
-      font-weight: bold;
-      border-radius: 5px;
-  }
-  
-  .main-btn:hover {
-      background-color: #0056b3;
-  }
-  /* Mesage */
-  #student-registration > div{
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      padding-top: 15px;
-  }
-  #student-registration > div >p{
-      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-      font-size: 20px;
-      font-weight: bold;
-  }
-  
+/* Form Group */
+.form-group {
+    margin-bottom: 20px; /* Space between form groups */
+}
+
+/* Labels */
+label {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333; /* Darker color for labels */
+    margin-bottom: 5px; /* Space below labels */
+}
+
+/* Input Fields */
+input {
+    width: 100%;
+    padding: 10px; /* Increased padding */
+    box-sizing: border-box; /* Ensure padding is included in width */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 6px; /* Rounded corners */
+    font-size: 15px; /* Font size for input */
+    transition: border-color 0.3s ease; /* Smooth transition for focus */
+}
+
+/* Input Focus State */
+input:focus {
+    border-color: #007bff; /* Change border color on focus */
+    outline: none; /* Remove default outline */
+}
+
+/* Submit Button */
+.main-btn {
+    width: 100%; /* Full width */
+    padding: 10px; /* Increased padding */
+    background-color: #007bff; /* Primary blue color */
+    color: #fff; /* White text */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer on hover */
+    font-size: 16px; /* Font size */
+    font-weight: bold; /* Bold text */
+    transition: background-color 0.3s ease; /* Smooth background transition */
+}
+
+/* Submit Button Hover State */
+.main-btn:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Registration Message */
+#user-registration-message {
+    color: #dc3545; /* Red for error messages */
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center; /* Center alignment */
+    margin-top: 15px; /* Space above the message */
+}

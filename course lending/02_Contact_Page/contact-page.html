@@ -50,12 +50,13 @@
         <form class="contact" id="contactUsForm">
             <h1>Contact Us</h1>
             <label> Name:</label><br>
-            <input type="text" id="name"><br>
+            <input type="text" id="name" required><br>
             <label>Email:</label><br>
-            <input type="email" id="email"><br>
+            <input type="email" id="email" required email><br>
             <label>Message:</label><br>
-            <textarea cols="80" rows="5" id="message"></textarea><br>
+            <textarea cols="80" rows="5" id="message" required></textarea><br>
             <button type="submit" id="submit-btn">Submit</button>
+            <p id="contactUsMessage" style="margin-top: 10px;"></p>
         </form>
         <div class="map-container">
             <iframe

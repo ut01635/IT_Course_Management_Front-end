@@ -30,7 +30,7 @@
 
 <body>
     <!-- Navebar -->
-    <nav class="navbar px-5">
+    <header class="header px-5">
         <div class="logo">
             <img src="../image/icon-removebg-preview.png" alt="A-Z LOGO">
             <h1> Coding Academy</h1>
@@ -38,7 +38,7 @@
         <div class="navebar-menu-toggle">
             <i class="fa-solid fa-bars"></i>
         </div>
-    </nav>
+    </header>
 
     <!-- Side Navebar -->
      <div class="side">
@@ -50,16 +50,17 @@
              <ul class="side-navebar-links">
                  <li class="side-navebar-link"><a href="../Student_Registration/Student_Registration.html">REGISTER</a>
                  </li>
-                 <li class="side-navebar-link"><a href="../Fee_Managment/Fee_Management.htm">PAYMENT</a></li>
+                 <li class="side-navebar-link"><a href="../Fee_Managment/Fee_Management.html">PAYMENT</a></li>
                  <li class="side-navebar-link"><a href="../Course_offering/Course_offering.html">COURSE OFFERINGS</a>
                  </li>
-                 <li class="side-navebar-link"><a href="../05_Report/report.html">REPORT</a></li>
+                 <li class="side-navebar-link"><a href="../ContactUs/ContactUs.html">MESSAGE</a></li>
+                 <li class="side-navebar-link"><a href="../Report/Report.html">REPORT</a></li>
                  <li class="side-navebar-link logout"><a href="#" id="logoutButton">Logout</a></li>
              </ul>
          </div>
      </div>
 
-    <div id="main-container" class="mt-5">
+    <div id="main-container" class="main">
         <div id="heading-container" class="d-flex justify-content-around align-items-center">
             <h1>Student Details</h1>
 
@@ -123,10 +124,7 @@
                                 <label for="password">Password</label>
                                 <input type="password" id="password" name="password" required>
                             </div>
-                            <div class="form-group">
-                                <label for="profilepic">Profile Picture</label>
-                                <input type="file" id="profilepic" name="profilepic" required>
-                            </div>
+                          
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary main-btn">Register</button>
                             </div>

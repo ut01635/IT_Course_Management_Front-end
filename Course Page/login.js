@@ -1,51 +1,59 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     let students = [];
-    const GetAllStudentsURL = 'http://localhost:5251/api/Student/Get-All-Students';
+    const GetAllStudentsURL = 'https://localhost:7008/api/Student/Get-All-Students';
+    
     async function GetAllStudents() {
-        //Fetch Students Data from Database
-        fetch(GetAllStudentsURL).then((response) => {
-            return response.json();
-        }).then((data) => {
-            students = data;
-        })
-    };
-    GetAllStudents()
-
-    let Admins = [];
-    const GetAllAdminsURL = '';
-    async function GetAllAdmins() {
-        fetch(GetAllAdminsURL).then((response) => {
-            return response.json();
-        }).then((data) => {
-            Admins = data;
-        })
+        try {
+            const response = await fetch(GetAllStudentsURL);
+            if (!response.ok) throw new Error('Network response was not ok');
+            students = await response.json();
+            console.log(students);
+        } catch (error) {
+            console.error('Error fetching students:', error);
+        }
     }
+
+    await GetAllStudents();
+
+    let admins = [];
+    const GetAllAdminsURL = 'https://localhost:7008/api/Admin';
+    
+    async function GetAllAdmins() {
+        try {
+            const response = await fetch(GetAllAdminsURL);
+            if (!response.ok) throw new Error('Network response was not ok');
+            admins = await response.json();
+        } catch (error) {
+            console.error('Error fetching admins:', error);
+        }
+    }
+
+    await GetAllAdmins();
+    console.log(admins);
 
     const alertMessage = "Please check your internet connection....";
 
-    const encryptPassword = password => btoa(password); // Avoid using in real-world apps
-
     document.getElementById('loginform').addEventListener('submit', event => {
         event.preventDefault();
-
+        console.log(admins);
         const nicNumber = document.getElementById('loginNIC').value.trim();
-        const password = encryptPassword(document.getElementById('loginPassword').value.trim());
+        const password = document.getElementById('loginPassword').value.trim();
 
-        const student = students.find(s => s.nicNumber === nicNumber && s.password === password);
-        const admin = admins.find(a => a.nicNumber === nicNumber && a.password === password);
+        student = students.find(s=>s.nic == nicNumber && s.password == password)
+        admin = admins.find(a => a.nic == nicNumber && a.password == password)
 
         if (admin) {
             alert(alertMessage);
-            window.location.href = 'admin/admin_home.html';
+            sessionStorage.setItem("NIC", JSON.stringify(nicNumber));
+            window.location.href = './Admin/Student_Registration/Student_Registration.html';
+            event.target.reset();
         } else if (student) {
             sessionStorage.setItem('loggedStudent', nicNumber);
             alert(alertMessage);
-            window.location.href = 'Student_page/student_home.html';
+            window.location.href = './Student page/student-dashboard.html';
+            event.target.reset();
         } else {
             document.getElementById('loginMessage').textContent = "Invalid NIC number or password.";
         }
-
-        sessionStorage.setItem("NIC", JSON.stringify(Nic))
-        event.target.reset();
     });
 });

@@ -1,0 +1,226 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #d2fdff; /* Light blue background for body */
+}
+
+.custom-link {
+    color: aliceblue; 
+    text-decoration: none; 
+    transition: background-color 0.3s, color 0.3s, border-radius 0.3s; 
+    padding: 10px; 
+    border-radius: 5px;
+}
+
+.custom-link:hover {
+    color: #303c6c;
+    background-color: white; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff; /* White background for container */
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #303c6c; /* Dark blue for headings */
+}
+
+.section {
+    margin-bottom: 40px;
+}
+
+.section h2 {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    color: #f4976c; /* Coral orange for section headings */
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #303c6c; /* Dark blue for form labels */
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.form-group button {
+    padding: 10px 15px;
+    background-color: #f4976c; /* Coral orange for button background */
+    border: none;
+    border-radius: 5px;
+    color: #fff; /* White text on button */
+    cursor: pointer;
+}
+
+.form-group button:hover {
+    background-color: #303c6c; /* Dark blue for button hover */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #303c6c; /* Dark blue for table headers */
+    color: white;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black with opacity */
+}
+
+.modal-content {
+    background-color: #fff; /* White background for modal */
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#container-footer {
+    background-color: #fbe8a6; /* Light peach background for the footer */
+    padding: 20px; /* Add some padding */
+    color: #333; /* Dark text color for readability */
+    font-family: Arial, sans-serif; /* Simple font for readability */
+}
+
+.mainfoot {
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space out the sections */
+    align-items: flex-start; /* Align items at the top */
+    max-width: 1200px; /* Maximum width for the footer */
+    margin: 0 auto; /* Center the footer horizontally */
+}
+
+.logofoot img {
+    max-width: 150px; /* Limit logo size */
+    height: auto; /* Maintain aspect ratio */
+}
+
+.con, .about {
+    flex: 1; /* Flex-grow to make sure sections take up available space */
+    margin: 0 15px; /* Space between sections */
+}
+
+h5, h4 {
+    margin: 0; /* Remove default margin */
+    color: #303c6c; /* Dark blue for footer headings */
+}
+
+p {
+    margin: 5px 0; /* Space out paragraphs */
+    line-height: 1.6; /* Increase line height for readability */
+}
+
+.about p {
+    margin-top: 10px; /* Extra space for paragraph in the about section */
+}
+
+@media (max-width: 768px) {
+    .mainfoot {
+        flex-direction: column; /* Stack items vertically on small screens */
+        align-items: center; /* Center items horizontally */
+    }
+    
+    .logofoot, .con, .about {
+        margin: 10px 0; /* Add vertical space between stacked items */
+    }
+}
+/* Basic styles for course cards */
+#corsesFromAdminPage {
+    display: flex;
+    flex-wrap: wrap;  /* Allows cards to wrap to the next line if there's not enough space */
+    gap: 20px;        /* Space between the cards */
+    justify-content: center; /* Centers the cards horizontally */
+}
+
+.course-card {
+    flex: 0 1 300px;   /* Each card will take up to 300px but shrink if necessary */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 10px;
+    background-color: #fbe8a6; /* Light peach background for course cards */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;  /* Center the text inside the card */
+}
+
+.course-card h3 {
+    margin-top: 0;
+    font-size: 1.5em;
+    color: #303c6c; /* Dark blue for course card titles */
+}
+
+.course-card p {
+    margin: 8px 0;
+    font-size: 1em;
+    color: #555;
+}
+.courses-container {
+    display: flex;  /* Align items in a row */
+    gap: 20px;     /* Space between cards */
+}
+
+.course-card {
+    flex: 0 0 auto; /* Prevent flex items from shrinking */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    background-color: #fbe8a6; /* Light peach background for course cards */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;  /* Center the text inside the card */
+}
