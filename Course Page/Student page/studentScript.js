@@ -84,7 +84,7 @@ async function fetchCourseById(courseId) {
 //                 card.className = 'course-card';
 
 //                 card.innerHTML = `
-                
+
 //                     <h3>${course.courseName}</h3>
 //                     <p>Period: ${course.duration}</p>
 //                     <p>Level: ${course.level}</p>
@@ -116,13 +116,16 @@ async function populateCoursesFromAdminPage() {
 
         // Populate left half
         leftCourses.forEach(course => {
-            const card = document.createElement('div');
+            const card = document.getElementById('card');
             card.className = 'course-card';
             card.innerHTML = `
-                <h3>${course.courseName}</h3>
-                <p>Period: ${course.duration}</p>
-                <p>Level: ${course.level}</p>
-                <p>Fee: $${course.fees}</p>
+                <div class="card-body">
+                    <h5 class="card-title">${course.courseName}</h5>
+                    <p class="card-text text-dark">${course.duration}</p>
+                    <p class="card-text text-secondary">${course.level}</p>
+                    <p class="card-text text-danger">${course.fees}</p>
+                    <a href="#" class="btn btn-success">Follow</a>
+                /div>
             `;
             leftCoursesContainer.appendChild(card);
         });
@@ -285,7 +288,7 @@ async function loadNotifications() {
         console.log('Fetching notifications...');
         const notifications = await fetchNotifications(nic);
         console.log('Fetched notifications:', notifications);
-        
+
         const notificationsTable = document.getElementById('notificationTable').getElementsByTagName('tbody')[0];
         notificationsTable.innerHTML = '';
 

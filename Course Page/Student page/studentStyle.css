@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #d2fdff; /* Light blue background for body */
+    background-color: #636363; /* Light blue background for body */
 }
 
 .custom-link {
@@ -10,39 +10,27 @@ body {
     text-decoration: none; 
     transition: background-color 0.3s, color 0.3s, border-radius 0.3s; 
     padding: 10px; 
-    border-radius: 5px;
+     border-radius: 5px;
 }
 
-.custom-link:hover {
-    color: #303c6c;
+.nav-item a {
+    color: #fff;
+    font-size: 24px;
+    transition: transform 0.3s, color 0.3s; /* Add transition for smooth scaling and color change */
+   
+}
+
+.nav-item a:hover {
+    color: #535151;
+    transform: scale(1.04); /* Scale the link on hover */
     background-color: white; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff; /* White background for container */
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-    text-align: center;
+section h2 {
     margin-bottom: 20px;
-    color: #303c6c; /* Dark blue for headings */
-}
-
-.section {
-    margin-bottom: 40px;
-}
-
-.section h2 {
-    margin-bottom: 20px;
-    border-bottom: 1px solid #ddd;
     padding-bottom: 10px;
-    color: #f4976c; /* Coral orange for section headings */
+    color: #550404; /* Coral orange for section headings */
 }
 
 .form-group {
@@ -93,7 +81,7 @@ th, td {
 }
 
 th {
-    background-color: #303c6c; /* Dark blue for table headers */
+    background-color: #323333; /* Dark blue for table headers */
     color: white;
 }
 
@@ -132,9 +120,9 @@ th {
 }
 
 #container-footer {
-    background-color: #fbe8a6; /* Light peach background for the footer */
+    background-color:rgb(77, 2, 2); /* Light peach background for the footer */
     padding: 20px; /* Add some padding */
-    color: #333; /* Dark text color for readability */
+    color: #ffffff; /* Dark text color for readability */
     font-family: Arial, sans-serif; /* Simple font for readability */
 }
 
@@ -142,7 +130,7 @@ th {
     display: flex; /* Use flexbox for layout */
     justify-content: space-between; /* Space out the sections */
     align-items: flex-start; /* Align items at the top */
-    max-width: 1200px; /* Maximum width for the footer */
+    /* max-width: 1200px; Maximum width for the footer */
     margin: 0 auto; /* Center the footer horizontally */
 }
 
@@ -183,8 +171,8 @@ p {
 /* Basic styles for course cards */
 #corsesFromAdminPage {
     display: flex;
-    flex-wrap: wrap;  /* Allows cards to wrap to the next line if there's not enough space */
-    gap: 20px;        /* Space between the cards */
+    /* flex-wrap: wrap;  /* Allows cards to wrap to the next line if there's not enough space */
+    /* gap: 20px;        Space between the cards */ 
     justify-content: center; /* Centers the cards horizontally */
 }
 
