@@ -3,11 +3,11 @@ const toggle = document.querySelector(".fa-bars");
 const toggleClose = document.querySelector(".fa-xmark");
 const sideNavbar = document.querySelector(".side-navebar");
 
-toggle.addEventListener("click", function() {
+toggle.addEventListener("click", function () {
     sideNavbar.style.right = "0";
 });
 
-toggleClose.addEventListener("click", function() {
+toggleClose.addEventListener("click", function () {
     sideNavbar.style.right = "-60%";
 });
 
@@ -116,7 +116,7 @@ function validatePassword() {
 document.getElementById('password').addEventListener("keyup", validatePassword);
 
 // Form Submit Function
-document.getElementById("registration-form").addEventListener("submit", function(event) {
+document.getElementById("registration-form").addEventListener("submit", function (event) {
     event.preventDefault();
     const nic = document.getElementById('nic').value.trim();
     const fullName = document.getElementById('fullname').value.trim();
@@ -145,6 +145,8 @@ document.getElementById("registration-form").addEventListener("submit", function
             document.getElementById('user-registration-message').style.color = "Green";
             document.getElementById('user-registration-message').textContent = "Registered Successfully";
             event.target.reset();
+            const modal = bootstrap.Modal.getInstance(document.getElementById('staticBackdrop'));
+            modal.hide();
         } else {
             document.getElementById('user-registration-message').style.color = "Red";
             document.getElementById('user-registration-message').textContent = "Password must be at least 8 characters long";
