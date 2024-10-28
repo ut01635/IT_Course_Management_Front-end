@@ -35,8 +35,16 @@ async function fetchEnrollmentsByNic(nic) {
 }
 
 // Fetch course details by course ID
-async function fetchCourseData(courseId) {
-    const response = await fetch(`https://localhost:7008/api/Course/GetById${courseId}`);
+async function fetchCourseData(CourseId) {
+    const response = await fetch(`https://localhost:7008/api/Course/GetById${CourseId}`);
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return await response.json();
+}
+
+async function fetchAllCourseData() {
+    const response = await fetch(`https://localhost:7008/api/Course/GetAllCourses`);
     if (!response.ok) {
         throw new Error('Network response was not ok');
     }
@@ -71,77 +79,31 @@ async function fetchCourseById(courseId) {
     return await response.json();
 }
 
-// Populate courses from admin page
-// async function populateCoursesFromAdminPage() {
-//     try {
-//         const courses = await fetchCourses();
-//         const coursesContainer = document.getElementById('corsesFromAdminPage'); // Ensure this matches your HTML ID
-//         coursesContainer.innerHTML = '';
-
-//         if (courses.length > 0) {
-//             courses.forEach(course => {
-//                 const card = document.createElement('div');
-//                 card.className = 'course-card';
-
-//                 card.innerHTML = `
-
-//                     <h3>${course.courseName}</h3>
-//                     <p>Period: ${course.duration}</p>
-//                     <p>Level: ${course.level}</p>
-//                     <p>Fee: $${course.fees}</p>
-//                 `;
-
-//                 coursesContainer.appendChild(card);
-//             });
-//         } else {
-//             coursesContainer.innerHTML = '<p>No courses available at the moment. Please contact admin for more details.</p>';
-//         }
-//     } catch (error) {
-//         console.error('Error populating courses:', error.message);
-//     }
-// }
 
 async function populateCoursesFromAdminPage() {
     try {
-        const courses = await fetchCourses();
-        const leftCoursesContainer = document.getElementById('leftCoursesFromAdminPage');
-        const rightCoursesContainer = document.getElementById('rightCoursesFromAdminPage');
-
-        leftCoursesContainer.innerHTML = '';
-        rightCoursesContainer.innerHTML = '';
-
-        const midIndex = Math.ceil(courses.length / 2); // Find the middle index
-        const leftCourses = courses.slice(0, midIndex); // First half
-        const rightCourses = courses.slice(midIndex); // Second half
-
+        const courses = await fetchAllCourseData();
+        console.log(courses);
+        const cardRow = document.getElementById('card-row');
         // Populate left half
-        leftCourses.forEach(course => {
-            const card = document.getElementById('card');
-            card.className = 'course-card';
-            card.innerHTML = `
+        courses.forEach(course => {
+            const cardMain = document.createElement('div')
+            cardMain.className = 'col-md-4 mb-3';
+            cardMain.innerHTML = `
+            <div class="card" id="card">
                 <div class="card-body">
                     <h5 class="card-title">${course.courseName}</h5>
                     <p class="card-text text-dark">${course.duration}</p>
                     <p class="card-text text-secondary">${course.level}</p>
                     <p class="card-text text-danger">${course.fees}</p>
                     <a href="#" class="btn btn-success">Follow</a>
-                /div>
+                </div>
+            </div>  
             `;
-            leftCoursesContainer.appendChild(card);
+            cardRow.appendChild(cardMain);
         });
 
-        // Populate right half
-        rightCourses.forEach(course => {
-            const card = document.createElement('div');
-            card.className = 'course-card';
-            card.innerHTML = `
-                <h3>${course.courseName}</h3>
-                <p>Period: ${course.duration}</p>
-                <p>Level: ${course.level}</p>
-                <p>Fee: $${course.fees}</p>
-            `;
-            rightCoursesContainer.appendChild(card);
-        });
+      
 
     } catch (error) {
         console.error('Error populating courses:', error.message);
@@ -163,7 +125,7 @@ async function loadProfile() {
     try {
         console.log('Fetching student data for NIC:', nic);
         const student = await fetchStudentData(nic);
-        console.log('Fetched student data:', student);
+        // console.log('Fetched student data:', student);
 
         document.getElementById('profileNameDisplay').innerText = student.fullName;
         document.getElementById('profileNICDisplay').innerText = student.nic;
@@ -260,7 +222,7 @@ async function loadCourses() {
         // Fetch course details for each enrollment using forEach
         enrollments.forEach(async (enrollment) => {
             const course = await fetchCourseData(enrollment.courseId);
-            console.log('Course fetched:', course);
+            // console.log('Course fetched:', course);
 
             // Populate the table
             const row = studentCoursesTable.insertRow();
@@ -287,16 +249,16 @@ async function loadNotifications() {
     try {
         console.log('Fetching notifications...');
         const notifications = await fetchNotifications(nic);
-        console.log('Fetched notifications:', notifications);
+        // console.log('Fetched notifications:', notifications);
 
         const notificationsTable = document.getElementById('notificationTable').getElementsByTagName('tbody')[0];
         notificationsTable.innerHTML = '';
 
         notifications.forEach(notification => {
             const row = notificationsTable.insertRow(); // Create a new row
-
+            let formatdate = new Date( notification.date).toISOString().slice(0, 10);
             const dateCell = row.insertCell(0); // Insert a new cell for the date
-            dateCell.innerText = notification.date; // Set the date text
+            dateCell.innerText =formatdate; // Set the date text
 
             const messageCell = row.insertCell(1); // Insert a new cell for the message
             messageCell.innerText = notification.message; // Set the message text
@@ -317,39 +279,70 @@ async function loadPayments() {
     }
 
     try {
+        tableBody = document.getElementById("paymentDetails")
         const payments = await fetchPaymentByNic(nic);
         console.log('Payments fetched:', payments);
-
-        if (Array.isArray(payments) && payments.length > 0) {
-            const studentPaymentsTable = document.getElementById('studentPaymentsTable').getElementsByTagName('tbody')[0];
-            studentPaymentsTable.innerHTML = '';
-
-            for (const payment of payments) {
-                const enrollmentId = payment.enrollmentID;
-
-                if (!enrollmentId) {
-                    console.warn('No enrollment ID found for payment:', payment);
-                    continue;
-                }
-
-                const enrollment = await fetchEnrollmentById(enrollmentId);
-                if (enrollment) {
-                    const course = await fetchCourseById(enrollment.courseId);
-                    if (course) {
-                        const row = studentPaymentsTable.insertRow();
-                        row.insertCell(0).innerText = new Date(payment.paymentDate).toLocaleDateString();
-                        row.insertCell(1).innerText = course.courseName;
-                        row.insertCell(2).innerText = payment.amount;
-                    } else {
-                        console.warn(`No course found for ID: ${enrollment.courseId}`);
-                    }
-                } else {
-                    console.warn(`No enrollment found for ID: ${enrollmentId}`);
-                }
-            }
-        } else {
-            alert('No payments found for this student.');
+        if(payments){
+            payments.forEach(payment =>{
+                enrollment = fetchEnrollmentById(payment.enrollmentID)
+                if(enrollment)
+                console.log(enrollment);
+                course = fetchCourseById(enrollment.CourseId)
+                Row = document.createElement('tr');
+                Row.innerHTML = `
+                <td>${payment.paymentDate}</td>
+                <td>${course.courseName}</td>
+                <td>${payment.amount}</td>
+                `;
+                tableBody.appendChild(Row)
+    
+            })
         }
+        else{
+            Row = document.createElement('tr');
+                Row.innerHTML = `
+                <td>Payment details not availabe...</td>
+                `;
+             tableBody.appendChild(Row)
+        }
+        
+
+
+    //     // if (payments) {
+    //     //     courses = 
+            
+    //     // }
+
+    //     if (Array.isArray(payments) && payments.length > 0) {
+    //         const studentPaymentsTable = document.getElementById('studentPaymentsTable').getElementsByTagName('tbody')[0];
+    //         studentPaymentsTable.innerHTML = '';
+
+    //         for (const payment of payments) {
+    //             const enrollmentId = payment.enrollmentID;
+
+    //             if (!enrollmentId) {
+    //                 console.warn('No enrollment ID found for payment:', payment);
+    //                 continue;
+    //             }
+
+    //             const enrollment = await fetchEnrollmentById(enrollmentId);
+    //             if (enrollment) {
+    //                 const course = await fetchCourseById(enrollment.courseId);
+    //                 if (course) {
+    //                     const row = studentPaymentsTable.insertRow();
+    //                     row.insertCell(0).innerText = new Date(payment.paymentDate).toLocaleDateString();
+    //                     row.insertCell(1).innerText = course.courseName;
+    //                     row.insertCell(2).innerText = payment.amount;
+    //                 } else {
+    //                     console.warn(`No course found for ID: ${enrollment.courseId}`);
+    //                 }
+    //             } else {
+    //                 console.warn(`No enrollment found for ID: ${enrollmentId}`);
+    //             }
+    //         }
+    //     } else {
+    //         alert('No payments found for this student.');
+    //     }
     } catch (error) {
         console.error('Error loading payments:', error.message);
     }

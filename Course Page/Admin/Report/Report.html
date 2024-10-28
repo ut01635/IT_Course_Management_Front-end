@@ -18,6 +18,7 @@
     <nav class="header px-5">
         <div class="logo">
             <img src="../image/icon-removebg-preview.png" alt="A-Z LOGO">
+            
             <h1>Coding Academy</h1>
         </div>
         <div class="navebar-menu-toggle">
@@ -39,97 +40,67 @@
         </div>
     </div>
 
-    <main id="student-report">
-        <div id="report-container">
-            <div class="heading">
-                <h1>Student</h1><h1>Report</h1>
-                <div id="search-container">
-                    <input type="text" id="search-by-nic" placeholder="NIC number">
-                    <button id="report-generate-btn">Generate Report</button>
-                </div>
+    <main id="student-report" class="container mt-5">
+        <h1>Student Report</h1>
+        <div id="search-container">
+            <input type="text" id="search-by-nic" placeholder="NIC number" class="form-control" style="height: 50px;">
+            <button id="report-generate-btn" class="btn btn-primary mt-2" style="height: 50px;">Generate Report</button>
+        </div>
+
+        <div id="report-container" class="mt-4">
+            <div class="personal-details">
+                <h2 class="ms-3">Personal Details</h2>
+                <table class="table">
+                    <tr>
+                        <td><strong>NIC Number:</strong></td>
+                        <td><input type="text" id="nic" disabled></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Full Name:</strong></td>
+                        <td><input type="text" id="name" disabled></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email:</strong></td>
+                        <td><input type="text" id="email" disabled></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phone No:</strong></td>
+                        <td><input type="text" id="phone" disabled></td>
+                    </tr>
+                </table>
             </div>
 
-            <div id="form-container">
-                <form id="personal-details">
-                    <div class="form-group">
-                        <h2>Personal Details</h2>
-                        <table>
-                            <tr class="form-group">
-                                <td><label for="nic">NIC Number :</label></td>
-                                <td><input type="text" id="nic" disabled></td>
-                            </tr>
-                            <tr class="form-group">
-                                <td><label for="name">Full Name :</label></td>
-                                <td><input type="text" id="name" disabled></td>
-                            </tr>
-                            <tr class="form-group">
-                                <td><label for="email">Email :</label></td>
-                                <td><input type="text" id="email" disabled></td>
-                            </tr>
-                            <tr class="form-group">
-                                <td><label for="phone">Phone No :</label></td>
-                                <td><input type="text" id="phone" disabled></td>
-                            </tr>
-                        </table>
-                    </div>
-                </form>
-                <form id="course-details">
-                    <div class="form-group">
-                        <h2>Course Details</h2>
-                        <table>
-                            <tr>
-                                <td><label for="EnrollCourses">Course Name :</label></td>
-                                <td>
-                                    <select id="EnrollCourses" class="form-select" aria-label="Default select example">
-                                        <option selected>Following Course</option>
-                                    </select>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </form>
-                <form id="payment-details">
-                    <div class="form-group">
-                        <h2>Payment Details</h2>
-                        <table>
-                            <tr>
-                                <td><label for="fee">Course Fee :</label></td>
-                                <td><input type="text" id="fee" disabled></td>
-                            </tr>
-                            <tr>
-                                <td><label for="plan">Payment Plan :</label></td>
-                                <td><input type="text" id="plan" disabled></td>
-                            </tr>
-                            <tr id="full-payment-row">
-                                <td><label for="full-payment">Paid Payment :</label></td>
-                                <td><input type="text" id="full-payment" disabled></td>
-                            </tr>
-                            <tr id="installments-row">
-                                <td><label for="installments">Installments :</label></td>
-                                <td><input type="text" id="installments" disabled></td>
-                            </tr>
-                            <tr id="installment-amount-row">
-                                <td><label for="installment-amount">Installment Amount :</label></td>
-                                <td><input type="text" id="installment-amount" disabled></td>
-                            </tr>
-                            <tr id="payment-paid-row">
-                                <td><label for="payment-paid">Payment Paid :</label></td>
-                                <td><input type="text" id="payment-paid" disabled></td>
-                            </tr>
-                            <tr id="payment-due-row">
-                                <td><label for="payment-due">Payment Due :</label></td>
-                                <td><input type="text" id="payment-due" disabled></td>
-                            </tr>
-                            <tr id="payment-date-row">
-                                <td><label for="payment-date">Payment Date :</label></td>
-                                <td><input type="text" id="payment-date" disabled></td>
-                            </tr>
-                        </table>
-                    </div>
-                </form>
+            <div class="course-details mt-4">
+                <h2>Course Details</h2>
+                <select id="EnrollCourses" class="form-select" aria-label="Course selection" onchange="SelectFectPayment()">
+                    <option selected>Following Course</option>
+                </select>
+            </div>
+
+            <div class="payment-details mt-4">
+                <h2>Payment Details</h2>
+                <table class="table">
+                    <tr>
+                        <td><strong>Course Fee:</strong></td>
+                        <td><input type="text" id="fee" disabled></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Payment Plan:</strong></td>
+                        <td><input type="text" id="paymentPlan" disabled></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Paid Amount:</strong></td>
+                        <td><input type="text" id="paidAmount" disabled></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Due Amount:</strong></td>
+                        <td><input type="text" id="dueAmount" disabled></td>
+                    </tr>
+                </table>
             </div>
         </div>
     </main>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="./Report.js"></script>
