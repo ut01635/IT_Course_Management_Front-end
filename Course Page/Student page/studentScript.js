@@ -101,13 +101,13 @@ async function populateCoursesFromAdminPage() {
             const cardMain = document.createElement('div')
             cardMain.className = 'col-md-4 mb-3';
             cardMain.innerHTML = `
-            <div class="card" id="card">
-                <div class="card-body">
-                    <h5 class="card-title">${course.courseName}</h5>
-                    <p class="card-text text-dark">${course.duration}</p>
-                    <p class="card-text text-secondary">${course.level}</p>
-                    <p class="card-text text-danger">${course.fees}</p>
-                    <a href="#" class="btn btn-success" onclick="PlanPopup(${course.id})" >Follow</a>
+            <div class="card shadow p-3 mb-5 bg-body-tertiary rounded" id="card">
+                <div class="card-body ">
+                    <h5 class="card-title fs-2 text-center">${course.courseName}</h5>
+                    <p class="card-text text-dark text-center">${course.duration}</p>
+                    <p class="card-text text-secondary text-center fw-medium">${course.level}</p>
+                    <p class="card-text text-danger text-center">LKR. ${course.fees}.00</p>
+                    <div class="d-flex justify-content-center"> <a href="#" class="btn btn-success " onclick="PlanPopup(${course.id})" >Follow</a></div>
                 </div>
             </div>  
             `;
@@ -122,28 +122,67 @@ async function populateCoursesFromAdminPage() {
 }
 
 
+
+
+const loggedNic = sessionStorage.getItem('loggedStudent');
 let currentCourseId = null;
-function PlanPopup(courseId) {
-    // Find the course details from the courses array or from an API
+console.log(loggedNic);
+
+
+function PlanPopup(CourseId) {
+    // Fetch the course details
     fetchAllCourseData().then(courses => {
-        const course = courses.find(c => c.id === courseId);
+        const course = courses.find(c => c.id === CourseId);
         if (course) {
-            document.getElementById('courseDetails').innerText = `Course: ${course.courseName}\nFees: ${course.fees}`;
-            currentCourseId = course.id;
-            // Show the modal
-            const modal = new bootstrap.Modal(document.getElementById('paymentPlanModal'));
-            modal.show();
+            // Get the NIC from session storage
+
+
+            if (loggedNic) {
+                // Fetch enrollment details using the logged NIC
+                fetch(`https://localhost:7008/api/Enrollment/by-nic/${loggedNic}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(enrollmentData => {
+                        // Check if there's a matching enrollment
+                        const existingEnrollment = enrollmentData.find(enrollment => enrollment.courseId === CourseId);
+                        if (existingEnrollment) {
+                            // Show alert modal
+                            const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+                            alertModal.show();
+                            return; // Exit the function if already enrolled
+                        } else {
+                            // If not enrolled, display course details
+                            document.getElementById('courseDetails').innerText = `Course: ${course.courseName}\nFees: ${course.fees}`;
+                            currentCourseId = course.id;
+
+                            // Show the payment plan modal
+                            const modal = new bootstrap.Modal(document.getElementById('paymentPlanModal'));
+                            modal.show();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching enrollment data:', error.message);
+                    });
+            } else {
+                console.error('No NIC found in session storage.');
+            }
         }
     }).catch(error => {
         console.error('Error fetching course data:', error.message);
     });
 }
 
+
+
 async function confirmEnroll() {
     const selectedPlan = document.getElementById('paymentPlanSelect').value;
-    
-    // Assuming you have the student's NIC and course ID available in your context
-    const studentNIC = "200206601718"; // Replace with actual NIC as needed
+
+
+    const studentNIC = loggedNic;
     const courseId = currentCourseId;
     const enrollmentDate = new Date().toISOString(); // Current date in ISO format
 
@@ -152,7 +191,7 @@ async function confirmEnroll() {
         courseId: courseId,
         enrollmentDate: enrollmentDate,
         paymentPlan: selectedPlan,
-        status: "pending" // Default status
+        status: "pending"
     };
 
     try {
@@ -170,11 +209,12 @@ async function confirmEnroll() {
 
         const result = await response.json();
         console.log('Enrollment successful:', result);
-        alert('Enrollment successful!');
-
         // Optionally close the modal after successful enrollment
         const modal = bootstrap.Modal.getInstance(document.getElementById('paymentPlanModal'));
         modal.hide();
+        alert('Enrollment successful!');
+        loadCourses()
+
 
     } catch (error) {
         console.error('Error enrolling:', error.message);
@@ -201,10 +241,10 @@ async function loadProfile() {
         const student = await fetchStudentData(nic);
         // console.log('Fetched student data:', student);
 
-        document.getElementById('profileNameDisplay').innerText = student.fullName;
-        document.getElementById('profileNICDisplay').innerText = student.nic;
-        document.getElementById('profileEmailDisplay').innerText = student.email;
-        document.getElementById('profilePhoneDisplay').innerText = student.phone;
+        document.getElementById('profileNameDisplay').value = student.fullName;
+        document.getElementById('profileNICDisplay').value = student.nic;
+        document.getElementById('profileEmailDisplay').value = student.email;
+        document.getElementById('profilePhoneDisplay').value = student.phone;
 
     } catch (error) {
         console.error('Error fetching student data:', error.message);
@@ -215,7 +255,7 @@ async function loadProfile() {
 async function openUpdateProfileModal() {
     const nic = sessionStorage.getItem('loggedStudent');
     if (!nic) {
-        console.error('No NIC found in local storage.');
+        console.error('No NIC found in session storage.');
         return;
     }
 
@@ -227,7 +267,9 @@ async function openUpdateProfileModal() {
         document.getElementById('updateProfileEmail').value = student.email;
         document.getElementById('updateProfilePhone').value = student.phone;
 
-        document.getElementById('updateProfileModal').style.display = 'block'; // Show the modal
+        // Use Bootstrap's modal methods to show the modal
+        const modal = new bootstrap.Modal(document.getElementById('updateProfileModal'));
+        modal.show();
     } catch (error) {
         console.error('Error fetching student data for update:', error.message);
     }
@@ -235,25 +277,35 @@ async function openUpdateProfileModal() {
 
 // Close update profile modal
 function closeUpdateProfileModal() {
-    document.getElementById('updateProfileModal').style.display = 'none'; // Hide the modal
+    const modal = bootstrap.Modal.getInstance(document.getElementById('updateProfileModal'));
+    modal.hide();
 }
 
 // Update student profile
 async function updateProfile() {
     const nic = sessionStorage.getItem('loggedStudent');
     if (!nic) {
-        console.error('No NIC found in local storage.');
+        console.error('No NIC found in session storage.');
         return;
     }
 
-    const payload = {
-        fullName: document.getElementById('updateProfileName').value.trim(), // Use correct property name
-        nic: nic, // Use the NIC from session storage
-        email: document.getElementById('updateProfileEmail').value.trim(),
-        phone: document.getElementById('updateProfilePhone').value.trim(),
-    };
+    const name = document.getElementById('updateProfileName').value.trim();
+    const email = document.getElementById('updateProfileEmail').value.trim();
+    const phoneNumber = document.getElementById('updateProfilePhone').value.trim();
+
+    // Basic validation
+    if (!name || !email || !phoneNumber) {
+        alert('Please fill out all fields.');
+        return;
+    }
+
+    const payload = { name, email, phoneNumber };
 
     try {
+        // Show loading indicator (optional)
+        const loadingMessage = document.getElementById('loadingMessage');
+        loadingMessage.style.display = 'block'; // Show loading message
+
         const response = await fetch(`https://localhost:7008/api/Student/Update-Student/${nic}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -261,7 +313,9 @@ async function updateProfile() {
         });
 
         if (!response.ok) {
-            throw new Error('Failed to update profile');
+            const errorData = await response.json();
+            const errorMessage = errorData.message || 'Failed to update profile';
+            throw new Error(errorMessage);
         }
 
         alert('Profile updated successfully!');
@@ -269,8 +323,16 @@ async function updateProfile() {
         loadProfile(); // Reload the profile to reflect changes
     } catch (error) {
         console.error('Error updating profile:', error.message);
+        alert(`Error: ${error.message}`); // Show error to user
+    } finally {
+        // Hide loading indicator
+        const loadingMessage = document.getElementById('loadingMessage');
+       loadingMessage.style.display = 'none'; // Hide loading message
     }
 }
+
+
+
 
 // Load courses for the student
 async function loadCourses() {
@@ -325,22 +387,50 @@ async function loadNotifications() {
         const notifications = await fetchNotifications(nic);
         // console.log('Fetched notifications:', notifications);
 
-        const notificationsTable = document.getElementById('notificationTable').getElementsByTagName('tbody')[0];
-        notificationsTable.innerHTML = '';
+        const notificationData = document.getElementById('notificationData')
+        notificationData.innerHTML = '';
 
         notifications.forEach(notification => {
-            const row = notificationsTable.insertRow(); // Create a new row
             let formatdate = new Date(notification.date).toISOString().slice(0, 10);
-            const dateCell = row.insertCell(0); // Insert a new cell for the date
-            dateCell.innerText = formatdate; // Set the date text
-
-            const messageCell = row.insertCell(1); // Insert a new cell for the message
-            messageCell.innerText = notification.message; // Set the message text
+            const row = document.createElement('tr'); // Create a new row
+            row.innerHTML = `
+                <td>${formatdate}</td>
+                <td>${notification.message}</td>
+                <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="deleteNotification(${notification.id})" ><i class="fa-solid fa-trash"></i></button></td>
+            `;
+            notificationData.appendChild(row); // Append the new row to the table
         });
+        
     } catch (error) {
         console.error('Error loading notifications:', error.message);
     }
 }
+
+///Delete function for notification message
+async function deleteNotification(notificationId) {
+    try {
+        const response = await fetch(`https://localhost:7008/api/Notification/Delete${notificationId}`, {
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to delete notification');
+        }
+
+        // // Remove the row from the table
+        // const row = document.querySelector(`button[data-id="${notificationId}"]`).closest('tr');
+        // if (row) {
+        //     row.remove();
+        // }
+        loadNotifications();
+
+        alert('Notification deleted successfully!');
+    } catch (error) {
+        console.error('Error deleting notification:', error.message);
+        alert(`Error: ${error.message}`);
+    }
+}
+
 
 // Load payments for the student
 async function loadPayments() {
@@ -383,9 +473,10 @@ async function loadPayments() {
                     let course = getCourse(Enrollment.CourseId)
 
                     if (course) {
+                        let formatdate = new Date(payment.paymentDate).toISOString().slice(0, 10);
                         Row = document.createElement('tr');
                         Row.innerHTML = `
-                            <td>${payment.paymentDate}</td>
+                            <td>${formatdate}</td>
                             <td>${course.courseName}</td>
                             <td>${payment.amount}</td>
                         `;
