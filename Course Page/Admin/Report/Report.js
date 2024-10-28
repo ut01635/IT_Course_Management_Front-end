@@ -1,8 +1,8 @@
 const GetAllStudentsURL = 'https://localhost:7008/api/Student/Get-All-Students';
 const GetAllCoursesURL = 'https://localhost:7008/api/Course/GetAllCourses';
 const GetEnrollmentsByNICURL = 'https://localhost:7008/api/Enrollment/by-nic/';
-const GetPaymentByNICURL = 'https://localhost:7008/api/Payment/GetByNIC/'; // Updated endpoint for payment by NIC
-const GetCourseByIdURL = 'https://localhost:7008/api/Course/GetById'; 
+const GetPaymentByNICURL = 'https://localhost:7008/api/Payment/GetByNIC/';
+const GetCourseByIdURL = 'https://localhost:7008/api/Course/GetById';
 
 // Global variables to hold fetched data
 let students = [];
@@ -52,9 +52,7 @@ reportGenerateBtn.addEventListener("click", async function () {
 
     // Fetch enrolled courses for the student by NIC
     const enrolledCourses = await fetchData(GetEnrollmentsByNICURL + nicInput);
-    
-    // Populate the course dropdown
-    populateCourseDropdown(enrolledCourses, nicInput); // Pass nicInput here
+    await populateCourseDropdown(enrolledCourses, nicInput);
 });
 
 // Populate course dropdown based on enrollments
@@ -62,26 +60,24 @@ async function populateCourseDropdown(enrolledCourses, nicInput) {
     const courseSelect = document.getElementById("EnrollCourses");
     courseSelect.innerHTML = '<option selected>Following Course</option>'; // Reset the dropdown
 
-    // Store the enrollment IDs for later use
     let enrollmentIds = [];
 
     for (const enrollment of enrolledCourses) {
-        const course = await fetchData(GetCourseByIdURL + enrollment.courseId); // Fetch course by ID
+        const course = await fetchData(GetCourseByIdURL + enrollment.courseId);
         if (course) {
             const option = document.createElement("option");
-            option.value = enrollment.id; // Store the enrollment ID as the value
-            option.textContent = course.courseName; // Display the course name
+            option.value = enrollment.id;
+            option.textContent = course.courseName;
             courseSelect.appendChild(option);
-            enrollmentIds.push(enrollment.id); // Collect enrollment IDs
+            enrollmentIds.push(enrollment.id);
         }
     }
 
-    // If there are enrolled courses, fetch payment info for the student
     if (enrollmentIds.length > 0) {
-        fetchPaymentDetailsByNIC(nicInput); // Fetch payment details by NIC
+        await fetchPaymentDetailsByNIC(nicInput);
     } else {
         alert("No enrolled courses found.");
-        clearPaymentDetails(); // Clear payment details if no courses found
+        clearPaymentDetails();
     }
 }
 
@@ -90,44 +86,35 @@ async function fetchPaymentDetailsByNIC(nic) {
     const response = await fetch(GetPaymentByNICURL + nic);
     if (response.ok) {
         const payments = await response.json();
-        // Assuming payments is an array and we want to show the first one
         if (payments.length > 0) {
-            fillPaymentDetails(payments[0]); // Fill with first payment detail
+            fillPaymentDetails(payments[0]);
         } else {
             alert("No payment details found for this student.");
-            clearPaymentDetails(); // Clear payment details if not found
+            clearPaymentDetails();
         }
     } else {
         alert("Payment details not found.");
-        clearPaymentDetails(); // Clear payment details if not found
+        clearPaymentDetails();
     }
 }
 
 // Function to fill payment details
 function fillPaymentDetails(payment) {
-    console.log(payment);
-    document.getElementById("fee").value = payment.amount || ""; // Ensure safe access
-    document.getElementById("plan").value = payment.paymentPlan || ""; // Ensure safe access
-    document.getElementById("full-payment").value = payment.amount || ""; // Ensure safe access
-    document.getElementById("installments").value = payment.installments || ""; // Ensure safe access
-    document.getElementById("installment-amount").value = payment.installmentAmount || ""; // Ensure safe access
-    document.getElementById("payment-paid").value = payment.paymentPaid || ""; // Ensure safe access
-    document.getElementById("payment-due").value = payment.paymentDue || ""; // Ensure safe access
-    document.getElementById("payment-date").value = payment.paymentDate || ""; // Ensure safe access
+    clearPaymentDetails(); // Clear previous values
 
-    // Debugging log for checking values
-    console.log("Payment Details:", payment);
+    document.getElementById("fee").value = payment.amount || ""; // Course Fee
+    document.getElementById("full-payment").value = payment.fullPaymentAmount || ""; // Full Payment
+    document.getElementById("installments").value = payment.installments || ""; // Installments
+    document.getElementById("installment-amount").value = payment.installmentAmount || ""; // Installment Amount
+    document.getElementById("payment-date").value = payment.paymentDate || ""; // Payment Date
 }
 
 // Function to clear payment details
 function clearPaymentDetails() {
     document.getElementById("fee").value = "";
-    document.getElementById("plan").value = "";
     document.getElementById("full-payment").value = "";
     document.getElementById("installments").value = "";
     document.getElementById("installment-amount").value = "";
-    document.getElementById("payment-paid").value = "";
-    document.getElementById("payment-due").value = "";
     document.getElementById("payment-date").value = "";
 }
 
