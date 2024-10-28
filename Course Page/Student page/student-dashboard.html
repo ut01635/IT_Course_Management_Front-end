@@ -106,13 +106,18 @@
                     </marquee> -->
 
                     <div class="container mt-5">
-                        <div class="row">
-                            <div class="col-md-4">
+                        <div class="row" id="card-row">
+                            <!-- <div class="col-md-4" >
                                 <div class="card" id="card">
-                                  
-                                    
+                                    <div class="card-body">
+                                        <h5 class="card-title">${course.courseName}</h5>
+                                                     <p class="card-text text-dark">${course.duration}</p>
+                                                     <p class="card-text text-secondary">${course.level}</p>
+                                                     <p class="card-text text-danger">${course.fees}</p>
+                                                    <a href="#" class="btn btn-success">Follow</a>
+                                    </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
 
@@ -237,8 +242,9 @@
                                 <th>Amount Paid</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="paymentDetails">
                             <!-- Payment data will be populated here -->
+                            
                         </tbody>
                     </table>
                 </div>
