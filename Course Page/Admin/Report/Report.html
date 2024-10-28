@@ -72,7 +72,7 @@
 
             <div class="course-details mt-4">
                 <h2>Course Details</h2>
-                <select id="EnrollCourses" class="form-select" aria-label="Course selection">
+                <select id="EnrollCourses" class="form-select" aria-label="Course selection" onchange="SelectFectPayment()">
                     <option selected>Following Course</option>
                 </select>
             </div>
@@ -85,20 +85,16 @@
                         <td><input type="text" id="fee" disabled></td>
                     </tr>
                     <tr>
-                        <td><strong>Full Payment:</strong></td>
-                        <td><input type="text" id="full-payment" disabled></td>
+                        <td><strong>Payment Plan:</strong></td>
+                        <td><input type="text" id="paymentPlan" disabled></td>
                     </tr>
                     <tr>
-                        <td><strong>Installment Payments:</strong></td>
-                        <td><input type="text" id="installments" disabled></td>
+                        <td><strong>Paid Amount:</strong></td>
+                        <td><input type="text" id="paidAmount" disabled></td>
                     </tr>
                     <tr>
-                        <td><strong>Installment Amount:</strong></td>
-                        <td><input type="text" id="installment-amount" disabled></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Payment Date:</strong></td>
-                        <td><input type="text" id="payment-date" disabled></td>
+                        <td><strong>Due Amount:</strong></td>
+                        <td><input type="text" id="dueAmount" disabled></td>
                     </tr>
                 </table>
             </div>
