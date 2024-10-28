@@ -121,6 +121,33 @@
                         </div>
                     </div>
 
+                    <!-- Payment Plan Modal -->
+                <div class="modal fade" id="paymentPlanModal" tabindex="-1" aria-labelledby="paymentPlanModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="paymentPlanModalLabel">Payment Plan</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <p id="courseDetails"></p>
+                          <div class="mb-3">
+                            <label for="paymentPlanSelect" class="form-label">Select Payment Plan</label>
+                            <select id="paymentPlanSelect" class="form-select">
+                              <option value="fullPayment">Full Payment</option>
+                              <option value="installment">Installment</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-primary" onclick="confirmEnroll()">Confirm</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+  
+
 
                     <!-- <marquee behavior="" direction="right">If you like to follow these courses, contact admin for more details</marquee> -->
                 </section>
@@ -152,6 +179,7 @@
                         <button class="btn btn-info" onclick="openUpdateProfileModal()">Update Profile</button>
                     </div>
                 </div>
+
                 <!-- modal popup form -->
                 <div class="modal" tabindex="-1" id="updateProfileModal">
                     <div class="modal-dialog">
@@ -244,7 +272,7 @@
                         </thead>
                         <tbody id="paymentDetails">
                             <!-- Payment data will be populated here -->
-                            
+                           
                         </tbody>
                     </table>
                 </div>
