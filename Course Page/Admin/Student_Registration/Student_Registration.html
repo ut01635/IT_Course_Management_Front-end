@@ -93,53 +93,47 @@
     <!-- Button trigger modal -->
 
     <!-- Modal -->
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Student Registration</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title" id="staticBackdropLabel">Student Registration</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <div id="student-registration">
-                        <form id="registration-form">
-                            <div class="form-group">
-                                <label for="nic">NIC Number</label>
-                                <input type="text" id="nic" name="nic" autocomplete="off" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="fullname">Full Name</label>
-                                <input type="text" id="fullname" name="fullname" autocomplete="off" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" id="email" name="email" autocomplete="off" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="phone">Phone</label>
-                                <input type="tel" id="phone" name="phone" autocomplete="off" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" id="password" name="password" required>
-                            </div>
-                          
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary main-btn">Register</button>
-                            </div>
-                        </form>
-
-                        <div>
-                            <p id="user-registration-message"></p>
+                    <form id="registration-form">
+                        <div class="mb-3">
+                            <label for="nic" class="form-label">NIC Number</label>
+                            <input type="text" class="form-control" id="nic" name="nic" autocomplete="off" required>
                         </div>
-
+                        <div class="mb-3">
+                            <label for="fullname" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="fullname" name="fullname" autocomplete="off" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" autocomplete="off" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" autocomplete="off" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </div>
+                    </form>
+                    <div>
+                        <p id="user-registration-message" class="text-center mt-3"></p>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
+    
 
 
 

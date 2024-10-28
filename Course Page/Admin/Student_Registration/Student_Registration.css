@@ -112,7 +112,7 @@ a:hover::after{
 
 /* Main content */
 .main {
-    margin-top: 100px; /* Space for header */
+    /* margin-top: 100px; Space for header */
     padding: 20px; /* General padding for main content */
 }
 
