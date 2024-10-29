@@ -109,19 +109,6 @@ a:hover::after{
 
 /* Form */
 
-#main-container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 50%;
-    margin-top: 50px;
-}
-#sub-container{
-    display: flex;
-    /* gap: 100px; */
-    /* height: 100%; */
-}
-
 #main-container  h2{
     color: maroon;
     letter-spacing: 2px;
@@ -129,9 +116,9 @@ a:hover::after{
 
 }
 #fee-management{
-    margin-top: 120px;
+    /* margin-top: 120px; */
   /* margin: auto;   */
-  background-color: rgba(147, 148, 150, 0.842);
+  background-color: rgba(208, 209, 212, 0.438);
   /* padding: 30px 50px 50px 50px; */
   border-radius: 10px;
   width: 750px;
@@ -150,7 +137,7 @@ table{
 }
 input , select{
     background: none;
-    width: 113%;
+    width: 115%;
     padding: 0.5rem;
     font-size: 1rem;
     border: none;

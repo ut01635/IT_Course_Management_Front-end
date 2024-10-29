@@ -40,11 +40,11 @@
         </div>
     </div>
 
-    <main id="student-report" class="container mt-5">
-        <h1>Student Report</h1>
-        <div id="search-container">
+    <main id="student-report" class="container card mt-4">
+        <h1 class="text-center mb-5">Student Report</h1>
+        <div id="search-container" class="container">
             <input type="text" id="search-by-nic" placeholder="NIC number" class="form-control" style="height: 50px;">
-            <button id="report-generate-btn" class="btn btn-primary mt-2" style="height: 50px;">Generate Report</button>
+            <button id="report-generate-btn" class="btn btn-success mt-2" style="height: 50px;">Generate Report</button>
         </div>
 
         <div id="report-container" class="mt-4">
@@ -79,7 +79,7 @@
 
             <div class="payment-details mt-4">
                 <h2>Payment Details</h2>
-                <table class="table">
+                <table class="table table1">
                     <tr>
                         <td><strong>Course Fee:</strong></td>
                         <td><input type="text" id="fee" disabled></td>
@@ -90,12 +90,24 @@
                     </tr>
                     <tr>
                         <td><strong>Paid Amount:</strong></td>
-                        <td><input type="text" id="paidAmount" disabled></td>
+                        <td><input type="text" id="paidAmount" class="text-success" disabled></td>
                     </tr>
                     <tr>
                         <td><strong>Due Amount:</strong></td>
-                        <td><input type="text" id="dueAmount" disabled></td>
+                        <td><input type="text" id="dueAmount" class="text-danger" disabled></td>
                     </tr>
+                </table>
+                <table class="table mt-4">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Date</th>
+                            <th>Course Name</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paymentDetails">
+                        
+                    </tbody>
                 </table>
             </div>
         </div>

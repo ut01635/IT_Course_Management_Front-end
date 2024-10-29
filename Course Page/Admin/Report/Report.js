@@ -1,3 +1,15 @@
+const toggle = document.querySelector(".fa-bars");
+const toggleClose = document.querySelector(".fa-xmark");
+const sideNavbar = document.querySelector(".side-navebar");
+
+toggle.addEventListener("click", function () {
+    sideNavbar.style.right = "0";
+});
+
+toggleClose.addEventListener("click", function () {
+    sideNavbar.style.right = "-60%";
+});
+
 const BASE_URL = 'https://localhost:7008/api';
 const GetAllStudentsURL = `${BASE_URL}/Student/Get-All-Students`;
 const GetAllCoursesURL = `${BASE_URL}/Course/GetAllCourses`;
@@ -10,6 +22,7 @@ const GetEnrollmentsById = `${BASE_URL}/Enrollment/Get-enrollmetnt-By`;
 // Global variables to hold fetched data
 let students = [];
 let courses = [];
+const nicInput = document.getElementById("search-by-nic").value.trim();
 
 // Fetch all initial data
 async function fetchData(url) {
@@ -29,6 +42,42 @@ async function GetAllStudents() {
 
 async function GetAllCourses() {
     courses = await fetchData(GetAllCoursesURL);
+}
+// Fetch course details by ID
+async function fetchCourseById(courseId) {
+    const response = await fetch(`https://localhost:7008/api/Course/GetById${courseId}`);
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return await response.json();
+}
+//Course get by id
+async function getCourse(CourseId) {
+    try {
+        const CourseData = await fetchCourseById(CourseId);
+        return CourseData
+    } catch (error) {
+        console.error("Error fetching enrollment:", error);
+    }
+}
+
+// Fetch enrollment details by ID
+async function fetchEnrollmentById(enrollmentId) {
+    const response = await fetch(`https://localhost:7008/api/Enrollment/Get-enrollmetnt-By${enrollmentId}`);
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return await response.json();
+}
+
+//Get enrollment BY Id
+async function getEnrollment(enrollmentId) {
+    try {
+        const enrollmentData = await fetchEnrollmentById(enrollmentId);
+        return enrollmentData
+    } catch (error) {
+        console.error("Error fetching enrollment:", error);
+    }
 }
 
 // Event Listener for Generate Report Button
@@ -56,6 +105,7 @@ reportGenerateBtn.addEventListener("click", async function () {
     // Fetch enrolled courses for the student by NIC
     const enrolledCourses = await fetchData(GetEnrollmentsByNICURL + nicInput);
     await populateCourseDropdown(enrolledCourses, nicInput);
+    loadPayments(nicInput)
 });
 
 // Populate course dropdown based on enrollments
@@ -130,6 +180,50 @@ function clearPaymentDetails() {
     document.getElementById("paymentPlan").value = "";
     document.getElementById("paidAmount").value = "";
     document.getElementById("dueAmount").value = "";
+}
+
+
+async function loadPayments(nic) {
+    if (!nic) {
+        console.error('Please enter NIC');
+        return;
+    }
+
+    const tableBody = document.getElementById("paymentDetails");
+    const payments = await fetchPaymentDetailsByNIC(nic);
+
+    // Check if payments were fetched
+    if (payments) {
+        // Use for...of to handle async operations
+        for (const payment of payments) {
+            console.log(payment);
+
+            const Enrollment = await getEnrollment(payment.enrollmentID);
+
+            if (Enrollment) {
+               
+
+                const course = await getCourse(Enrollment.courseId); 
+               
+                if (course) {
+                    const formatDate = new Date(payment.paymentDate).toISOString().slice(0, 10);
+                    const Row = document.createElement('tr');
+                    Row.innerHTML = `
+                        <td>${formatDate}</td>
+                        <td>${course.courseName}</td>
+                        <td>${payment.amount}</td>
+                    `;
+                    tableBody.appendChild(Row);
+                }
+            }
+        }
+    } else {
+        const Row = document.createElement('tr');
+        Row.innerHTML = `
+            <td>Payment details not available...</td>
+        `;
+        tableBody.appendChild(Row);
+    }
 }
 
 // Initialize data fetching

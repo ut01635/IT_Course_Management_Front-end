@@ -500,7 +500,6 @@ async function loadPayments() {
     }
 }
 
-// async function loadPayments() {
 //     const nic = sessionStorage.getItem('loggedStudent');
 //     console.log('NIC from session storage:', nic);
 
