@@ -214,6 +214,7 @@ async function saveStudent(fullName, email, phone, UpdateButton, SaveButton, Stu
 
     await UpdateStudent(StudentNic, studentUpdateData);
 
+    // Disable fields and hide Save button
     document.getElementById(fullName).disabled = true;
     document.getElementById(email).disabled = true;
     document.getElementById(phone).disabled = true;
