@@ -1,10 +1,11 @@
-const GetAllStudentsURL = 'https://localhost:7008/api/Student/Get-All-Students';
-const GetAllCoursesURL = 'https://localhost:7008/api/Course/GetAllCourses';
-const GetEnrollmentsByNICURL = 'https://localhost:7008/api/Enrollment/by-nic/';
-const GetPaymentsByEnrollmentId = 'https://localhost:7008/api/Payment/GetByEnrollment/';
-const GetPaymentByNICURL = 'https://localhost:7008/api/Payment/GetByNIC/';
-const GetCourseByIdURL = 'https://localhost:7008/api/Course/GetById';
-const GetEnrollmentsById = 'https://localhost:7008/api/Enrollment/Get-enrollmetnt-By'
+const BASE_URL = 'https://localhost:7008/api';
+const GetAllStudentsURL = `${BASE_URL}/Student/Get-All-Students`;
+const GetAllCoursesURL = `${BASE_URL}/Course/GetAllCourses`;
+const GetEnrollmentsByNICURL = `${BASE_URL}/Enrollment/by-nic/`;
+const GetPaymentsByEnrollmentId = `${BASE_URL}/Payment/GetByEnrollment/`;
+const GetPaymentByNICURL = `${BASE_URL}/Payment/GetByNIC/`;
+const GetCourseByIdURL = `${BASE_URL}/Course/GetById`;
+const GetEnrollmentsById = `${BASE_URL}/Enrollment/Get-enrollmetnt-By`;
 
 // Global variables to hold fetched data
 let students = [];
@@ -62,46 +63,35 @@ async function populateCourseDropdown(enrolledCourses, nicInput) {
     const courseSelect = document.getElementById("EnrollCourses");
     courseSelect.innerHTML = '<option selected>Following Course</option>'; // Reset the dropdown
 
-    let enrollmentIds = [];
-
-    for (const enrollment of enrolledCourses) {
-        const course = await fetchData(GetCourseByIdURL + enrollment.courseId);
-        if (course) {
-            const option = document.createElement("option");
-            option.value = enrollment.id;
-            console.log('select Option')
-            console.log(enrollment.id)
-            option.textContent = course.courseName;
-            courseSelect.appendChild(option);
-            enrollmentIds.push(enrollment.id);
-        }
-    }
-
-    if (enrollmentIds.length > 0) {
-        await fetchPaymentDetailsByNIC(nicInput);
-    } else {
+    if (enrolledCourses.length === 0) {
         alert("No enrolled courses found.");
         clearPaymentDetails();
+        return;
+    }
+
+    for (const enrollment of enrolledCourses) {
+        try {
+            const course = await fetchData(`${GetCourseByIdURL}${enrollment.courseId}`);
+            if (course) {
+                const option = document.createElement("option");
+                option.value = enrollment.id; // Enrollment ID
+                option.textContent = course.courseName;
+                courseSelect.appendChild(option);
+            }
+        } catch (error) {
+            console.error(`Failed to fetch course with ID ${enrollment.courseId}: ${error.message}`);
+            alert(`Course with ID ${enrollment.courseId} not found.`);
+        }
     }
 }
 
-function SelectFectPayment() {
-    fillPaymentDetails();
-}
 // Fetch payment details using NIC
 async function fetchPaymentDetailsByNIC(nic) {
-    console.log('nic fetcg')
-    console.log(nic)
     const response = await fetch(GetPaymentByNICURL + nic);
     if (response.ok) {
         const payments = await response.json();
         if (payments.length > 0) {
-            console.log(payments)
-
-
-
-       
-
+            return payments;
         } else {
             alert("No payment details found for this student.");
             clearPaymentDetails();
@@ -112,56 +102,34 @@ async function fetchPaymentDetailsByNIC(nic) {
     }
 }
 
-// Function to fill payment details
-async function fillPaymentDetails() {
-    let selectData = document.getElementById('EnrollCourses').value
+// Function to handle the selection of a course
+async function SelectFectPayment() {
+    const selectedEnrollmentId = document.getElementById('EnrollCourses').value;
+    if (!selectedEnrollmentId) return;
 
-    const paymentDetails = []
-    const enrollments = []
-    const courseDetails=[]
-    
-    await fetch(GetPaymentsByEnrollmentId + selectData)
-        .then(data => data.json())
-        .then(data => {
-            
-            console.log("0101");
-            console.log(data);
-            paymentDetails.push(data)
-        })
+    const paymentDetails = await fetch(GetPaymentsByEnrollmentId + selectedEnrollmentId).then(res => res.json());
+    const enrollmentDetails = await fetch(GetEnrollmentsById + selectedEnrollmentId).then(res => res.json());
+    const courseDetails = await fetch(`${GetCourseByIdURL}${selectedEnrollmentId}`).then(res => res.json());
 
-    await fetch(GetEnrollmentsById + selectData)
-        .then(data => data.json())
-        .then(data => {
-            enrollments.push(data)
-        })
-    fetch(GetCourseByIdURL + selectData)
-        .then(d => d.json())
-        .then(d => {
-            courseDetails.push(d)
+    // Calculate values
+    const courseFee = courseDetails.fees || 0;
+    const paymentPlan = enrollmentDetails.paymentPlan || "N/A";
+    const paidAmount = paymentDetails.reduce((total, payment) => total + payment.amount, 0);
+    const dueAmount = courseFee - paidAmount;
 
-        })
-
-
-    // let PaidAmount = 0;
-    // paymentDetails.forEach(element => {
-    //     PaidAmount += element.amount
-    // });
-
-    console.log('piralask')
-    console.log(courseDetails)
-    document.getElementById("fee").value = courseDetails.fees || ""; // Course Fee
-    document.getElementById("paymentPlan").value = enrollments[0].paymentPlan || ""; // Full Payment
-    document.getElementById("paidAmount").value = paymentDetails.installments || ""; // Installments
-    document.getElementById("dueAmount").value = paymentDetails.installmentAmount || ""; // Installment Amount
+    // Fill payment details
+    document.getElementById("fee").value = courseFee; // Course Fee
+    document.getElementById("paymentPlan").value = paymentPlan; // Payment Plan
+    document.getElementById("paidAmount").value = paidAmount; // Total Paid Amount
+    document.getElementById("dueAmount").value = dueAmount > 0 ? dueAmount : 0; // Remaining Amount
 }
 
 // Function to clear payment details
 function clearPaymentDetails() {
     document.getElementById("fee").value = "";
-    document.getElementById("full-payment").value = "";
-    document.getElementById("installments").value = "";
-    document.getElementById("installment-amount").value = "";
-    document.getElementById("payment-date").value = "";
+    document.getElementById("paymentPlan").value = "";
+    document.getElementById("paidAmount").value = "";
+    document.getElementById("dueAmount").value = "";
 }
 
 // Initialize data fetching
