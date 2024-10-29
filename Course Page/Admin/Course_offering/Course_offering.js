@@ -6,11 +6,21 @@ async function fetchCourses() {
         const tableBody = document.getElementById('table-body-courses');
         tableBody.innerHTML = ''; // Clear previous entries
 
+        // Mapping duration values to their corresponding string formats
+        const durationMap = {
+            2: '2 months',
+            3: '3 months',
+            4: '4 months',
+            5: '5 months',
+            6: '6 months'
+        };
+
         courses.forEach(course => {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${course.courseName}</td>
                 <td>${course.level}</td>
+                <td>${durationMap[course.duration] || course.duration}</td> <!-- Use the mapping here -->
                 <td>${course.fees}</td>
                 <td>
                     <button class="btn btn-warning btn-sm" onclick="editCourse(${course.id})">Edit</button>
@@ -23,6 +33,7 @@ async function fetchCourses() {
         console.error('Error fetching courses:', error);
     }
 }
+
 
 // Call the function to fetch courses on page load
 fetchCourses();
@@ -52,22 +63,30 @@ async function deleteCourse(courseId) {
 
 // Function to edit a course
 async function editCourse(courseId) {
-    const response = await fetch(`https://localhost:7008/api/Course/GetCourseById${courseId}`);
-    const course = await response.json();
+    try {
+        const response = await fetch(`https://localhost:7008/api/Course/GetById${courseId}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch course details');
+        }
 
-    // Populate the modal with the course data
-    document.getElementById('courseName').value = course.courseName;
-    document.getElementById('level').value = course.level;
-    document.getElementById('fee').value = course.fees;
-    document.getElementById('duration').value = course.duration;
+        const course = await response.json();
+        document.getElementById('courseName').value = course.courseName;
+        document.getElementById('level').value = course.level;
+        document.getElementById('duration').value = course.duration;
+        document.getElementById('fee').value = course.fees;
 
-    // Change the submit button to "Update"
-    const submitButton = document.querySelector('.main-btn');
-    submitButton.innerText = 'Update';
-    submitButton.setAttribute('data-id', courseId);
-    const modal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
-    modal.show();
+        const submitButton = document.querySelector('.main-btn');
+        submitButton.innerText = 'Update';
+        submitButton.setAttribute('data-id', courseId);
+
+        const modal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+        modal.show();
+    } catch (error) {
+        console.error('Error fetching course for edit:', error);
+        alert('Error fetching course details. Please try again.');
+    }
 }
+
 
 // Form submission for creating or updating a course
 document.getElementById('course-offerings-form').addEventListener('submit', async function(event) {
@@ -76,21 +95,23 @@ document.getElementById('course-offerings-form').addEventListener('submit', asyn
     const courseId = document.querySelector('.main-btn').getAttribute('data-id');
     const courseName = document.getElementById('courseName').value;
     const level = document.getElementById('level').value;
-    const fee = document.getElementById('fee').value;
     const duration = document.getElementById('duration').value;
+    const fee = document.getElementById('fee').value;
+    
 
     const data = {
         courseName: courseName,
         level: level,
-        fees: fee,
         duration: duration,
+        fees: fee,
+        
     };
 
     try {
         let response;
         if (courseId) {
             // Update course
-            response = await fetch(`https://localhost:7008/api/Course/Update`, {
+            response = await fetch(`https://localhost:7008/api/Course/Update${courseId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

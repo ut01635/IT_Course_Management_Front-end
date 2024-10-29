@@ -1,31 +1,28 @@
-//Site Navebar
-const toggle = document.querySelector(".fa-bars")
-const toggleClose = document.querySelector(".fa-xmark")
-const sideNavebar = document.querySelector(".side-navebar")
+const toggle = document.querySelector(".fa-bars");
+const toggleClose = document.querySelector(".fa-xmark");
+const sideNavbar = document.querySelector(".side-navebar");
 
 toggle.addEventListener("click", function () {
-    sideNavebar.style.right = "0"
-})
+    sideNavbar.style.right = "0";
+});
 
 toggleClose.addEventListener("click", function () {
-    sideNavebar.style.right = "-60%"
-})
-
-
-// JavaScript to manage the fee form and payment plans
+    sideNavbar.style.right = "-60%";
+});
 
 document.addEventListener("DOMContentLoaded", function () {
     const nicInput = document.getElementById('nic');
     const courseSelect = document.getElementById('course');
     const totalCourseFee = document.getElementById('total-course-fee');
-    const paymentPlanTag = document.getElementById('payment-plan'); // To show the payment plan
+    const paymentPlanTag = document.getElementById('payment-plan');
     const totalAmount = document.getElementById('total-amount');
-    const installmentAmount = document.getElementById('installment-amount');
+    const installmentAmount = document.getElementById('amount');
     const feeManagementForm = document.getElementById('fee-management-form');
     const feeManagementMessage = document.getElementById('fee-management-message');
-    
+
     let courses = [];
     let enrollmentDetails = null;
+    let paidAmount = 0;
 
     // Fetch all courses
     fetch('https://localhost:7008/api/Course/GetAllCourses')
@@ -35,135 +32,350 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(err => console.error('Error fetching courses:', err));
 
-    // Fetch enrollment details by NIC
-    nicInput.addEventListener('blur', function () {
-        const nic = nicInput.value.trim();
-        if (nic) {
-            fetch(`https://localhost:7008/api/Enrollment/by-nic/${nic}`)
-                .then(response => response.json())
-                .then(data => {
-                    enrollmentDetails = data;
-                    if (data && data.length > 0) {
-                        feeManagementMessage.textContent = ""; // Clear any previous messages
-                        // Enable course selection dropdown
-                        courseSelect.disabled = false;
-                        // Filter courses based on the enrollment details
-                        const enrolledCourseIds = data.map(e => e.courseId);
-                        const filteredCourses = courses.filter(course => enrolledCourseIds.includes(course.id));
-
-                        // Clear the course dropdown and populate with the filtered courses
-                        courseSelect.innerHTML = '<option value="">Select Course</option>';
-                        filteredCourses.forEach(course => {
-                            const option = document.createElement('option');
-                            option.value = course.id;
-                            option.textContent = course.name;
-                            option.style.color = "black"
-                            courseSelect.appendChild(option);
-                        });
-                    } else {
-                        courseSelect.disabled = true;
-                        feeManagementMessage.textContent = "Student not found or not enrolled in any courses.";
-                        feeManagementMessage.style.color = 'red';
-                    }
-                })
-                .catch(err => {
-                    console.error('Error fetching enrollment details:', err);
-                    feeManagementMessage.textContent = "Student not found.";
-                    feeManagementMessage.style.color = 'red';
-                });
-        }
-    });
-
-    // When a course is selected
-    courseSelect.addEventListener('change', function () {
-        const selectedCourse = courses.find(course => course.id == courseSelect.value);
-        if (selectedCourse) {
-            totalCourseFee.textContent = `${selectedCourse.fees} Rs`; // Show course fee
-            const enrollmentDetail = enrollmentDetails.find(e => e.courseId === selectedCourse.id);
-            if (enrollmentDetail) {
-                // Display the payment plan as text in the <p> tag
-                const paymentPlan = enrollmentDetail.paymentPlan; // Assuming paymentPlan is part of enrollment details
-                paymentPlanTag.textContent = `${paymentPlan.charAt(0).toUpperCase() + paymentPlan.slice(1)}`;
-
-                // Set the total amount based on payment plan
-                if (paymentPlan === "fullpayment") {
-                    totalAmount.textContent = `${selectedCourse.fees} Rs`; // Full course fee
-                    installmentAmount.textContent = `0 Rs`; // No installments for full payment
-                } else if (paymentPlan === "installment") {
-                    const installmentAmountValue = selectedCourse.fees / selectedCourse.duration; // Assuming duration is the number of months
-                    totalAmount.textContent = `${selectedCourse.fees} Rs`; // Total course fee
-                    installmentAmount.textContent = `${installmentAmountValue.toFixed(2)} Rs`; // Installment amount
+    // Function to fetch course by ID
+    function fetchCourseById(courseId) {
+        fetch(`https://localhost:7008/api/Course/GetById/${courseId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
+                return response.json();
+            })
+            .then(data => {
+                // Assuming `data` contains the course details
+                const course = data;
+                console.log(course);
+                return course
+
+            })
+            .catch(err => console.error('Error fetching course by ID:', err));
+    }
+
+
+
+
+    // // Event when NIC loses focus
+    // nicInput.addEventListener('blur', function () {
+    //     const nic = nicInput.value.trim();
+    //     console.log(nic);
+
+    //     if (nic) {
+    //         // Fetch enrollment details
+    //         fetch(`https://localhost:7008/api/Enrollment/by-nic/${nic}`)
+    //             .then(response => response.json())
+    //             .then(data => {
+    //                 enrollmentDetails = data;
+    //                 console.log(enrollmentDetails);
+
+    //                 if (data && data.length > 0) {
+    //                     feeManagementMessage.textContent = "";
+    //                     courseSelect.disabled = false;
+    //                     courseSelect.innerHTML = '<option value="">Select Course</option>'; // Move this outside the loop
+
+    //                     const fetchCoursePromises = enrollmentDetails.map(enrollment => {
+    //                         return fetch(`https://localhost:7008/api/Course/GetById${enrollment.courseId}`)
+    //                             .then(response => response.json())
+    //                             .then(course => {
+    //                                 const option = document.createElement('option');
+    //                                 option.value = enrollment.id; // Set value to EnrollmentId
+    //                                 option.textContent = course.name || course.courseName || 'Course Not Found';
+    //                                 courseSelect.appendChild(option);
+    //                             })
+    //                             .catch(err => {
+    //                                 console.error(`Error fetching course with ID ${enrollment.courseId}:`, err);
+    //                             });
+    //                     });
+
+    //                     // Wait for all course fetches to complete
+    //                     return Promise.all(fetchCoursePromises);
+    //                 } else {
+    //                     courseSelect.disabled = true;
+    //                     feeManagementMessage.textContent = "Student not found or not enrolled in any courses.";
+    //                     feeManagementMessage.style.color = 'red';
+    //                 }
+    //             })
+    //             .catch(err => {
+    //                 console.error('Error fetching enrollment details:', err);
+    //                 feeManagementMessage.textContent = "Student not found.";
+    //                 feeManagementMessage.style.color = 'red';
+    //             });
+
+
+
+    //     }
+    // });
+
+    // // Course selection change event
+    // courseSelect.addEventListener('change', function () {
+    //     const selectEnrollId = courseSelect.value
+    //     console.log("selectEnrollId:" + selectEnrollId);
+
+
+    //     // Fetch payment history
+    //     // Fetch payments by enrollment ID
+    //     fetch(`https://localhost:7008/api/Payment/GetByEnrollment/${selectEnrollId}`)
+    //         .then(response => {
+    //             if (!response.ok) {
+    //                 throw new Error('Network response was not ok');
+    //             }
+    //             return response.json();
+    //         })
+    //         .then(data => {
+    //             // Calculate total paid amount
+    //             const paidAmount = data.reduce((total, payment) => total + payment.amount, 0);
+
+    //             // You can use `paidAmount` as needed, for example:
+    //             console.log('Total Paid Amount:', paidAmount);
+    //         })
+    //         .catch(err => console.error('Error fetching payment history:', err));
+
+
+    //     const selectedCourse = courses.find(course => course.id == courseSelect.value);
+    //     if (selectedCourse) {
+    //         totalCourseFee.textContent = `${selectedCourse.fees} Rs`;
+    //         const enrollmentDetail = enrollmentDetails.find(e => e.courseId === selectedCourse.id);
+    //         if (enrollmentDetail) {
+    //             const paymentPlan = enrollmentDetail.paymentPlan;
+    //             paymentPlanTag.textContent = paymentPlan.charAt(0).toUpperCase() + paymentPlan.slice(1);
+    //             const totalAmountValue = selectedCourse.fees;
+    //             const dueAmount = totalAmountValue - paidAmount;
+
+    //             totalAmount.textContent = `${dueAmount} Rs`;
+
+    //             if (paymentPlan === "installment") {
+    //                 const installmentAmountValue = selectedCourse.fees / selectedCourse.duration;
+    //                 installmentAmount.textContent = `${installmentAmountValue.toFixed(2)} Rs`;
+    //             } else {
+    //                 installmentAmount.textContent = '0 Rs';
+    //             }
+
+    //             if (dueAmount <= 0) {
+    //                 feeManagementMessage.textContent = "Payment has already been settled. No further payment is required.";
+    //                 feeManagementMessage.style.color = 'red';
+    //                 feeManagementForm.querySelector('button[type="submit"]').disabled = true;
+    //             } else {
+    //                 feeManagementMessage.textContent = ""; // Clear previous messages
+    //                 feeManagementForm.querySelector('button[type="submit"]').disabled = false;
+    //             }
+    //         }
+    //     }
+    // });
+
+    // Event when NIC loses focus
+    nicInput.addEventListener('blur', async function () {
+        const nic = nicInput.value.trim();
+
+        if (nic) {
+            try {
+                // Fetch enrollment details
+                const response = await fetch(`https://localhost:7008/api/Enrollment/by-nic/${nic}`);
+                const data = await response.json();
+                enrollmentDetails = data;
+               
+
+                if (data && data.length > 0) {
+                    feeManagementMessage.textContent = "";
+                    courseSelect.disabled = false;
+                    courseSelect.innerHTML = '<option value="">Select Course</option>'; // Move this outside the loop
+
+                    const fetchCoursePromises = enrollmentDetails.map(async enrollment => {
+                        try {
+                            const courseResponse = await fetch(`https://localhost:7008/api/Course/GetById${enrollment.courseId}`);
+                            const course = await courseResponse.json();
+                            const option = document.createElement('option');
+                            option.value = enrollment.id; // Set value to EnrollmentId
+                            option.textContent = course.name || course.courseName || 'Course Not Found';
+                            courseSelect.appendChild(option);
+                        } catch (err) {
+                            console.error(`Error fetching course with ID ${enrollment.courseId}:`, err);
+                        }
+                    });
+
+                    // Wait for all course fetches to complete
+                    await Promise.all(fetchCoursePromises);
+                } else {
+                    courseSelect.disabled = true;
+                    feeManagementMessage.textContent = "Student not found or not enrolled in any courses.";
+                    feeManagementMessage.style.color = 'red';
+                }
+            } catch (err) {
+                console.error('Error fetching enrollment details:', err);
+                feeManagementMessage.textContent = "Student not found.";
+                feeManagementMessage.style.color = 'red';
             }
         }
     });
 
-    // Handle form submission
-    feeManagementForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-        const enrollId = enrollmentDetails[0].id;
-        const nic = nicInput.value;
-        const date = new Date().toISOString();
-        const amount = parseFloat(totalAmount.textContent.replace(' Rs', ''));
+    let SelectId = 0
+    // Course selection change event
+    courseSelect.addEventListener('change', async function () {
+        const selectEnrollId = courseSelect.value;
+        SelectId = selectEnrollId
 
-        const paymentData = {
-            enrollId,
-            nic,
-            date,
-            amount
-        };
+        if (selectEnrollId) {
+            try {
+                // Fetch payment history
+                const response = await fetch(`https://localhost:7008/api/Payment/GetByEnrollment/${selectEnrollId}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
 
-        // Send payment data to the backend
-        fetch('https://localhost:7008/api/Payment/Create-Payment', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(paymentData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            feeManagementMessage.textContent = 'Payment Successful!';
-            feeManagementMessage.style.color = 'green';
-        })
-        .catch(err => {
-            console.error('Error submitting payment:', err);
-            feeManagementMessage.textContent = 'Payment failed. Please try again.';
-            feeManagementMessage.style.color = 'red';
-        });
+                 // Calculate total paid amount
+                 const paidAmount = data.reduce((total, payment) => total + payment.amount, 0);
+
+                 let enrollment = ""
+
+                try {
+                    const response = await fetch(`https://localhost:7008/api/Enrollment/Get-enrollmetnt-By${selectEnrollId}`);
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const enrollmentData = await response.json();
+                    enrollment = enrollmentData
+
+                    // Handle the enrollment data as needed
+                    console.log('Enrollment Data:', enrollmentData);
+                } catch (err) {
+                    console.error('Error fetching enrollment details:', err);
+                }
+
+
+               
+
+                const selectedCourse = courses.find(course => course.id == enrollment.courseId);
+                if (selectedCourse) {
+                    totalCourseFee.textContent = `${selectedCourse.fees} Rs`;
+                    const enrollmentDetail = enrollmentDetails.find(e => e.courseId === selectedCourse.id);
+                    if (enrollmentDetail) {
+                        const paymentPlan = enrollmentDetail.paymentPlan;
+                        paymentPlanTag.textContent = paymentPlan.charAt(0).toUpperCase() + paymentPlan.slice(1);
+                        const totalAmountValue = selectedCourse.fees;
+                        const dueAmount = totalAmountValue - paidAmount;
+
+                        totalAmount.textContent = `${dueAmount} Rs`;
+
+                        if (paymentPlan === "Installment") {
+                            const installmentAmountValue = selectedCourse.fees / selectedCourse.duration;
+                            installmentAmount.textContent = `${installmentAmountValue.toFixed(2)} Rs`;
+                        } else {
+                            installmentAmount.textContent = '0 Rs';
+                        }
+
+                        if (dueAmount <= 0) {
+                            feeManagementMessage.textContent = "Payment has already been settled. No further payment is required.";
+                            feeManagementMessage.style.color = 'red';
+                            feeManagementForm.querySelector('button[type="submit"]').disabled = true;
+                            installmentAmount.disabled = true
+                        } else {
+                            installmentAmount.disabled = false
+                            feeManagementMessage.textContent = ""; // Clear previous messages
+                            feeManagementForm.querySelector('button[type="submit"]').disabled = false;
+                        }
+                    }
+                }
+            } catch (err) {
+                console.error('Error fetching payment history:', err);
+            }
+        }
     });
 
 
+    // Fee management form submission
+    feeManagementForm.addEventListener('submit', function (e) {
+        e.preventDefault();
 
+        // Validate enrollment details
+        if (!enrollmentDetails || enrollmentDetails.length === 0) {
+            feeManagementMessage.textContent = "No valid enrollment found.";
+            feeManagementMessage.style.color = 'red';
+            return;
+        }
 
+        const enrollmentID = SelectId; // Use the valid enrollment ID
+        const nic = nicInput.value;
+        const paymentDate = new Date().toISOString();
+        const amount = installmentAmount.value
 
-    // Function to format the date in the desired format (dd-mm-yyyy / hh.mm)
+        // Validate amount
+        if (amount <= 0) {
+            feeManagementMessage.textContent = "Due amount must be greater than zero.";
+            feeManagementMessage.style.color = 'red';
+            return;
+        }
+
+        // Check if enrollment ID exists
+        fetch(`https://localhost:7008/api/Enrollment/Get-enrollmetnt-By${enrollmentID}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Enrollment ID does not exist');
+                }
+                return response.json();
+            })
+            .then(() => {
+                // Proceed to submit the payment
+                const paymentData = {
+                    enrollmentID,
+                    nic,
+                    paymentDate,
+                    amount
+                };
+
+                console.log("Submitting payment data:", paymentData);
+
+                fetch('https://localhost:7008/api/Payment/Create-Payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(paymentData)
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.json().then(err => {
+                                throw new Error(`Network response was not ok: ${err.message}`);
+                            });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        feeManagementMessage.textContent = 'Payment Successful!';
+                        feeManagementMessage.style.color = 'green';
+                        
+                    })
+                    .catch(err => {
+                        console.error('Error submitting payment:', err);
+                        feeManagementMessage.textContent = 'Payment failed. Please try again.';
+                        feeManagementMessage.style.color = 'red';
+                    });
+            })
+            .catch(err => {
+                feeManagementMessage.textContent = err.message;
+                feeManagementMessage.style.color = 'red';
+            });
+    });
+
+    // Format date and time function
     function formatDateTime(dateString) {
         const date = new Date(dateString);
-
-        const day = String(date.getDate()).padStart(2, '0');       // Get day and pad with leading zero if necessary
-        const month = String(date.getMonth() + 1).padStart(2, '0');  // Get month (0-based) and pad with leading zero
-        const year = date.getFullYear();                            // Get full year
-
-        const hours = String(date.getHours()).padStart(2, '0');    // Get hours and pad with leading zero
-        const minutes = String(date.getMinutes()).padStart(2, '0'); // Get minutes and pad with leading zero
-
-        // Return the formatted date and time
-        return  `${hours}.${minutes} - ${day}/${month}/${year} `;
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${hours}.${minutes} - ${day}/${month}/${year}`;
     }
 
-    // Triggering the modal and fetching payment details
+    // Fetching payment details
     document.getElementById('student-payment-details').addEventListener('click', function () {
-        fetch('https://localhost:7008/api/Payment/Get-All-PAyments')
+        fetch('https://localhost:7008/api/Payment/Get-All-Payments')
             .then(response => response.json())
             .then(data => {
                 const tbody = document.querySelector('#payment-details-table tbody');
-                tbody.innerHTML = '';  // Clear previous table rows
+                tbody.innerHTML = '';
 
-                // Store the payment data in a variable for later use
                 const payments = data;
 
-                // Populate the table with payment details
                 payments.forEach(payment => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
@@ -172,11 +384,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     <td>${payment.enrollmentID}</td>
                     <td>${payment.nic}</td>
                     <td>${payment.amount} Rs</td>
-                `;
+                    `;
                     tbody.appendChild(row);
                 });
 
-                // Now apply the search functionality
+                // Implement search functionality
                 const searchNicInput = document.getElementById('searchNic');
 
                 searchNicInput.addEventListener('input', function () {
@@ -185,8 +397,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         payment.nic.toLowerCase().includes(searchValue)
                     );
 
-                    // Re-render the table based on the filtered results
-                    tbody.innerHTML = '';  // Clear the current rows
+                    tbody.innerHTML = '';
                     filteredPayments.forEach(payment => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
@@ -195,30 +406,25 @@ document.addEventListener("DOMContentLoaded", function () {
                         <td>${payment.enrollmentID}</td>
                         <td>${payment.nic}</td>
                         <td>${payment.amount} Rs</td>
-                    `;
+                        `;
                         tbody.appendChild(row);
                     });
                 });
 
-                // Show the modal after populating the data
+                // Show modal for payment details
                 const paymentDetailsModal = new bootstrap.Modal(document.getElementById('paymentDetailsModal'));
                 paymentDetailsModal.show();
             })
             .catch(err => console.error('Error fetching payment details:', err));
     });
 
+    // Logout function
+    function logout() {
+        window.location.href = "../01_Admin_Login/admin_login.html";
+    }
+
+    const logoutButton = document.getElementById('logoutButton');
+    logoutButton.addEventListener('click', function () {
+        logout();
+    });
 });
-
-
-//Logout function
-
-function logout() {
-    window.location.href = "../01_Admin_Login/admin_login.html";
-}
-
-const logoutButton = document.getElementById('logoutButton');
-logoutButton.addEventListener('click', function () {
-    logout();
-});
-
-

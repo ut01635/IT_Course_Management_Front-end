@@ -62,7 +62,7 @@
 
     <div id="main-container" class="mt-5">
         <div id="heading-container" class="d-flex justify-content-around align-items-center">
-            <h1>Student Details</h1>
+            <h1>Course Details</h1>
 
             <!-- Button trigger form modal -->
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">New
@@ -75,6 +75,7 @@
                     <tr>
                         <th>Course Name</th>
                         <th>Level</th>
+                        <th>Duration</th>
                         <th>Fee</th>
                         <th>Action</th>
                     </tr>
@@ -97,7 +98,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Student Registration</h1>
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Course Add</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -113,6 +114,7 @@
                                     <option selected>Proficiency Level</option>
                                     <option value="Beginner">Beginner</option>
                                     <option value="Intermediate">Intermediate</option>
+                                    <option value="Advanced">Advanced</option>
                                   </select>
                             </div>
                             <div class="form-group">
@@ -124,6 +126,9 @@
                                 <select class="form-select" id="duration" aria-label="Default select example" required>
                                     <option selected>Duration</option>
                                     <option value="2">2 Months</option>
+                                    <option value="3">3 Months</option>
+                                    <option value="4">4 Months</option>
+                                    <option value="5">5 Months</option>
                                     <option value="6">6 Months</option>
                                   </select>
                             </div>
@@ -132,7 +137,7 @@
                                 <input type="file" id="coursePic" name="coursePic" >
                             </div> -->
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary main-btn">Register</button>
+                                <button type="submit" class="btn btn-primary main-btn">Add Course</button>
                             </div>
                         </form>
 
