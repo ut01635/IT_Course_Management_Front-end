@@ -114,28 +114,37 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
- 
     feeManagementForm.addEventListener('submit', function (e) {
         e.preventDefault();
-        const enrollId = enrollmentDetails[0].id;
+    
+        // Validate enrollment details
+        if (!enrollmentDetails || enrollmentDetails.length === 0) {
+            feeManagementMessage.textContent = "No valid enrollment found.";
+            feeManagementMessage.style.color = 'red';
+            return;
+        }
+    
+        const enrollId = enrollmentDetails[0].id; // This should be a valid ID
         const nic = nicInput.value;
         const date = new Date().toISOString();
         const amount = parseFloat(totalAmount.textContent.replace(' Rs', ''));
-
+    
         if (amount <= 0) {
             feeManagementMessage.textContent = "Due amount must be greater than zero.";
             feeManagementMessage.style.color = 'red';
             return;
         }
-
+    
         const paymentData = {
             enrollId,
             nic,
             date,
             amount
         };
-
-       
+    
+        // Check the data before sending
+        console.log("Submitting payment data:", paymentData);
+    
         fetch('https://localhost:7008/api/Payment/Create-Payment', {
             method: 'POST',
             headers: {
@@ -143,7 +152,12 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             body: JSON.stringify(paymentData)
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(data => {
             feeManagementMessage.textContent = 'Payment Successful!';
             feeManagementMessage.style.color = 'green';
@@ -154,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
             feeManagementMessage.style.color = 'red';
         });
     });
-
+    
    
     function formatDateTime(dateString) {
         const date = new Date(dateString);
