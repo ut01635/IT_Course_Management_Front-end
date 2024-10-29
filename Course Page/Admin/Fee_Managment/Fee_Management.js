@@ -1,4 +1,4 @@
-// Site Navbar Toggle
+
 const toggle = document.querySelector(".fa-bars");
 const toggleClose = document.querySelector(".fa-xmark");
 const sideNavbar = document.querySelector(".side-navebar");
@@ -11,7 +11,7 @@ toggleClose.addEventListener("click", function () {
     sideNavbar.style.right = "-60%";
 });
 
-// JavaScript to manage the fee form and payment plans
+
 document.addEventListener("DOMContentLoaded", function () {
     const nicInput = document.getElementById('nic');
     const courseSelect = document.getElementById('course');
@@ -24,9 +24,9 @@ document.addEventListener("DOMContentLoaded", function () {
     
     let courses = [];
     let enrollmentDetails = null;
-    let paidAmount = 0; // Variable to hold the paid amount
+    let paidAmount = 0; 
 
-    // Fetch all courses
+
     fetch('https://localhost:7008/api/Course/GetAllCourses')
         .then(response => response.json())
         .then(data => {
@@ -34,7 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(err => console.error('Error fetching courses:', err));
 
-    // Fetch enrollment details and payment history by NIC
     nicInput.addEventListener('blur', function () {
         const nic = nicInput.value.trim();
         if (nic) {
@@ -44,12 +43,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 .then(data => {
                     enrollmentDetails = data;
                     if (data && data.length > 0) {
-                        feeManagementMessage.textContent = ""; // Clear any previous messages
+                        feeManagementMessage.textContent = ""; 
                         courseSelect.disabled = false;
                         const enrolledCourseIds = data.map(e => e.courseId);
                         const filteredCourses = courses.filter(course => enrolledCourseIds.includes(course.id));
 
-                        // Clear the course dropdown and populate with the filtered courses
+                        
                         courseSelect.innerHTML = '<option value="">Select Course</option>';
                         filteredCourses.forEach(course => {
                             const option = document.createElement('option');
@@ -69,53 +68,53 @@ document.addEventListener("DOMContentLoaded", function () {
                     feeManagementMessage.style.color = 'red';
                 });
 
-            // Fetch payment history for the student
+            
             fetch(`https://localhost:7008/api/Payment/GetByNIC/${nic}`)
                 .then(response => response.json())
                 .then(data => {
-                    paidAmount = data.reduce((total, payment) => total + payment.amount, 0); // Sum up all paid amounts
+                    paidAmount = data.reduce((total, payment) => total + payment.amount, 0); 
                 })
                 .catch(err => console.error('Error fetching payment history:', err));
         }
     });
 
-    // When a course is selected
+    
     courseSelect.addEventListener('change', function () {
         const selectedCourse = courses.find(course => course.id == courseSelect.value);
         if (selectedCourse) {
             totalCourseFee.textContent = `${selectedCourse.fees} Rs`;
             const enrollmentDetail = enrollmentDetails.find(e => e.courseId === selectedCourse.id);
             if (enrollmentDetail) {
-                const paymentPlan = enrollmentDetail.paymentPlan; // Assuming paymentPlan is part of enrollment details
+                const paymentPlan = enrollmentDetail.paymentPlan; 
                 paymentPlanTag.textContent = paymentPlan.charAt(0).toUpperCase() + paymentPlan.slice(1);
                 const totalAmountValue = selectedCourse.fees;
-                const dueAmount = totalAmountValue - paidAmount; // Use paidAmount from payment history
+                const dueAmount = totalAmountValue - paidAmount;
 
-                // Update due amount
+                
                 totalAmount.textContent = `${dueAmount} Rs`; 
 
-                // Set installment amounts if applicable
+                
                 if (paymentPlan === "installment") {
-                    const installmentAmountValue = selectedCourse.fees / selectedCourse.duration; // Assuming duration is the number of installments
-                    installmentAmount.textContent = `${installmentAmountValue.toFixed(2)} Rs`; // Populate installment amount
+                    const installmentAmountValue = selectedCourse.fees / selectedCourse.duration; 
+                    installmentAmount.textContent = `${installmentAmountValue.toFixed(2)} Rs`; 
                 } else {
-                    installmentAmount.textContent = '0 Rs'; // Clear installment field for full payment
+                    installmentAmount.textContent = '0 Rs'; 
                 }
 
-                // Prevent payment if due amount is zero
+                
                 if (dueAmount <= 0) {
                     feeManagementMessage.textContent = "Payment has already been settled. No further payment is required.";
                     feeManagementMessage.style.color = 'red';
-                    feeManagementForm.querySelector('button[type="submit"]').disabled = true; // Disable submit button
+                    feeManagementForm.querySelector('button[type="submit"]').disabled = true; 
                 } else {
                     feeManagementMessage.textContent = ""; // Clear any previous messages
-                    feeManagementForm.querySelector('button[type="submit"]').disabled = false; // Enable submit button
+                    feeManagementForm.querySelector('button[type="submit"]').disabled = false; 
                 }
             }
         }
     });
 
-    // Handle form submission
+ 
     feeManagementForm.addEventListener('submit', function (e) {
         e.preventDefault();
         const enrollId = enrollmentDetails[0].id;
@@ -136,7 +135,7 @@ document.addEventListener("DOMContentLoaded", function () {
             amount
         };
 
-        // Send payment data to the backend
+       
         fetch('https://localhost:7008/api/Payment/Create-Payment', {
             method: 'POST',
             headers: {
@@ -156,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // Function to format the date in the desired format (dd-mm-yyyy / hh.mm)
+   
     function formatDateTime(dateString) {
         const date = new Date(dateString);
         const day = String(date.getDate()).padStart(2, '0');
@@ -167,18 +166,18 @@ document.addEventListener("DOMContentLoaded", function () {
         return `${hours}.${minutes} - ${day}/${month}/${year}`;
     }
 
-    // Triggering the modal and fetching payment details
+    
     document.getElementById('student-payment-details').addEventListener('click', function () {
         fetch('https://localhost:7008/api/Payment/Get-All-Payments')
             .then(response => response.json())
             .then(data => {
                 const tbody = document.querySelector('#payment-details-table tbody');
-                tbody.innerHTML = ''; // Clear previous table rows
+                tbody.innerHTML = ''; 
 
-                // Store the payment data in a variable for later use
+               
                 const payments = data;
 
-                // Populate the table with payment details
+               
                 payments.forEach(payment => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
@@ -191,7 +190,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     tbody.appendChild(row);
                 });
 
-                // Now apply the search functionality
+               
                 const searchNicInput = document.getElementById('searchNic');
 
                 searchNicInput.addEventListener('input', function () {
@@ -200,8 +199,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         payment.nic.toLowerCase().includes(searchValue)
                     );
 
-                    // Re-render the table based on the filtered results
-                    tbody.innerHTML = ''; // Clear the current rows
+                   
+                    tbody.innerHTML = ''; 
                     filteredPayments.forEach(payment => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
@@ -215,7 +214,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
                 });
 
-                // Show the modal after populating the data
+                
                 const paymentDetailsModal = new bootstrap.Modal(document.getElementById('paymentDetailsModal'));
                 paymentDetailsModal.show();
             })
