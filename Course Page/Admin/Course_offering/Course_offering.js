@@ -11,6 +11,7 @@ async function fetchCourses() {
             row.innerHTML = `
                 <td>${course.courseName}</td>
                 <td>${course.level}</td>
+                <td>${course.duration}</td>
                 <td>${course.fees}</td>
                 <td>
                     <button class="btn btn-warning btn-sm" onclick="editCourse(${course.id})">Edit</button>
@@ -58,8 +59,9 @@ async function editCourse(courseId) {
     // Populate the modal with the course data
     document.getElementById('courseName').value = course.courseName;
     document.getElementById('level').value = course.level;
-    document.getElementById('fee').value = course.fees;
     document.getElementById('duration').value = course.duration;
+    document.getElementById('fee').value = course.fees;
+   
 
     // Change the submit button to "Update"
     const submitButton = document.querySelector('.main-btn');
@@ -76,14 +78,16 @@ document.getElementById('course-offerings-form').addEventListener('submit', asyn
     const courseId = document.querySelector('.main-btn').getAttribute('data-id');
     const courseName = document.getElementById('courseName').value;
     const level = document.getElementById('level').value;
-    const fee = document.getElementById('fee').value;
     const duration = document.getElementById('duration').value;
+    const fee = document.getElementById('fee').value;
+    
 
     const data = {
         courseName: courseName,
         level: level,
-        fees: fee,
         duration: duration,
+        fees: fee,
+        
     };
 
     try {
