@@ -34,6 +34,25 @@ async function fetchEnrollmentsByNic(nic) {
     return await response.json();
 }
 
+async function getEnrollment(enrollmentId) {
+    try {
+        const enrollmentData = await fetchEnrollmentById(enrollmentId);
+        console.log("enrollment:", enrollmentData);
+        return enrollmentData
+    } catch (error) {
+        console.error("Error fetching enrollment:", error);
+    }
+}
+
+async function getCourse(CourseId) {
+    try {
+        const CourseData = await fetchCourseById(CourseId);
+        console.log("course:", CourseData);
+        return CourseData
+    } catch (error) {
+        console.error("Error fetching enrollment:", error);
+    }
+}
 // Fetch course details by course ID
 async function fetchCourseData(CourseId) {
     const response = await fetch(`https://localhost:7008/api/Course/GetById${CourseId}`);
@@ -442,101 +461,92 @@ async function loadPayments() {
         return;
     }
 
-    try {
-        tableBody = document.getElementById("paymentDetails")
-        const payments = await fetchPaymentByNic(nic);
-        // console.log('Payments fetched:', payments);
-        if (payments) {
-            payments.forEach(payment => {
+    const tableBody = document.getElementById("paymentDetails");
+    const payments = await fetchPaymentByNic(nic);
 
+    // Check if payments were fetched
+    if (payments) {
+        // Use for...of to handle async operations
+        for (const payment of payments) {
+            console.log(payment);
 
-                async function getEnrollment(enrollmentId) {
-                    try {
-                        const enrollmentData = await fetchEnrollmentById(enrollmentId);
-                        console.log("enrollment:", enrollmentData);
-                        return enrollmentData
-                    } catch (error) {
-                        console.error("Error fetching enrollment:", error);
-                    }
+            const Enrollment = await getEnrollment(payment.enrollmentID);
+            console.log("Enrollment data:", Enrollment);
+
+            if (Enrollment) {
+                console.log("dfgdrgh",Enrollment.courseId)// Assuming getCourse is also async
+
+                const course = await getCourse(Enrollment.courseId); 
+                console.log("dfgdrgh",course)// Assuming getCourse is also async
+
+                if (course) {
+                    const formatDate = new Date(payment.paymentDate).toISOString().slice(0, 10);
+                    const Row = document.createElement('tr');
+                    Row.innerHTML = `
+                        <td>${formatDate}</td>
+                        <td>${course.courseName}</td>
+                        <td>${payment.amount}</td>
+                    `;
+                    tableBody.appendChild(Row);
                 }
-                const Enrollment = getEnrollment(payment.enrollmentId)
-
-                if (Enrollment) {
-                    async function getCourse(CourseId) {
-                        try {
-                            const CourseData = await fetchCourseById(CourseId);
-                            console.log("course:", CourseData);
-                        } catch (error) {
-                            console.error("Error fetching enrollment:", error);
-                        }
-                    }
-                    let course = getCourse(Enrollment.CourseId)
-
-                    if (course) {
-                        let formatdate = new Date(payment.paymentDate).toISOString().slice(0, 10);
-                        Row = document.createElement('tr');
-                        Row.innerHTML = `
-                            <td>${formatdate}</td>
-                            <td>${course.courseName}</td>
-                            <td>${payment.amount}</td>
-                        `;
-                        tableBody.appendChild(Row)
-                    }
-
-                }
-
-
-            })
+            }
         }
-        else {
-            Row = document.createElement('tr');
-            Row.innerHTML = `
-                <td>Payment details not availabe...</td>
-                `;
-            tableBody.appendChild(Row)
-        }
-
-
-
-        //     // if (payments) {
-        //     //     courses = 
-
-        //     // }
-
-        //     if (Array.isArray(payments) && payments.length > 0) {
-        //         const studentPaymentsTable = document.getElementById('studentPaymentsTable').getElementsByTagName('tbody')[0];
-        //         studentPaymentsTable.innerHTML = '';
-
-        //         for (const payment of payments) {
-        //             const enrollmentId = payment.enrollmentID;
-
-        //             if (!enrollmentId) {
-        //                 console.warn('No enrollment ID found for payment:', payment);
-        //                 continue;
-        //             }
-
-        //             const enrollment = await fetchEnrollmentById(enrollmentId);
-        //             if (enrollment) {
-        //                 const course = await fetchCourseById(enrollment.courseId);
-        //                 if (course) {
-        //                     const row = studentPaymentsTable.insertRow();
-        //                     row.insertCell(0).innerText = new Date(payment.paymentDate).toLocaleDateString();
-        //                     row.insertCell(1).innerText = course.courseName;
-        //                     row.insertCell(2).innerText = payment.amount;
-        //                 } else {
-        //                     console.warn(`No course found for ID: ${enrollment.courseId}`);
-        //                 }
-        //             } else {
-        //                 console.warn(`No enrollment found for ID: ${enrollmentId}`);
-        //             }
-        //         }
-        //     } else {
-        //         alert('No payments found for this student.');
-        //     }
-    } catch (error) {
-        console.error('Error loading payments:', error.message);
+    } else {
+        const Row = document.createElement('tr');
+        Row.innerHTML = `
+            <td>Payment details not available...</td>
+        `;
+        tableBody.appendChild(Row);
     }
 }
+
+// async function loadPayments() {
+//     const nic = sessionStorage.getItem('loggedStudent');
+//     console.log('NIC from session storage:', nic);
+
+//     if (!nic) {
+//         console.error('No NIC found in session storage.');
+//         return;
+//     }
+//         tableBody = document.getElementById("paymentDetails")
+//         const payments = await fetchPaymentByNic(nic);
+//         // console.log('Payments fetched:', payments);
+//         if (payments) {
+            
+//             payments.forEach(payment =>  {
+//                 console.log(payment)
+             
+//                 const Enrollment =await getEnrollment(payment.enrollmentID)
+//                 console.log("dfbsdfvb",Enrollment)
+
+//                 if (Enrollment) {
+             
+//                     let course = getCourse(Enrollment.courseId)
+
+//                     if (course) {
+//                         let formatdate = new Date(payment.paymentDate).toISOString().slice(0, 10);
+//                         Row = document.createElement('tr');
+//                         Row.innerHTML = `
+//                             <td>${formatdate}</td>
+//                             <td>${course.courseName}</td>
+//                             <td>${payment.amount}</td>
+//                         `;
+//                         tableBody.appendChild(Row)
+//                     }
+//                 }
+//             })
+//         }
+//         else {
+//             Row = document.createElement('tr');
+//             Row.innerHTML = `
+//                 <td>Payment details not availabe...</td>
+//                 `;
+//             tableBody.appendChild(Row)
+//         }
+    
+// }
+
+
 
 
 // Call all loading functions on page load

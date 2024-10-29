@@ -1,4 +1,3 @@
-
 const toggle = document.querySelector(".fa-bars");
 const toggleClose = document.querySelector(".fa-xmark");
 const sideNavbar = document.querySelector(".side-navebar");
@@ -10,7 +9,6 @@ toggle.addEventListener("click", function () {
 toggleClose.addEventListener("click", function () {
     sideNavbar.style.right = "-60%";
 });
-
 
 document.addEventListener("DOMContentLoaded", function () {
     const nicInput = document.getElementById('nic');
@@ -26,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let enrollmentDetails = null;
     let paidAmount = 0; 
 
-
+    // Fetch all courses
     fetch('https://localhost:7008/api/Course/GetAllCourses')
         .then(response => response.json())
         .then(data => {
@@ -34,6 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(err => console.error('Error fetching courses:', err));
 
+    // Event when NIC loses focus
     nicInput.addEventListener('blur', function () {
         const nic = nicInput.value.trim();
         if (nic) {
@@ -48,12 +47,11 @@ document.addEventListener("DOMContentLoaded", function () {
                         const enrolledCourseIds = data.map(e => e.courseId);
                         const filteredCourses = courses.filter(course => enrolledCourseIds.includes(course.id));
 
-                        
                         courseSelect.innerHTML = '<option value="">Select Course</option>';
                         filteredCourses.forEach(course => {
                             const option = document.createElement('option');
                             option.value = course.id;
-                            option.textContent = course.name || course.courseName || 'Course Not Found'; // Adjust accordingly
+                            option.textContent = course.name || course.courseName || 'Course Not Found';
                             courseSelect.appendChild(option);
                         });
                     } else {
@@ -68,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     feeManagementMessage.style.color = 'red';
                 });
 
-            
+            // Fetch payment history
             fetch(`https://localhost:7008/api/Payment/GetByNIC/${nic}`)
                 .then(response => response.json())
                 .then(data => {
@@ -78,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    
+    // Course selection change event
     courseSelect.addEventListener('change', function () {
         const selectedCourse = courses.find(course => course.id == courseSelect.value);
         if (selectedCourse) {
@@ -90,10 +88,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 const totalAmountValue = selectedCourse.fees;
                 const dueAmount = totalAmountValue - paidAmount;
 
-                
                 totalAmount.textContent = `${dueAmount} Rs`; 
 
-                
                 if (paymentPlan === "installment") {
                     const installmentAmountValue = selectedCourse.fees / selectedCourse.duration; 
                     installmentAmount.textContent = `${installmentAmountValue.toFixed(2)} Rs`; 
@@ -101,19 +97,19 @@ document.addEventListener("DOMContentLoaded", function () {
                     installmentAmount.textContent = '0 Rs'; 
                 }
 
-                
                 if (dueAmount <= 0) {
                     feeManagementMessage.textContent = "Payment has already been settled. No further payment is required.";
                     feeManagementMessage.style.color = 'red';
                     feeManagementForm.querySelector('button[type="submit"]').disabled = true; 
                 } else {
-                    feeManagementMessage.textContent = ""; // Clear any previous messages
+                    feeManagementMessage.textContent = ""; // Clear previous messages
                     feeManagementForm.querySelector('button[type="submit"]').disabled = false; 
                 }
             }
         }
     });
 
+    // Fee management form submission
     feeManagementForm.addEventListener('submit', function (e) {
         e.preventDefault();
     
@@ -124,52 +120,69 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
     
-        const enrollId = enrollmentDetails[0].id; // This should be a valid ID
+        const enrollmentID = enrollmentDetails[0].id; // Use the valid enrollment ID
         const nic = nicInput.value;
-        const date = new Date().toISOString();
+        const paymentDate = new Date().toISOString();
         const amount = parseFloat(totalAmount.textContent.replace(' Rs', ''));
-    
+
+        // Validate amount
         if (amount <= 0) {
             feeManagementMessage.textContent = "Due amount must be greater than zero.";
             feeManagementMessage.style.color = 'red';
             return;
         }
+
+        // Check if enrollment ID exists
+        fetch(`https://localhost:7008/api/Enrollment/Get-enrollmetnt-By${enrollmentID}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Enrollment ID does not exist');
+                }
+                return response.json();
+            })
+            .then(() => {
+                // Proceed to submit the payment
+                const paymentData = {
+                    enrollmentID,
+                    nic,
+                    paymentDate,
+                    amount
+                };
+
+                console.log("Submitting payment data:", paymentData);
     
-        const paymentData = {
-            enrollId,
-            nic,
-            date,
-            amount
-        };
-    
-        // Check the data before sending
-        console.log("Submitting payment data:", paymentData);
-    
-        fetch('https://localhost:7008/api/Payment/Create-Payment', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(paymentData)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            feeManagementMessage.textContent = 'Payment Successful!';
-            feeManagementMessage.style.color = 'green';
-        })
-        .catch(err => {
-            console.error('Error submitting payment:', err);
-            feeManagementMessage.textContent = 'Payment failed. Please try again.';
-            feeManagementMessage.style.color = 'red';
-        });
+                fetch('https://localhost:7008/api/Payment/Create-Payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(paymentData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => {
+                            throw new Error(`Network response was not ok: ${err.message}`);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    feeManagementMessage.textContent = 'Payment Successful!';
+                    feeManagementMessage.style.color = 'green';
+                })
+                .catch(err => {
+                    console.error('Error submitting payment:', err);
+                    feeManagementMessage.textContent = 'Payment failed. Please try again.';
+                    feeManagementMessage.style.color = 'red';
+                });
+            })
+            .catch(err => {
+                feeManagementMessage.textContent = err.message;
+                feeManagementMessage.style.color = 'red';
+            });
     });
-    
-   
+
+    // Format date and time function
     function formatDateTime(dateString) {
         const date = new Date(dateString);
         const day = String(date.getDate()).padStart(2, '0');
@@ -180,7 +193,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return `${hours}.${minutes} - ${day}/${month}/${year}`;
     }
 
-    
+    // Fetching payment details
     document.getElementById('student-payment-details').addEventListener('click', function () {
         fetch('https://localhost:7008/api/Payment/Get-All-Payments')
             .then(response => response.json())
@@ -188,10 +201,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 const tbody = document.querySelector('#payment-details-table tbody');
                 tbody.innerHTML = ''; 
 
-               
                 const payments = data;
 
-               
                 payments.forEach(payment => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
@@ -204,7 +215,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     tbody.appendChild(row);
                 });
 
-               
+                // Implement search functionality
                 const searchNicInput = document.getElementById('searchNic');
 
                 searchNicInput.addEventListener('input', function () {
@@ -213,7 +224,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         payment.nic.toLowerCase().includes(searchValue)
                     );
 
-                   
                     tbody.innerHTML = ''; 
                     filteredPayments.forEach(payment => {
                         const row = document.createElement('tr');
@@ -228,7 +238,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
                 });
 
-                
+                // Show modal for payment details
                 const paymentDetailsModal = new bootstrap.Modal(document.getElementById('paymentDetailsModal'));
                 paymentDetailsModal.show();
             })
