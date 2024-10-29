@@ -8,11 +8,11 @@ async function fetchCourses() {
 
         // Mapping duration values to their corresponding string formats
         const durationMap = {
-            2: '2 Months',
-            3: '3 Months',
-            4: '4 Months',
-            5: '5 Months',
-            6: '6 Months'
+            2: '2 months',
+            3: '3 months',
+            4: '4 months',
+            5: '5 months',
+            6: '6 months'
         };
 
         courses.forEach(course => {
