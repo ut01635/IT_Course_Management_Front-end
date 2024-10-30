@@ -42,6 +42,7 @@ async function AddStudent(studentData) {
         });
         if (!response.ok) throw new Error(`Failed to add student: ${response.status}`);
         await GetAllStudents();
+        
     } catch (error) {
         console.error('Error adding student:', error);
         alert('Failed to add student. Please ensure the server is running and the URL is correct.');
@@ -61,7 +62,12 @@ async function UpdateStudent(StudentNic, StudentUpdateData) {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(StudentUpdateData)
+             
         });
+
+        await GetAllStudents();
+        
+    
 
         if (!response.ok) {
             const errorResponse = await response.json();
@@ -201,9 +207,9 @@ async function saveStudent(fullName, email, phone, UpdateButton, SaveButton, Stu
     const phoneValue = document.getElementById(phone).value.trim();
 
     const studentUpdateData = {
-        fullName: fullNameValue,
+        name: fullNameValue,
         email: emailValue,
-        phone: phoneValue
+        phoneNumber: phoneValue
     };
 
     // Check for required fields
@@ -221,6 +227,8 @@ async function saveStudent(fullName, email, phone, UpdateButton, SaveButton, Stu
 
     document.getElementById(UpdateButton).style.display = "block";
     document.getElementById(SaveButton).style.display = "none";
+
+    
 }
 
 // Remove Student
