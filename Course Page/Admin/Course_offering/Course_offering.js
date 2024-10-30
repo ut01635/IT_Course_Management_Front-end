@@ -1,4 +1,5 @@
 // Function to fetch all courses and display them in the table
+const form = document.getElementById("course-offerings-form");
 async function fetchCourses() {
     try {
         const response = await fetch('https://localhost:7008/api/Course/GetAllCourses');
@@ -9,9 +10,6 @@ async function fetchCourses() {
         // Mapping duration values to their corresponding string formats
         const durationMap = {
             2: '2 months',
-            3: '3 months',
-            4: '4 months',
-            5: '5 months',
             6: '6 months'
         };
 
@@ -117,6 +115,7 @@ document.getElementById('course-offerings-form').addEventListener('submit', asyn
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ ...data, id: courseId })
+                
             });
         } else {
             // Create course
@@ -140,6 +139,8 @@ document.getElementById('course-offerings-form').addEventListener('submit', asyn
     } catch (error) {
         console.error('Error saving course:', error);
     }
+
+    await form.reset();
 });
 
 //Site Navebar
