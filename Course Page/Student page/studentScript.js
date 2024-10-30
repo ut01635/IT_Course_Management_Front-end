@@ -1,4 +1,8 @@
+const Greeting = document.getElementById("greeting");
+
 // Fetch student data by NIC
+
+
 async function fetchStudentData(nic) {
     const response = await fetch(`https://localhost:7008/api/Student/Get-StudentByNIC${nic}`);
     if (!response.ok) {
@@ -242,6 +246,22 @@ async function confirmEnroll() {
 }
 
 
+// Function to get current greeting based on time
+function getGreetingMessage(studentName) {
+    const currentHour = new Date().getHours();
+    let greeting;
+
+    if (currentHour < 12) {
+        greeting = "Good Morning";
+    } else if (currentHour < 18) {
+        greeting = "Good Afternoon";
+    } else {
+        greeting = "Good Evening";
+    }
+
+    return `${greeting}, ${studentName}!`;
+}
+
 
 
 
@@ -258,7 +278,12 @@ async function loadProfile() {
     try {
         console.log('Fetching student data for NIC:', nic);
         const student = await fetchStudentData(nic);
-        // console.log('Fetched student data:', student);
+        
+
+         // Update greeting message
+         const greetingMessage = getGreetingMessage(student.fullName);
+         Greeting.innerText = greetingMessage;
+ 
 
         document.getElementById('profileNameDisplay').value = student.fullName;
         document.getElementById('profileNICDisplay').value = student.nic;
