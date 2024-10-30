@@ -228,3 +228,16 @@ async function loadPayments(nic) {
 
 // Initialize data fetching
 GetAllStudents();
+
+
+//Logout function
+
+function logout() {
+    window.location.href = "../../login.html";
+}
+
+const logoutButton = document.getElementById('logoutButton');
+logoutButton.addEventListener('click', function () {
+    logout();
+});
+

@@ -160,7 +160,7 @@ toggleClose.addEventListener("click", function () {
 //Logout function
 
 function logout() {
-    window.location.href = "../01_Admin_Login/admin_login.html";
+    window.location.href = "../../login.html";
 }
 
 const logoutButton = document.getElementById('logoutButton');
